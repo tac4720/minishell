@@ -14,6 +14,7 @@ int main() {
 
         if (*input) { // 入力が空でない場合
             add_history(input); // 履歴に追加
+            interpret(input); // 入力を解釈して実行
         }
 
         printf("You entered: %s\n", input);

@@ -2,7 +2,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror  -lreadline
 LDFLAGS = -lreadline
-SRCS = readline.c
+SRCS = readline.c interpret.c
 OBJS = $(SRCS:.c=.o)
 NAME = minishell
 
