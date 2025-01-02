@@ -2,75 +2,122 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
+#include "environ.h"
 
-#define TABLE_SIZE 101
 
-typedef struct Entry {
-    int key;
-    int value;
-    struct Entry *next;
-} Entry;
-
-typedef struct {
-    Entry *table[TABLE_SIZE];
-} HashTable;
-
-unsigned int hash_function(int key) {
-    return abs(key) % TABLE_SIZE;
-}
-
-HashTable *create_hash_table() {
-    HashTable *ht = (HashTable *)calloc(1, sizeof(HashTable));
-    if (ht == NULL) {
-        perror("Memory allocation failed");
-        exit(EXIT_FAILURE);
+static unsigned int hash_function(const char *name) 
+{
+    unsigned int hash = 0;
+    while (*name) {
+        hash = (hash * 31 + *name) % TABLE_SIZE;
+        name++;
     }
-    return ht;
+    return hash;
 }
 
-void insert(HashTable *ht, int key, int value) {
-    if (ht == NULL) return;
-
-    unsigned int index = hash_function(key);
-    Entry *new_node = malloc(sizeof(Entry));
-    if (new_node == NULL) {
-        perror("Memory allocation failed");
-        exit(EXIT_FAILURE);
-    }
-    new_node->key = key;
-    new_node->value = value;
-    new_node->next = ht->table[index];
-    ht->table[index] = new_node;
+t_item *item_new(char *name, char *value) 
+{
+    t_item *item = malloc(sizeof(t_item));
+    if (!item)
+        return NULL;
+    item->name = strdup(name);
+    item->value = strdup(value);
+    item->next = NULL;
+    return item;
 }
 
-int search(HashTable *ht, int key) {
-    if (ht == NULL) return -1;
+t_map *map_new(void) 
+{
+    t_map *map = calloc(1, sizeof(t_map));
+    return map;
+}
 
-    unsigned int index = hash_function(key);
-    Entry *current = ht->table[index];
-    while (current != NULL) {
-        if (current->key == key) {
+char *map_get(t_map *map, const char *name) 
+{
+    if (!map || !name)
+        return NULL;
+    size_t index = hash_function(name);
+    t_item *current = map->table[index];
+    
+    while (current) 
+    {
+        if (strcmp(current->name, name) == 0)
             return current->value;
+        current = current->next;
+    }
+    return NULL;
+}
+
+int map_put(t_map *map, const char *string) 
+{
+    char *equal_pos = strchr(string, '=');
+    if (!equal_pos)
+        return -1;
+    
+    char *name = strndup(string, equal_pos - string);
+    char *value = strdup(equal_pos + 1);
+    
+    int result = map_set(map, name, value);
+    
+    free(name);
+    free(value);
+    return result;
+}
+
+int map_set(t_map *map, const char *name, const char *value) 
+{
+    if (!map || !name)
+        return -1;
+        
+    size_t index = hash_function(name);
+    t_item *current = map->table[index];
+    
+    while (current)
+    {
+        if (strcmp(current->name, name) == 0) 
+        {
+            free(current->value);
+            current->value = strdup(value);
+            return 0;
         }
+        current = current->next;
+    }
+    
+    t_item *new_item = item_new((char *)name, (char *)value);
+    if (!new_item)
+        return -1;
+    new_item->next = map->table[index];
+    map->table[index] = new_item;
+    return 0;
+}
+
+int map_unset(t_map *map, const char *name) 
+{
+    if (!map || !name)
+        return -1;
+        
+    unsigned int index = hash_function(name);
+    t_item *current = map->table[index];
+    t_item *prev = NULL;
+    
+    while (current) 
+    {
+        if (strcmp(current->name, name) == 0) 
+        {
+            if (prev)
+                prev->next = current->next;
+            else
+                map->table[index] = current->next;
+            
+            free(current->name);
+            free(current->value);
+            free(current);
+            return 0;
+        }
+        prev = current;
         current = current->next;
     }
     return -1;
 }
 
-void free_hash_table(HashTable *ht) {
-    if (ht == NULL) return;
-
-    for (int i = 0; i < TABLE_SIZE; i++) {
-        Entry *current = ht->table[i];
-        while (current != NULL) {
-            Entry *temp = current;
-            current = current->next;
-            free(temp);
-        }
-    }
-    free(ht);
-}
-
-int cmpfunc(const void *a, const void *b) {
-    return (*(int *)a - *(int *)b);
-}

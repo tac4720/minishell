@@ -1,15 +1,17 @@
 typedef struct s_map		t_map;
 typedef struct s_item		t_item;
 
-struct s_item {
-	char	*name;
-	char	*value;
-	t_item	*next;
-};
+#define TABLE_SIZE 1021
 
-struct s_map {
-	t_item	item_head;
-};
+typedef struct s_item {
+    char    *name;
+    char    *value;
+    struct s_item *next;
+} t_item;
+
+typedef struct s_map {
+    t_item *table[TABLE_SIZE];
+} t_map;
 
 t_item	*item_new(char *name, char *value);
 t_map		*map_new(void);
