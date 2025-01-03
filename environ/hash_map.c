@@ -120,4 +120,3 @@ int map_unset(t_map *map, const char *name)
     }
     return -1;
 }
-
