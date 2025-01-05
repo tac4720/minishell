@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <unistd.h>
-
+#include "../builtin_execute/builtin.h"
 //TODO: 最後に使用したコマンドのステータスを保存表示
 //TODO: カスタムperrorを使用してエラーメッセージを表示
 //TODO: エラーコードの数字が正しいか？大きすぎるエラーコードが渡された場合
@@ -20,15 +20,14 @@ bool is_numeric(const char *str) {
     return true;
 }
 
-int ft_exit(char **args) 
+int ft_exit(char **args, t_context *context) 
 {
     long status;
     char *endptr;
-	int last_status = 0;
 
   if (args[1] == NULL) 
   {
-    exit(last_status);
+    exit(context->last_status);
   } 
   else if (args[2] != NULL) 
   {

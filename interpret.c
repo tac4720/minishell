@@ -6,7 +6,7 @@ void	fatal_error(const char *msg)
 	exit(1);
 }
 
-int	interpret(char *line)
+int	interpret(char *line, t_context *context)
 {
 	extern char	**environ;
 	char		*argv[] = {line, NULL};
@@ -19,7 +19,7 @@ int	interpret(char *line)
 		fatal_error("fork");
 	else if (pid == 0)
 	{
-		if (builtin_execute(line))
+		if (builtin_execute(line, context))
 		{
 			return (0);
 		}

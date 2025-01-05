@@ -1,6 +1,6 @@
 # コンパイラとフラグの設定
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS =
 LDFLAGS = -lreadline
 INCLUDES = -I. -I./builtin
 

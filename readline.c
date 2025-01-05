@@ -2,6 +2,9 @@
 
 int main() {
     char *input;
+	t_context context;
+	context.environ = map_new();
+	context.last_status = 0;
 
     while (1) {
         // ユーザーにプロンプトを表示して入力を受け取る
@@ -14,7 +17,7 @@ int main() {
 
         if (*input) { // 入力が空でない場合
             add_history(input); // 履歴に追加
-            interpret(input); // 入力を解釈して実行
+            interpret(input, &context); // 入力を解釈して実行
         }
 
         printf("You entered: %s\n", input);

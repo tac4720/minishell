@@ -1,9 +1,9 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include "../builtin_execute/builtin.h"
 //TODO: エラー処理をもっと厳しくする。bash準拠のエラーメッセージを表示する。
-int ft_echo(char **args)
+int ft_echo(char **args, t_context *context)
 {
   size_t i = 1;
   bool flag = false; 

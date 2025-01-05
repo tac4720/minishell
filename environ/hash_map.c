@@ -1,10 +1,11 @@
+#include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include "environ.h"
-
+#include "../libft/libft.h"
 
 static unsigned int hash_function(const char *name) 
 {
@@ -27,9 +28,17 @@ t_item *item_new(char *name, char *value)
     return item;
 }
 
+void	map_init(t_map *map)
+{
+	char buff[PATH_MAX];
+	getcwd(buff, PATH_MAX);
+	map_put(map, ft_strjoin("PWD=",buff));
+}
+
 t_map *map_new(void) 
 {
     t_map *map = calloc(1, sizeof(t_map));
+	map_init(map);
     return map;
 }
 
@@ -120,3 +129,5 @@ int map_unset(t_map *map, const char *name)
     }
     return -1;
 }
+
+

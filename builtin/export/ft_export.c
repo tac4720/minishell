@@ -1,19 +1,17 @@
-#include "../../minishell.h"
-#include "../../environ/environ.h"
 #include <unistd.h>
-
+#include "../builtin_execute/builtin.h"
 //TODO: 引数が空の場合、環境変数を全て出力するが、その表示形式がbashと違う
-//TODO: 環境変数へのアクセスが現在はダミーを使っている
+//TODO: 環境変数へのアクセスが現在はダミーを使っている (変更済み)
 
-int ft_export(char **args)
+int ft_export(char **args, t_context *context)
 {
-  t_map *dummy = NULL; //TODO:グローバル変数で定義されてる環境変数へのアクセスへ変更
+  t_map *env = context->environ; //TODO:
   
   if (args[1] == NULL)
   {
     for (int i = 0; i < TABLE_SIZE; i++)
     {
-      t_item *current = dummy->table[i];
+      t_item *current = env->table[i];
       while (current)
       {
         printf("declare -x %s=%s\n", current->name, current->value);
@@ -31,6 +29,6 @@ int ft_export(char **args)
     }
     i++;
   }
-  map_put(dummy, args[1]);
+  map_put(env, args[1]);
   return 0;
 }

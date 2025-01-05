@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int ft_pwd(char **args)
+#include "../builtin_execute/builtin.h"
+int ft_pwd(char **args, t_context *context)
 {
 
 	if (args[2] != NULL) 
