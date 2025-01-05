@@ -19,6 +19,10 @@ int	interpret(char *line)
 		fatal_error("fork");
 	else if (pid == 0)
 	{
+		if (builtin_execute(line))
+		{
+			return (0);
+		}
         if(strchr(line, '/') == NULL)
         {
             tmp = line;

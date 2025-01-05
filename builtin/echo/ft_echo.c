@@ -25,8 +25,8 @@ int ft_echo(char **args)
   return 0;
 }
 
-int main(int argc, char **argv)
-{
-  ft_echo(argv);
-  return 0;
-}
+// int main(int argc, char **argv)
+// {
+//   ft_echo(argv);
+//   return 0;
+// }

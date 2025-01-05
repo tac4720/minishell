@@ -9,6 +9,11 @@ int ft_env(char **args)
 	t_map *dummy = NULL;
 	int i = 0;
 
+	if (args[2] != NULL) 
+  	{
+		return (1);
+  	}
+
 	while (i < TABLE_SIZE)
     {
       t_item *current = dummy->table[i];

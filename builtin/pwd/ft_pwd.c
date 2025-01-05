@@ -5,6 +5,11 @@
 
 int ft_pwd(char **args)
 {
+
+	if (args[2] != NULL) 
+  	{
+		return (1);
+  	}
   char *buff = malloc(PATH_MAX);
   char *path = getcwd(buff, PATH_MAX);
   printf("%s\n", path);

@@ -20,11 +20,11 @@ bool is_numeric(const char *str) {
     return true;
 }
 
-
-int ft_exit(char **args, int last_status) 
+int ft_exit(char **args) 
 {
     long status;
     char *endptr;
+	int last_status = 0;
 
   if (args[1] == NULL) 
   {
