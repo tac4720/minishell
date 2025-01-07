@@ -41,7 +41,7 @@ char	*make_path(const char *filename)
             free_2d_array(path_dirs);
             return (full_path);
         }
-        i++;on
+        i++;
     }
     path_var_content = getenv("PATH");
 	return (NULL);
