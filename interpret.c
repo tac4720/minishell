@@ -19,6 +19,7 @@ int	interpret(char *line, t_context *context)
 		fatal_error("fork");
 	else if (pid == 0)
 	{
+
 		if (builtin_execute(line, context))
 		{
 			return (0);
