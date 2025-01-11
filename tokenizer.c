@@ -5,18 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "minishell.h"
-typedef enum {
-    TK_WORD,
-    TK_EOF,
-} TokenKind;
-
-typedef struct s_token t_token;
-
-struct s_token {
-    char    *word;
-    TokenKind kind;
-    t_token *next;
-};
 
 t_token *new_token(char *word)
 {
@@ -75,14 +63,14 @@ t_token *tokenize(char *line)
     return (head);
 }
 
-int main()
-{
-    char *line = "lsss -ls    unyo";
-    t_token *tok = tokenize(line);
-    while(tok)
-    {
-        printf("%s\n", tok->word);
-        tok = tok->next;
-    }
-    return (0);
-}
+// int main()
+// {
+//     char *line = readline("input:");
+//     t_token *tok = tokenize(line);
+//     while(tok)
+//     {
+//         printf("%s\n", tok->word);
+//         tok = tok->next;
+//     }
+//     return (0);
+// }

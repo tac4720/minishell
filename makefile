@@ -23,7 +23,7 @@ ENVIRON_SRCS = environ/hash_map.c
 # メインプログラムのソースファイル
 MAIN_SRCS = readline.c \
             interpret.c \
-            make_path.c
+            make_path.c tokenizer.c
 
 # 全ソースファイルの結合
 SRCS = $(MAIN_SRCS) $(BUILTIN_SRCS) $(ENVIRON_SRCS)
