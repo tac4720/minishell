@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "environ/environ.h"
+#include "fcntl.h"
 
 typedef struct s_context{
 	int last_status;

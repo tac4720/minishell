@@ -1,16 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/wait.h>
 
 int main() {
-    // "PATH" 環境変数を取得
-    char *path = getenv("USER");
+    int fd;
 
-    if (path) {
-        printf("PATH: %s\n", path);
-    } else {
-        printf("PATH 環境変数が見つかりません。\n");
+    fd = open("test.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fork() == 0) {
+        // fd = open("test.txt", O_WRONLY);
+    write(fd, "Hello, World!\n", 14);
+    close(fd);
+    }
+    else {
+        wait(NULL);
+ 
+
+
     }
 
     return 0;
