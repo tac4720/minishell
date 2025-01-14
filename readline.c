@@ -1,11 +1,18 @@
 #include "minishell.h"
 
+void handle_sigint(int sig) {
+    write(1, "\n", 1);
+    rl_replace_line("", 0);
+    rl_on_new_line();
+    rl_redisplay();
+}
+
 int main() {
     char *input;
 	t_context context;
 	context.environ = map_new();
 	context.last_status = 0;
-
+  signal(SIGINT, handle_sigint);
     while (1) {
         // ユーザーにプロンプトを表示して入力を受け取る
         input = readline("minishell:)");
