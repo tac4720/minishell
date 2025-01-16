@@ -5,84 +5,79 @@
 #include <stdlib.h>
 #include <string.h>
 #include "minishell.h"
-typedef enum {
-    TK_WORD,
-    TK_EOF,
-} TokenKind;
 
-typedef struct s_token t_token;
+// t_token *new_token(char *word)
+// {
+//     t_token *tok;
 
-struct s_token {
-    char    *word;
-    TokenKind kind;
-    t_token *next;
-};
+//     tok = calloc(1, sizeof(*tok));
+//     if (tok == NULL)
+//         return (0);//error内容を書く
+//     tok->word = word;
+//     // tok->kind = kind;
+//     return (tok);
+// }
 
-t_token *new_token(char *word)
-{
-    t_token *tok;
-
-    tok = calloc(1, sizeof(*tok));
-    if (tok == NULL)
-        return (0);//error内容を書く
-    tok->word = word;
-    // tok->kind = kind;
-    return (tok);
-}
-
-bool is_blank(char c)
+int is_blank(char c)
 {
     return (c == ' ' || c == '\t' || c == '\n');
 }
 
-t_token *tokenize(char *line)
+t_token *get_token(char **s)
 {
-    int i = 0;
-    int word_len = 0;
-    int start_pos = 0;
-    char *word;
-    t_token *head = NULL;
-    t_token *current_token = NULL;
-
-    while(line[i])
+    if (!(*s))
+        return (NULL);
+    while (**s && is_blank(**s))
     {
-        if (!(is_blank(line[i])))
-        {
-            while(line[i] && !(is_blank(line[i])))
-            {
-                i++;
-                word_len++;
-            }
-            word = strndup(&line[start_pos], word_len);
-            if (word == NULL)
-                return (NULL);
-            if (current_token == NULL)
-            {
-                current_token = new_token(word);
-                head = current_token;
-            }
-            else    
-            {
-                current_token->next = new_token(word);
-                current_token = current_token->next;
-            }
-            word_len = 0;
-        }
-        i++;
-        start_pos = i;
-        
+        (*s)++;
     }
-    return (head);
+    if (**s && ft_strchr(OPERATORS, **s))
+        return (get_operator_token(s));
+    else if (**s)
+        return (get_word_token(s));
+    return (NULL);
 }
 
-int main()
+t_token *last_token(t_token *token)
 {
-    char *line = "lsss -ls    unyo";
-    t_token *tok = tokenize(line);
-    while(tok)
+    t_token *tmp;
+
+    tmp = token;
+    while (tmp->next)
+        tmp = tmp->next;
+    return (tmp);
+}
+
+void token_add(t_token **token_list, t_token *token)
+{
+    t_token *tmp;
+    t_token *last;
+
+    if (!*token_list)
     {
-        printf("%s\n", tok->word);
-        tok = tok->next;
+        *token_list = token;
+        return;
     }
-    return (0);
+    else
+    {
+        last = last_token(*token_list);
+        last->next = token;
+        token->prev = last;
+    }
+    return;
+}
+
+t_token *input_scanner(char *line)
+{
+    t_token *token_list;
+    t_token *token;
+
+    token_list = NULL;
+    token = NULL;
+    while(*line)
+    {
+        token = get_token(&line);
+        token_add(&token_list, token);
+    }
+    return (token_list);
 }
