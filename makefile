@@ -24,9 +24,12 @@ ENVIRON_SRCS = environ/hash_map.c
 MAIN_SRCS = readline.c \
             interpret.c \
             make_path.c \
-            tokenizer.c \
-            get_word_token.c \
-            get_operator_token.c \
+            tokenizer/tokenizer.c \
+            tokenizer/get_word_token.c \
+            tokenizer/get_operator_token.c \
+            parse/parse_command.c \
+            parse/parse_pipes.c \
+            parse/parse.c \
 
 # 全ソースファイルの結合
 SRCS = $(MAIN_SRCS) $(BUILTIN_SRCS) $(ENVIRON_SRCS)

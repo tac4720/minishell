@@ -14,14 +14,25 @@ typedef struct s_context{
 	int is_in_pipeline;
 } t_context; 
 
-typedef struct s_redir
+typedef enum e_token_type
 {
-	int in_fd;
-	int out_fd;
-	t_token_type type;
-	struct s_redir *next;
-	t_input *filename;
-}	t_redir;
+	HEREDOC,
+	APPEND,
+	FILE_IN,
+	FILE_OUT,
+	ENV_PARAM,
+	PIPE_OP,
+	WORD,
+	ERROR
+}	t_token_type;
+
+typedef struct s_input
+{
+	int				flag;
+	char			*input;
+	struct s_input	*next;
+	struct s_input	*prev;
+} t_input;
 
 typedef struct s_cmd
 {
@@ -30,7 +41,6 @@ typedef struct s_cmd
 	int out_fd;
 	t_input *name;
 	t_input *args;
-	t_redir redirection_list;
 } t_cmd;
 
 typedef enum e_ast_node_type
@@ -44,9 +54,7 @@ typedef struct s_ast_node
 	t_ast_node_type	type;
 	int				in_fd;
 	int 			out_fd;
-	t_redir			*red_lst;
-	//ここから
-	void 			*node//何この行？
+	void 			*node;
 } t_ast_node;
 
 typedef struct s_pipe
@@ -57,17 +65,7 @@ typedef struct s_pipe
 	t_ast_node *right;
 } t_pipe;
 
-typedef enum e_token_type
-{
-	HEREDOC,
-	APPEND,
-	FILE_IN,
-	FILE_OUT,
-	ENV_PARAM,
-	PIPE_OP,
-	WORD,
-	ERROR
-}	t_token_type;
+
 
 typedef enum e_flags
 {
@@ -80,14 +78,6 @@ typedef enum e_flags
 	F_DEL_QUOTES		= 1 << 6
 }	t_flags;
 
-typedef struct s_input
-{
-	int				flag;
-	char			*input;
-	struct s_input	*next;
-	struct s_input	*prev;
-} t_input;
-
 typedef struct s_token {
     t_token_type type;
     t_input *cmd;
@@ -95,28 +85,30 @@ typedef struct s_token {
     struct s_token *prev;
 } t_token;
 
-
-
-
-//tokenizer.c
+//tokenizer
 t_token *tokenize(char *line);
 int is_blank(char c);
-
-
-//interepret関数のプロトタイプ宣言
-int	interpret(char *line, t_context *context);
-char	*make_path(const char *filename);
+t_token *get_token(char **s);
 t_token *get_word_token(char **s);
 t_input *get_word(char **s);
 t_token *get_operator_token(char **s);
 int get_op_type(char **s);
 void operator_input(t_token *node);
-t_token *get_token(char **s);
 int check_flags(t_input *current);
 void check_quotes(t_input *current, int *i);
 void quote_check(char *s, int *n);
 int check_redir(char **s);
 t_token *input_scanner(char *line);
+
+//parse
+t_ast_node  *parse_line(t_token **token_list);
+t_ast_node *parse_cmd(t_token **token_list);
+t_ast_node *parse_pipeline(t_token **token_list);
+t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list);
+
+//interpret関数のプロトタイプ宣言
+t_ast_node	*interpret(char *line, t_context *context);
+char	*make_path(const char *filename);
 
 //libft
 char	**ft_split(const char *str, char c);
