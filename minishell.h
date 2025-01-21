@@ -11,7 +11,51 @@
 typedef struct s_context{
 	int last_status;
 	t_map *environ;	
+	int is_in_pipeline;
 } t_context; 
+
+typedef struct s_redir
+{
+	int in_fd;
+	int out_fd;
+	t_token_type type;
+	struct s_redir *next;
+	t_input *filename;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	int n;
+	int in_fd;
+	int out_fd;
+	t_input *name;
+	t_input *args;
+	t_redir redirection_list;
+} t_cmd;
+
+typedef enum e_ast_node_type
+{
+	AST_PIPE,
+	AST_COMMAND
+}	t_ast_node_type;
+
+typedef struct s_ast_node
+{
+	t_ast_node_type	type;
+	int				in_fd;
+	int 			out_fd;
+	t_redir			*red_lst;
+	//ここから
+	void 			*node//何この行？
+} t_ast_node;
+
+typedef struct s_pipe
+{
+	int in_fd;
+	int out_fd;
+	t_ast_node *left;
+	t_ast_node *right;
+} t_pipe;
 
 typedef enum e_token_type
 {

@@ -2,16 +2,19 @@
 
 
 
-int	interpret(char *line, t_context *context)
+t_ast_node	*interpret(char *line, t_context *context)
 {
-	t_token *tokens;
-	tokens = input_scanner(line);
-	while(tokens)
+	t_token *token_list;
+    t_ast_node *tree;
+	token_list = input_scanner(line);
+	while(token_list)
     {
-        printf("%s\n", tokens->cmd->input);
-        tokens = tokens->next;
+        printf("%s\n", token_list->cmd->input);
+        token_list = token_list->next;
     }
-    return (0);
+
+    tree = parse_line(&token_list);
+    return (tree);
 }
 
 

@@ -1,3 +1,4 @@
+#include "minishell.h"
 // void	fatal_error(const char *msg)
 // {
 // 	dprintf(STDERR_FILENO, "Fatal Error: %s\n", msg);
@@ -41,3 +42,13 @@
 
 //     return (0);
 // }
+
+int execute(t_context *context, t_ast_node *node)
+{
+	if (context->err == 1)
+		return (1); //この二行の意味が分からない、エラー処理？
+	if (node->type == AST_COMMAND)
+		expand(node);
+	if (node->type == AST_PIPE)
+		execute_pipeline(node);
+}
