@@ -35,20 +35,20 @@ int check_redir(char **s)
     return (ERROR);
 }
 
-void	operator_input(t_token *node)
+void	operator_input(t_token *token)
 {
-	if (node->type == HEREDOC)
-		node->cmd->input = ft_strdup("<<");
-	else if (node->type == APPEND)
-		node->cmd->input = ft_strdup(">>");
-	else if (node->type == FILE_IN)
-		node->cmd->input = ft_strdup("<");
-	else if (node->type == FILE_OUT)
-		node->cmd->input = ft_strdup(">");
-	else if (node->type == PIPE_OP)
-		node->cmd->input = ft_strdup("|");
-	else if (node->type == ERROR)
-		node->cmd->input = ft_strdup("&");//謎とりあえず書いてる感じがする
+	if (token->type == HEREDOC)
+		token->str = ft_strdup("<<");
+	else if (token->type == APPEND)
+		token->str = ft_strdup(">>");
+	else if (token->type == FILE_IN)
+		token->str = ft_strdup("<");
+	else if (token->type == FILE_OUT)
+		token->str = ft_strdup(">");
+	else if (token->type == PIPE_OP)
+		token->str = ft_strdup("|");
+	else if (token->type == ERROR)
+		token->str = ft_strdup("&");//謎とりあえず書いてる感じがする
 }
 
 int get_op_type(char **s)
@@ -64,20 +64,18 @@ int get_op_type(char **s)
 }
 t_token *get_operator_token(char **s)
 {
-    t_token *node;
+    t_token *new_token;
 
     if (!s || !(*s))
         return (NULL);
-    node = ft_calloc(1, sizeof(t_token));
+    new_token = ft_calloc(1, sizeof(t_token));
     //mallocエラーしたときの挙動を書く
-    node->cmd = ft_calloc(1, sizeof(t_input));//cmdという名前がきもいかも
+    // new_token->str = ft_calloc(1, sizeof(char));//cmdという名前がきもいかも
     //mallocエラーしたときの挙動を書く
-    node->type = get_op_type(s);
-    operator_input(node);
-    node->cmd->flag = 0;
-    node->cmd->next = NULL;
-	node->cmd->prev = NULL;
-	node->next = NULL;
-	node->prev = NULL;
-    return (node);
+    new_token->type = get_op_type(s);
+    operator_input(new_token);
+    new_token->flag = 0;
+	new_token->next = NULL;
+	new_token->prev = NULL;
+    return (new_token);
 }
