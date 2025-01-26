@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_ast_node  *parse_line(t_token **token_list)
+t_ast_node  *parse_tokens(t_token **token_list)
 {
     t_ast_node *tree;
 

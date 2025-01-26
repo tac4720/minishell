@@ -16,7 +16,7 @@ t_ast_node	*interpret(char *line, t_context *context)
 
     //ここまではセグフォせずにうまくはしっている。
 
-    // tree = parse_line(&token_list);
+    tree = parse_tokens(&token_list);
     return (tree);
 }
 

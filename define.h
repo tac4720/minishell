@@ -46,18 +46,23 @@ typedef struct s_context{
 
 
 
-typedef struct s_input
+typedef struct s_command_args
 {
-	
-} t_input;
+	char *string;
+	t_command_args *next;
+	t_command_args *prev;
+	int flag;	
+} t_command_args;
 
 typedef struct s_cmd
 {
-	int n;
 	int in_fd;
 	int out_fd;
-	t_input *name;
-	t_input *args;
+	t_command_args command_args;
+	// t_infile_redir
+	// t_outfile_redir
+	// HEREDOC
+	// add
 } t_cmd;
 
 typedef enum e_ast_node_type
@@ -69,9 +74,9 @@ typedef enum e_ast_node_type
 typedef struct s_ast_node
 {
 	t_ast_node_type	type;
-	int				in_fd;
-	int 			out_fd;
-	void 			*node;
+	t_cmd command_node;
+	t_pipe          *pipe_node;
+
 } t_ast_node;
 
 typedef struct s_pipe
