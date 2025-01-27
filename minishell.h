@@ -11,18 +11,16 @@ t_token *tokenize(char *line);
 int is_blank(char c);
 t_token *get_token(char **s);
 t_token *get_word_token(char **s);
-t_input *get_word(char **s);
 t_token *get_operator_token(char **s);
 int get_op_type(char **s);
 void operator_input(t_token *node);
 int check_flags(char *str);
-void check_quotes(t_input *current, int *i);
 void quote_check(char *s, int *n);
 int check_redir(char **s);
 t_token *input_scanner(char *line);
 
 //parse
-t_ast_node  *parse_line(t_token **token_list);
+t_ast_node  *parse_tokens(t_token **token_list);
 t_ast_node *parse_cmd(t_token **token_list);
 t_ast_node *parse_pipeline(t_token **token_list);
 t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list);

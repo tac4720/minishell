@@ -15,7 +15,6 @@ int execute(t_ast_node *node, t_context *context)
 	pid_t		pid;
 	int			wstatus;
 
-	printf("test\n");
 
 	printf("%s\n", cmd->name->input);
 	// pid = fork();

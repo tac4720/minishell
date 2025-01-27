@@ -8,6 +8,7 @@ typedef enum e_token_type t_token_type;
 typedef enum e_ast_node_type t_ast_node_type;
 typedef struct s_ast_node t_ast_node;
 typedef struct s_pipe t_pipe;
+typedef struct s_command_args t_command_args;
 typedef struct s_operator t_operator;
 typedef struct s_redir t_redir;
 typedef enum e_flags t_flags;
@@ -50,7 +51,7 @@ typedef struct s_command_args
 {
 	char *string;
 	t_command_args *next;
-	t_command_args *prev;
+	// t_command_args *prev;
 	int flag;	
 } t_command_args;
 
@@ -58,7 +59,8 @@ typedef struct s_cmd
 {
 	int in_fd;
 	int out_fd;
-	t_command_args command_args;
+	int num_of_words;
+	t_command_args *command_args;
 	// t_infile_redir
 	// t_outfile_redir
 	// HEREDOC
@@ -74,7 +76,7 @@ typedef enum e_ast_node_type
 typedef struct s_ast_node
 {
 	t_ast_node_type	type;
-	t_cmd command_node;
+	t_cmd *command_node;
 	t_pipe          *pipe_node;
 
 } t_ast_node;

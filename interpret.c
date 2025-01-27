@@ -8,15 +8,27 @@ t_ast_node	*interpret(char *line, t_context *context)
     t_ast_node *tree;
 	check_open_close(line);//クォーテーションで閉じられているか決める
 	token_list = input_scanner(line);
-	while(token_list)
+
+	t_token *token_list_for_printf;
+    token_list_for_printf = token_list;
+	while(token_list_for_printf)
     {
-        printf("%s\n", token_list->str);
-        token_list = token_list->next;//セグフォの原因
+        printf("token_list:%s\n", token_list_for_printf->str);
+        token_list_for_printf = token_list_for_printf->next;
     }
 
-    //ここまではセグフォせずにうまくはしっている。
-
     tree = parse_tokens(&token_list);
+
+    // t_command_args *command_args_for_printf;
+    // command_args_for_printf = tree->pipe_node->right->command_node->command_args;
+
+    // while(command_args_for_printf != NULL)
+    // {
+    //     printf("%s\n", command_args_for_printf->string);
+    //     command_args_for_printf = command_args_for_printf->next;
+    // }
+    // コマンドの引数チェック
+
     return (tree);
 }
 

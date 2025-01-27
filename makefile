@@ -1,6 +1,6 @@
 # コンパイラとフラグの設定
 CC = gcc
-CFLAGS =
+CFLAGS = 
 LDFLAGS = -lreadline
 INCLUDES = -I. -I./builtin
 
@@ -28,10 +28,10 @@ MAIN_SRCS = readline.c \
             tokenizer/tokenizer.c \
             tokenizer/get_word_token.c \
             tokenizer/get_operator_token.c \
+            parse/parse_command.c \
+            parse/parse_pipes.c \
+            parse/parse.c \
             # execute/execute.c \
-            # parse/parse_command.c \
-            # parse/parse_pipes.c \
-            # parse/parse.c \
             # execute/execute_pipeline \
 
 # 全ソースファイルの結合
