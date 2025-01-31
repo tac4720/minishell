@@ -16,10 +16,9 @@ typedef struct s_token t_token;
 typedef struct s_env t_env;
 typedef struct s_stack t_stack;
 typedef struct s_shell t_shell;
-typedef struct s_ast_node t_ast_node;
+typedef enum e_command_flags t_command_flags;
 
-typedef enum e_token_type
-{
+typedef enum e_token_type {
 	HEREDOC,
 	APPEND,
 	FILE_IN,
@@ -28,7 +27,7 @@ typedef enum e_token_type
 	PIPE_OP,
 	WORD,
 	ERROR
-}	t_token_type;
+} t_token_type;
 
 typedef struct s_token {
     t_token_type type;
@@ -61,13 +60,6 @@ typedef struct s_cmd
 	t_command_args *command_args;
 	t_redir *redirection;
 } t_cmd;
-
-typedef struct s_redir
-{
-	char *filename;
-	t_command_flags redirection_flag;
-	t_redir *next;
-} t_redir;
 
 typedef enum e_ast_node_type
 {
@@ -110,4 +102,12 @@ typedef enum e_command_flags
 	F_HEREDOC = 1 << 3,
 	F_APPEND = 1 << 4
 }	t_command_flags;
+
+typedef struct s_redir
+{
+	char *filename;
+	t_command_flags redirection_flag;
+	t_redir *next;
+} t_redir;
+
 #endif
