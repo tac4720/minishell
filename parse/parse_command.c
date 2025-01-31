@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 void add_cmd_node(t_token **token_list, t_cmd *cmd)
 {
     int i;
@@ -8,6 +9,10 @@ void add_cmd_node(t_token **token_list, t_cmd *cmd)
     i = 0;
     while (i < cmd->num_of_words)
     {
+        if ((*token_list)->type == HEREDOC || APPEND || FILE_IN || FILE_OUT)
+        {
+            parse_redir(token_list, cmd);
+        }
         if (cmd->command_args == NULL)
         {
             cmd->command_args = ft_calloc(1, sizeof(t_command_args));
@@ -30,8 +35,6 @@ void add_cmd_node(t_token **token_list, t_cmd *cmd)
         i++;
         *token_list = (*token_list)->next;
     }
-
-    
 }
 
 t_ast_node *new_cmd_node(t_cmd *cmd, t_token **token_list)
@@ -41,7 +44,7 @@ t_ast_node *new_cmd_node(t_cmd *cmd, t_token **token_list)
     new_node = ft_calloc(1, sizeof(t_ast_node));
     new_node->command_node = cmd;
     if (cmd->num_of_words == 1)
-    {
+    {//もしWORDかENV_PARAM以外だったらはじく
         cmd->command_args = ft_calloc(1, sizeof(t_command_args));
         new_node->command_node->command_args->string = ft_strdup((*token_list)->str);
         new_node->command_node->command_args->next = NULL;
@@ -82,5 +85,7 @@ t_ast_node *parse_cmd(t_token **token_list)
     cmd->num_of_words = word_count(*token_list);//あとでかく,arg_countとかのほうが名前よさそう？
     cmd->in_fd = -2;
 	cmd->out_fd = -2;
+    cmd->command_flag = 0;//ここは0でいいのか？マクロとの兼ね合いに注意
+    cmd->redirection = NULL;
     return (new_cmd_node(cmd, token_list));//ここからかく
 }

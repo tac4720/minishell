@@ -45,8 +45,6 @@ typedef struct s_context{
 	int is_in_pipeline;
 } t_context; 
 
-
-
 typedef struct s_command_args
 {
 	char *string;
@@ -61,11 +59,16 @@ typedef struct s_cmd
 	int out_fd;
 	int num_of_words;
 	t_command_args *command_args;
-	// t_infile_redir
-	// t_outfile_redir
-	// HEREDOC
-	// add
+	t_command_flags command_flags;
+	t_redir *redirection;
 } t_cmd;
+
+typedef struct s_redir
+{
+	char *filename;
+	t_command_flags redirection_flag;
+	t_redir *next;
+} t_redir;
 
 typedef enum e_ast_node_type
 {
@@ -89,8 +92,6 @@ typedef struct s_pipe
 	t_ast_node *right;
 } t_pipe;
 
-
-
 typedef enum e_flags
 {
 	F_DOLLAR			= 1 << 0,
@@ -100,6 +101,14 @@ typedef enum e_flags
 	F_DOLLAR_IN_DQUOTES		= 1 << 4,
 	F_EXPANDED			= 1 << 5,
 	F_DEL_QUOTES		= 1 << 6
-}	t_flags;
+} t_flags;
 
+typedef enum e_command_flags
+{
+	F_NO_REDIR = 1 << 0,
+	F_INFILE = 1 << 1,
+	F_OUTFILE = 1 << 2,
+	F_HEREDOC = 1 << 3,
+	F_APPEND = 1 << 4
+}	t_command_flags;
 #endif
