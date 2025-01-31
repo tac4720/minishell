@@ -21,9 +21,21 @@ t_token *input_scanner(char *line);
 
 //parse
 t_ast_node  *parse_tokens(t_token **token_list);
-t_ast_node *parse_cmd(t_token **token_list);
 t_ast_node *parse_pipeline(t_token **token_list);
 t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list);
+
+//parse_command.c
+t_ast_node *parse_cmd(t_token **token_list);
+t_ast_node *new_cmd_node(t_cmd *cmd, t_token **token_list);
+void add_cmd_node(t_token **token_list, t_cmd *cmd);
+void parse_args(t_token **token_list, t_cmd *cmd);
+
+//parse_redir.c
+void parse_redir(t_token **token_list, t_cmd *cmd);
+void parse_file_out(t_token **token_list, t_cmd *cmd, int command_flags);
+void parse_file_in(t_token **token_list, t_cmd *cmd, int command_flags);
+void parse_append(t_token **token_list, t_cmd *cmd, int command_flags);
+void add_redir_node(t_token **token_list, t_cmd *cmd, int command_flag);
 
 //interpret関数のプロトタイプ宣言
 t_ast_node	*interpret(char *line, t_context *context);

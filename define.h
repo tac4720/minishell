@@ -59,7 +59,6 @@ typedef struct s_cmd
 	int out_fd;
 	int num_of_words;
 	t_command_args *command_args;
-	t_command_flags command_flags;
 	t_redir *redirection;
 } t_cmd;
 

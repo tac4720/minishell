@@ -30,6 +30,7 @@ MAIN_SRCS = readline.c \
             tokenizer/get_operator_token.c \
             parse/parse_command.c \
             parse/parse_pipes.c \
+            parse/parse_redir.c \
             parse/parse.c \
             # execute/execute.c \
             # execute/execute_pipeline \

@@ -1,39 +1,42 @@
 #include "minishell.h"
 
+void parse_args(t_token **token_list, t_cmd *cmd)
+{
+    t_command_args *tmp;
+
+    if (cmd->command_args == NULL)
+    {
+        cmd->command_args = ft_calloc(1, sizeof(t_command_args));
+        cmd->command_args->string = ft_strdup((*token_list)->str);
+        cmd->command_args->next = NULL;
+        cmd->command_args->flag = (*token_list)->flag; 
+    }
+    else
+    {
+        tmp = cmd->command_args;
+
+        while (tmp->next != NULL)
+            tmp = tmp->next;
+        tmp->next = ft_calloc(1, sizeof(t_command_args));
+        tmp->next->string = ft_strdup((*token_list)->str);
+        tmp->next->next = NULL;
+        tmp->next->flag = (*token_list)->flag;
+    }
+    *token_list = (*token_list)->next;
+}
 
 void add_cmd_node(t_token **token_list, t_cmd *cmd)
 {
-    int i;
-    t_command_args *tmp;
-
-    i = 0;
-    while (i < cmd->num_of_words)
+    while ((*token_list) != NULL)//このループの条件を変える
     {
         if ((*token_list)->type == HEREDOC || APPEND || FILE_IN || FILE_OUT)
         {
             parse_redir(token_list, cmd);
         }
-        if (cmd->command_args == NULL)
-        {
-            cmd->command_args = ft_calloc(1, sizeof(t_command_args));
-            cmd->command_args->string = ft_strdup((*token_list)->str);
-            cmd->command_args->next = NULL;
-            cmd->command_args->flag = (*token_list)->flag;
-            tmp = cmd->command_args;
-            tmp->next = ft_calloc(1, sizeof(t_command_args));
-            tmp = tmp->next;            
-        }
         else
         {
-            tmp->string = ft_strdup((*token_list)->str);
-            tmp->next = NULL;
-            tmp->flag = (*token_list)->flag;
-            if (i < cmd->num_of_words - 1)
-                tmp->next = ft_calloc(1, sizeof(t_command_args));
-            tmp = tmp->next;
+            parse_args(token_list, cmd);
         }
-        i++;
-        *token_list = (*token_list)->next;
     }
 }
 
@@ -82,10 +85,9 @@ t_ast_node *parse_cmd(t_token **token_list)
     t_cmd *cmd;
     cmd = ft_calloc(1, sizeof(t_cmd));
     //mallocエラー処理
-    cmd->num_of_words = word_count(*token_list);//あとでかく,arg_countとかのほうが名前よさそう？
+    //今のところいらない//cmd->num_of_words = word_count(*token_list);//あとでかく,arg_countとかのほうが名前よさそう？
     cmd->in_fd = -2;
 	cmd->out_fd = -2;
-    cmd->command_flag = 0;//ここは0でいいのか？マクロとの兼ね合いに注意
     cmd->redirection = NULL;
     return (new_cmd_node(cmd, token_list));//ここからかく
 }

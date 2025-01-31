@@ -73,25 +73,22 @@ void parse_file_out(t_token **token_list, t_cmd *cmd, int command_flags)
 }
 void parse_redir(t_token **token_list, t_cmd *cmd)
 {
-    while ((*token_list) != NULL && ((*token_list)->type != PIPE_OP || WORD || ERROR))
+    if ((*token_list)->type == HEREDOC)
     {
-        if ((*token_list)->type == HEREDOC)
-        {
-            // parse_heredoc(token_list, cmd, F_HEREDOC);
-        }
-        if ((*token_list)->type == APPEND)
-        {
-            parse_append(token_list, cmd, F_APPEND);
-        }
-        if ((*token_list)->type == FILE_IN)
-        {
-            parse_file_in(token_list, cmd, F_INFILE);
+        // parse_heredoc(token_list, cmd, F_HEREDOC);
+    }
+    if ((*token_list)->type == APPEND)
+    {
+        parse_append(token_list, cmd, F_APPEND);
+    }
+    if ((*token_list)->type == FILE_IN)
+    {
+        parse_file_in(token_list, cmd, F_INFILE);
 
-        }
-        if ((*token_list)->type == FILE_OUT)
-        {
-            parse_file_out(token_list, cmd, F_OUTFILE);
-        }
-    }    
+    }
+    if ((*token_list)->type == FILE_OUT)
+    {
+        parse_file_out(token_list, cmd, F_OUTFILE);
+    }
 }
 //ダメなところがあるまだシンタックスエラーをはじけてない、特に> WORD WORDとか
