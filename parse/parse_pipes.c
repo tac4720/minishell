@@ -14,6 +14,7 @@ t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list)
     printf("parse_pipe activated\n");
     t_ast_node *new_node;
     // t_pipe  *pipe_node;
+    printf("%s\n", (*token_list)->str);
     if (*token_list && (*token_list)->type == PIPE_OP)
     {
         new_node = ft_calloc(1, sizeof(t_ast_node));
@@ -21,6 +22,7 @@ t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list)
         new_node->pipe_node = ft_calloc(1, sizeof(t_pipe));
         //mallocエラー処理
         new_node->type = AST_PIPE;
+
         // printf("test\n");
         new_node->pipe_node->left = left;
         *token_list = (*token_list)->next;

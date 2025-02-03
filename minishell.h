@@ -35,7 +35,8 @@ void parse_redir(t_token **token_list, t_cmd *cmd);
 void parse_file_out(t_token **token_list, t_cmd *cmd, int command_flags);
 void parse_file_in(t_token **token_list, t_cmd *cmd, int command_flags);
 void parse_append(t_token **token_list, t_cmd *cmd, int command_flags);
-void add_redir_node(t_token **token_list, t_cmd *cmd, int command_flag);
+void add_infile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag);
+void add_outfile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag);
 
 //interpret関数のプロトタイプ宣言
 t_ast_node	*interpret(char *line, t_context *context);
@@ -53,6 +54,8 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_strchr(const char *str, int c);
 char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+int		ft_printf(const char *format, ...);
+
 //builtin
 int		builtin_execute(char *line, t_context *context);
 

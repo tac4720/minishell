@@ -16,6 +16,8 @@ typedef struct s_token t_token;
 typedef struct s_env t_env;
 typedef struct s_stack t_stack;
 typedef struct s_shell t_shell;
+typedef struct s_outfile_redir t_outfile_redir;
+typedef struct s_infile_redir t_infile_redir;
 typedef enum e_command_flags t_command_flags;
 
 typedef enum e_token_type {
@@ -58,7 +60,8 @@ typedef struct s_cmd
 	int out_fd;
 	int num_of_words;
 	t_command_args *command_args;
-	t_redir *redirection;
+	t_infile_redir *infile_redir;
+	t_outfile_redir *outfile_redir;
 } t_cmd;
 
 typedef enum e_ast_node_type
@@ -94,20 +97,27 @@ typedef enum e_flags
 	F_DEL_QUOTES		= 1 << 6
 } t_flags;
 
-typedef enum e_command_flags
+typedef enum e_redir_flags
 {
 	F_NO_REDIR = 1 << 0,
 	F_INFILE = 1 << 1,
 	F_OUTFILE = 1 << 2,
 	F_HEREDOC = 1 << 3,
 	F_APPEND = 1 << 4
-}	t_command_flags;
+}	t_redir_flags;
 
-typedef struct s_redir
+typedef struct s_infile_redir
 {
 	char *filename;
-	t_command_flags redirection_flag;
-	t_redir *next;
-} t_redir;
+	t_redir_flags redirection_flag;
+	t_infile_redir *next;
+} t_infile_redir;
+
+typedef struct s_outfile_redir
+{
+	char *filename;
+	t_redir_flags redirection_flag;
+	t_outfile_redir *next;
+} t_outfile_redir;
 
 #endif

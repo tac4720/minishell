@@ -27,9 +27,12 @@ void parse_args(t_token **token_list, t_cmd *cmd)
 
 void add_cmd_node(t_token **token_list, t_cmd *cmd)
 {
-    while ((*token_list) != NULL)//このループの条件を変える
+    while ((*token_list) != NULL && (*token_list)->type != PIPE_OP)//このループの条件を変える
     {
-        if ((*token_list)->type == HEREDOC || APPEND || FILE_IN || FILE_OUT)
+        if ((*token_list)->type == HEREDOC || 
+        (*token_list)->type == APPEND || 
+        (*token_list)->type == FILE_IN || 
+        (*token_list)->type == FILE_OUT)
         {
             parse_redir(token_list, cmd);
         }
@@ -43,10 +46,11 @@ void add_cmd_node(t_token **token_list, t_cmd *cmd)
 t_ast_node *new_cmd_node(t_cmd *cmd, t_token **token_list)
 {
     t_ast_node  *new_node;
+        printf("new_cmd_node activated\n");
 
     new_node = ft_calloc(1, sizeof(t_ast_node));
     new_node->command_node = cmd;
-    if (cmd->num_of_words == 1)
+    if (cmd->num_of_words == 1) //ここもう使ってないよな
     {//もしWORDかENV_PARAM以外だったらはじく
         cmd->command_args = ft_calloc(1, sizeof(t_command_args));
         new_node->command_node->command_args->string = ft_strdup((*token_list)->str);
@@ -81,6 +85,7 @@ int word_count(t_token *token_list)
 t_ast_node *parse_cmd(t_token **token_list)
 {
     printf("parse_cmd activated\n");
+    printf("token_content when parse_cmd activated%s\n", (*token_list)->str);
 
     t_cmd *cmd;
     cmd = ft_calloc(1, sizeof(t_cmd));
@@ -88,6 +93,8 @@ t_ast_node *parse_cmd(t_token **token_list)
     //今のところいらない//cmd->num_of_words = word_count(*token_list);//あとでかく,arg_countとかのほうが名前よさそう？
     cmd->in_fd = -2;
 	cmd->out_fd = -2;
-    cmd->redirection = NULL;
+	cmd->command_args = NULL;
+    cmd->infile_redir = NULL;
+    cmd->outfile_redir = NULL;
     return (new_cmd_node(cmd, token_list));//ここからかく
 }
