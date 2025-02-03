@@ -37,7 +37,6 @@ t_ast_node	*interpret(char *line, t_context *context)
 
     // ft_printf("%s\n", tree->command_node->command_args->string);
 
-    printf("test");
     //pipetest
     ft_printf("%s\n", tree->pipe_node->right->command_node->command_args->string);
     ft_printf("%s\n", tree->pipe_node->left->command_node->command_args->string);

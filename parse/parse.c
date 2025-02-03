@@ -8,5 +8,6 @@ t_ast_node  *parse_tokens(t_token **token_list)
     if(!token_list)
         return (NULL);
     tree = parse_pipeline(token_list);
+    printf("パースが完了しました\n");
     return (tree);
 }
