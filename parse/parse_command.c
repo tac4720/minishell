@@ -7,13 +7,11 @@ void parse_args(t_token **token_list, t_cmd *cmd)
 
     if (cmd->command_args == NULL)
     {
-        printf("testa\n");
 
         cmd->command_args = ft_calloc(1, sizeof(t_command_args));
         cmd->command_args->string = ft_strdup((*token_list)->str);
         cmd->command_args->next = NULL;
         cmd->command_args->flag = (*token_list)->flag;
-        printf("testb\n");
 
     }
     else
@@ -48,9 +46,11 @@ void add_cmd_node(t_token **token_list, t_cmd *cmd)
                 else
                 {
                     parse_args(token_list, cmd);
-                    printf("testc\n");
-
                 }
+            }
+            else
+            {
+                break ;
             }
         }
 
