@@ -35,19 +35,18 @@ t_ast_node	*interpret(char *line, t_context *context)
     // ft_printf("%s\n", tree->command_node->outfile_redir->next->filename);
 
     //parsetest ls < testa < testb
-    ft_printf("%s\n", tree->command_node->command_args->string);
-    ft_printf("%s\n", tree->command_node->infile_redir->filename);
-    ft_printf("%s\n", tree->command_node->infile_redir->next->filename);
+    // ft_printf("%s\n", tree->command_node->command_args->string);
+    // ft_printf("%s\n", tree->command_node->infile_redir->filename);
+    // ft_printf("%s\n", tree->command_node->infile_redir->next->filename);
 
     // ft_printf("%s\n", tree->command_node->command_args->string);
 
     //pipetest ls <fe | few < ffdsa
-    // ft_printf("%s\n", tree->pipe_node->right->command_node->command_args->string);
-    // ft_printf("%s\n", tree->pipe_node->left->command_node->command_args->string);
-
-
-    // ft_printf("%s\n", tree->pipe_node->right->command_node->infile_redir->filename);
-    // ft_printf("%s\n", tree->pipe_node->left->command_node->infile_redir->next->filename);
+    ft_printf("%s\n", tree->pipe_node->left->command_node->command_args->string);
+    ft_printf("%s\n", tree->pipe_node->right->command_node->command_args->string);
+    ft_printf("%s\n", tree->pipe_node->left->command_node->infile_redir->filename);
+    ft_printf("%s\n", tree->pipe_node->left->command_node->outfile_redir->filename);
+    ft_printf("%s\n", tree->pipe_node->right->command_node->infile_redir->filename);
 
 
 
