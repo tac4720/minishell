@@ -13,7 +13,7 @@ t_ast_node	*interpret(char *line, t_context *context)
     token_list_for_printf = token_list;
 	while(token_list_for_printf)
     {
-        printf("token_list:%s,token_type:%d\n", token_list_for_printf->str, token_list_for_printf->type);
+        printf("token_list:%s,token_type:%d,token_flag:%d\n", token_list_for_printf->str, token_list_for_printf->type, token_list_for_printf->flag);
 
         token_list_for_printf = token_list_for_printf->next;
     }
@@ -41,12 +41,16 @@ t_ast_node	*interpret(char *line, t_context *context)
 
     // ft_printf("%s\n", tree->command_node->command_args->string);
 
-    //pipetest ls <fe | few < ffdsa
-    ft_printf("%s\n", tree->pipe_node->left->command_node->command_args->string);
-    ft_printf("%s\n", tree->pipe_node->right->command_node->command_args->string);
-    ft_printf("%s\n", tree->pipe_node->left->command_node->infile_redir->filename);
-    ft_printf("%s\n", tree->pipe_node->left->command_node->outfile_redir->filename);
-    ft_printf("%s\n", tree->pipe_node->right->command_node->infile_redir->filename);
+    // //pipetest ls <fe | few < ffdsa
+    // ft_printf("%s\n", tree->pipe_node->left->command_node->command_args->string);
+    // ft_printf("%s\n", tree->pipe_node->right->command_node->command_args->string);
+    // ft_printf("%s\n", tree->pipe_node->left->command_node->infile_redir->filename);
+    // ft_printf("%s\n", tree->pipe_node->left->command_node->outfile_redir->filename);
+    // ft_printf("%s\n", tree->pipe_node->right->command_node->infile_redir->filename);
+
+    //test"> fef"
+    // ft_printf("%s\n", tree->command_node->outfile_redir->filename);
+
 
 
 

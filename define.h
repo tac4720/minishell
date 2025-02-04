@@ -76,7 +76,10 @@ typedef struct s_ast_node
 	t_cmd *command_node;
 	t_pipe          *pipe_node;
 
+
 } t_ast_node;
+
+
 
 typedef struct s_pipe
 {
