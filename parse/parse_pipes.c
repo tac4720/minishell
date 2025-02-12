@@ -1,8 +1,8 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 t_ast_node *parse_pipeline(t_token **token_list)
 {
-    printf("parse_pipeline activated\n");
+    // printf("parse_pipeline activated\n");
     t_ast_node *node;
 
     node = parse_cmd(token_list);
@@ -11,7 +11,7 @@ t_ast_node *parse_pipeline(t_token **token_list)
 
 t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list)
 {
-    printf("parse_pipe activated\n");
+    // printf("parse_pipe activated\n");
     t_ast_node *new_node;
     // t_pipe  *pipe_node;
     

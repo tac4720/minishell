@@ -45,8 +45,7 @@ t_map *map_new(void)
 char *map_get(t_map *map, const char *name) 
 {
     if (!map || !name)
-        return NULL;
-    size_t index = hash_function(name);
+        return NULL; size_t index = hash_function(name);
     t_item *current = map->table[index];
     
     while (current) 

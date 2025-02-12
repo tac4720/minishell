@@ -1,8 +1,8 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 void parse_args(t_token **token_list, t_cmd *cmd)
 {
-    printf("parse_args activated\n");
+    // printf("parse_args activated\n");
     t_command_args *tmp;
 
     if (cmd->command_args == NULL)
@@ -30,7 +30,7 @@ void parse_args(t_token **token_list, t_cmd *cmd)
 
 void add_cmd_node(t_token **token_list, t_cmd *cmd)
 {
-    printf("add_cmd_node activated\n");
+    // printf("add_cmd_node activated\n");
     
         while ((*token_list) != NULL)//ここでまいかいせぐふぉしちゃう
         {
@@ -59,7 +59,7 @@ void add_cmd_node(t_token **token_list, t_cmd *cmd)
 t_ast_node *new_cmd_node(t_cmd *cmd, t_token **token_list)
 {
     t_ast_node  *new_node;
-    printf("new_cmd_node activated\n");
+    // printf("new_cmd_node activated\n");
 
     new_node = ft_calloc(1, sizeof(t_ast_node));
     new_node->command_node = cmd;
@@ -97,8 +97,8 @@ int word_count(t_token *token_list)
 
 t_ast_node *parse_cmd(t_token **token_list)
 {
-    printf("parse_cmd activated\n");
-    printf("token_content when parse_cmd activated:%s\n", (*token_list)->str);
+    // printf("parse_cmd activated\n");
+    // printf("token_content when parse_cmd activated:%s\n", (*token_list)->str);
 
     t_cmd *cmd;
     cmd = ft_calloc(1, sizeof(t_cmd));

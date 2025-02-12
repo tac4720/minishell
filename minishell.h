@@ -5,7 +5,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "define.h"
-
+#include "libft/libft.h"
+#include <fcntl.h>
 //tokenizer
 t_token *tokenize(char *line);
 int is_blank(char c);
@@ -59,4 +60,5 @@ int		ft_printf(const char *format, ...);
 //builtin
 int		builtin_execute(char *line, t_context *context);
 
-
+//execute.c
+void execute_ast(t_ast_node *node, char **envp);

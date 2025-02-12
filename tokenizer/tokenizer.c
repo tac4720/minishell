@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "minishell.h"
+#include "../minishell.h"
 
 // t_token *new_token(char *word)
 // {

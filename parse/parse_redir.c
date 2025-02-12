@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 void add_infile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag)//outfile,infile,appendすべてに対応していない。
 {
@@ -113,7 +113,7 @@ void parse_append(t_token **token_list, t_cmd *cmd, int command_flags)
 
 void parse_redir(t_token **token_list, t_cmd *cmd)
 {
-    ft_printf("parse_redir activated\n");
+    // ft_printf("parse_redir activated\n");
 
     if ((*token_list)->type == HEREDOC)
     {
