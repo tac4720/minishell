@@ -18,10 +18,10 @@ int	is_builtin(char *str)
 	return (-1);
 }
 
-int builtin_execute(char *line, t_context *context)
+int builtin_execute(char **args, t_context *context)
 {
-	char *args[] = {line, NULL, NULL};
-	int select = is_builtin(line);
+	// char *args[] = {line, NULL, NULL};
+	int select = is_builtin(args[0]);
 	if (select == 0)
 	{
 		ft_cd(args, context);

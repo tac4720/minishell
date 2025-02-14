@@ -80,15 +80,32 @@ char	*generate_path(char *cmd, char **envp)
 	return (valid_command(cmds, path, NULL, NULL));
 }
 
-void ft_execvp(char *cmd, char **envp)
+int	check_other(char **args, t_context *ctx, char **envp)
+{
+	if (ft_strchr(args[0], '/'))
+	{
+		execve(args[0], args, envp);
+		return (1);
+	}
+	if (builtin_execute(args, ctx))
+	 	return (1);
+	return (0);
+}
+
+void ft_execvp(char *cmd, char **envp, t_context *ctx)
 {
 	char	*full_path;
 	char	**cmds;
 
 	if (!cmd || !envp)
 		exit(EXIT_FAILURE);
-	full_path = generate_path(cmd, envp);
 	cmds = ft_split(cmd, ' ');
+	if (check_other(cmds, ctx, envp))
+	{
+		free_split(cmds);
+		return ;
+	}
+	full_path = generate_path(cmd, envp);
 	if (!cmds)
 		exit(EXIT_FAILURE);
 	if (full_path == NULL)

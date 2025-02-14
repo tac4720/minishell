@@ -12,13 +12,12 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include "../environ/environ.h"
-
 typedef struct s_context {
-    pid_t           shell_pgid;
-    struct termios  shell_tmodes; //端末の設定を保存
-    int             last_status;//$?で使う
-    int             is_interactive;//対話モードかどうか
-    t_map            *environ;
+	pid_t           shell_pgid;
+	struct termios  shell_tmodes; //端末の設定を保存
+	int             last_status;//$?で使う
+	int             is_interactive;//対話モードかどうか
+	t_map            *environ;
 } t_context;
 
 int	interpret(char *line, t_context *context);
@@ -30,43 +29,44 @@ static volatile sig_atomic_t g_sigint = 0;
 
 static void	handle_sigint(int sig)
 {
-    (void)sig;
-    g_sigint = 1;
-    write(STDERR_FILENO, "\n", 1);
-    rl_replace_line("", 0);
-    rl_on_new_line();
+	(void)sig;
+	g_sigint = 1;
+	write(STDERR_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
-static void	setup_signals(t_context *ctx)
+void	setup_signals(t_context *ctx)
 {
-    struct sigaction	sa;
+	struct sigaction	sa;
 
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_RESTART;
-    if (ctx->is_interactive)
-    {
-        sa.sa_handler = handle_sigint;
-        sigaction(SIGINT, &sa, NULL);
-        sa.sa_handler = SIG_IGN;
-        sigaction(SIGQUIT, &sa, NULL);
-    }
-    else
-    {
-        sa.sa_handler = SIG_DFL;
-        sigaction(SIGINT, &sa, NULL);
-        sigaction(SIGQUIT, &sa, NULL);
-    }
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	if (ctx->is_interactive)
+	{
+		sa.sa_handler = handle_sigint;
+		sigaction(SIGINT, &sa, NULL);
+		sa.sa_handler = SIG_IGN;
+		sigaction(SIGQUIT, &sa, NULL);
+	}
+	else
+	{
+		sa.sa_handler = SIG_DFL;
+		sigaction(SIGINT, &sa, NULL);
+		sigaction(SIGQUIT, &sa, NULL);
+	}
 }
 
 void	init_context(t_context *ctx, char **envp)
 {
-    ctx->shell_pgid = getpid();
-    ctx->is_interactive = isatty(STDIN_FILENO);
-    ctx->environ = map_new();
+	ctx->shell_pgid = getpid();
+	ctx->is_interactive = isatty(STDIN_FILENO);
+	ctx->environ = map_new();
 	// map_set(ctx->environ, "TEST", "test");
 	// printf("%s\n", map_get(ctx->environ, "TEST"));
-    tcgetattr(STDIN_FILENO, &ctx->shell_tmodes);
-    setup_signals(ctx);
+	tcgetattr(STDIN_FILENO, &ctx->shell_tmodes);
+	setup_signals(ctx);
 }
 
 
