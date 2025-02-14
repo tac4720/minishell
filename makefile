@@ -32,8 +32,12 @@ MAIN_SRCS = readline.c \
             parse/parse_pipes.c \
             parse/parse_redir.c \
             parse/parse.c \
-            # execute/execute.c \
-            # execute/execute_pipeline \
+            execute/execute.c \
+            execute/resolve.c \
+			heredoc/heredoc.c \
+			signal/signal.c
+
+			
 
 # 全ソースファイルの結合
 SRCS = $(MAIN_SRCS) $(BUILTIN_SRCS) $(ENVIRON_SRCS)

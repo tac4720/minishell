@@ -114,6 +114,22 @@ char	*expand_helper(const char *str, t_context *ctx)
 	return (result);
 }
 
+void	remove_quotes(char *str)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	if (len >= 2)
+	{
+		ft_memmove(str, str + 1, len - 2);
+		str[len - 2] = '\0';
+	}
+	else if (len == 2)
+	{
+		str[0] = '\0';
+	}
+}
+
 void	expand(t_ast_node *node, t_context *ctx)
 {
 	t_command_args *current;
@@ -123,7 +139,13 @@ void	expand(t_ast_node *node, t_context *ctx)
 	current = node->command_node->command_args;
 	while (current)
 	{
-		current->string = expand_helper(current->string, ctx);
+		// printf("%i\n", current->flag);
+		if (current->flag & (F_DOLLAR_IN_DQUOTES | F_SQUOTES | F_DQUOTES))
+			remove_quotes(current->string);
+		if (current->flag != F_SQUOTES)
+		{
+			current->string = expand_helper(current->string, ctx);
+		}
 		current = current->next;
 	}
 }
@@ -348,51 +370,51 @@ void execute_ast(t_ast_node *node, char **envp, t_context *ctx)
 	}
 }
 
-static volatile sig_atomic_t g_sigint = 0; 
+// static volatile sig_atomic_t g_sigint = 0; 
 
-int	main(int argc, char **argv, char **envp)
-{
-	t_context	ctx;
-	char		*input;
-	char *line;
-	t_token *token;
-	t_ast_node *tree;
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_context	*ctx;
+// 	char		*input;
+// 	char *line;
+// 	t_token *token;
+// 	t_ast_node *tree;
 
-	(void)argc;
-	(void)argv;
+// 	(void)argc;
+// 	(void)argv;
+// 	ctx = malloc(sizeof(t_context));
+// 	// init_context(&ctx, envp);
+// 	ctx->last_status = 0;
+// 	ctx->environ = map_new();
+// 	setup_signals(ctx);
 
-	// init_context(&ctx, envp);
-	ctx.last_status = 0;
-	ctx.environ = map_new();
-	setup_signals(&ctx);
+// 	while (1)
+// 	{
+// 		if (g_sigint)
+// 		{
+// 			rl_redisplay();
+// 			g_sigint = 0;
+// 		}
 
-	while (1)
-	{
-		if (g_sigint)
-		{
-			rl_redisplay();
-			g_sigint = 0;
-		}
+// 		input = readline("minishell:)");
 
-		input = readline("minishell:)");
-
-		if (input == NULL)
-		{
-			printf("\nExiting...\n");
-			break ;
-		}
-		if (*input)
-		{
-			add_history(input);
-			token = input_scanner(input);
-			tree = parse_tokens(&token);
-			expand_ast(tree, envp, &ctx);
-			execute_ast(tree, envp, &ctx);
-			// print_ast(tree, 0);
-			// interpret(input, &ctx); // 入力を解釈して実行
-		}
-		free(input);
-	}
-	return (ctx.last_status);
-}
+// 		if (input == NULL)
+// 		{
+// 			printf("\nExiting...\n");
+// 			break ;
+// 		}
+// 		if (*input)
+// 		{
+// 			add_history(input);
+// 			token = input_scanner(input);
+// 			tree = parse_tokens(&token);
+// 			expand_ast(tree, envp, ctx);
+// 			execute_ast(tree, envp, ctx);
+// 			// print_ast(tree, 0);
+// 			// interpret(input, &ctx); // 入力を解釈して実行
+// 		}
+// 		free(input);
+// 	}
+// 	return (ctx->last_status);
+// }
 
