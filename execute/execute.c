@@ -224,7 +224,8 @@ void execute_command(t_ast_node *node, char **envp, int input_fd, int output_fd,
 	} 
 	else
 	{
-		 waitpid(pid, NULL, 0);
+		 waitpid(pid, &(ctx->last_status), 0);
+		 ctx->last_status = WEXITSTATUS(ctx->last_status);
 	}
 }
 
@@ -314,8 +315,13 @@ void	execute_pipeline(t_ast_node *node, char **envp, int input_fd, t_context *ct
 		parent_process(&in_fd, pipe_fd, info.i, info.count);
 		info.i++;
 	}
-	while (waitpid(-1, NULL, 0) > 0)
-		;
+	int status = 0;
+	// while (waitpid(-1, &status, 0) > 0)
+	// {
+
+	// }
+	while (waitpid(-1, &(ctx->last_status), 0) > 0)
+    	ctx->last_status = WEXITSTATUS(ctx->last_status);
 }
 
 void	expand_ast(t_ast_node *node, char **envp, t_context *ctx)
@@ -361,6 +367,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	// init_context(&ctx, envp);
+	ctx.last_status = 0;
 	ctx.environ = map_new();
 	setup_signals(&ctx);
 
@@ -386,7 +393,7 @@ int	main(int argc, char **argv, char **envp)
 			tree = parse_tokens(&token);
 			expand_ast(tree, envp, &ctx);
 			execute_ast(tree, envp, &ctx);
-			print_ast(tree, 0);
+			// print_ast(tree, 0);
 			// interpret(input, &ctx); // 入力を解釈して実行
 		}
 		free(input);
