@@ -68,7 +68,7 @@ int map_put(t_map *map, const char *string)
 	char *value = strdup(equal_pos + 1);
 	
 	int result = map_set(map, name, value);
-	
+
 	free(name);
 	free(value);
 	return result;

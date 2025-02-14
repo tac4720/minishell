@@ -315,11 +315,6 @@ void	execute_pipeline(t_ast_node *node, char **envp, int input_fd, t_context *ct
 		parent_process(&in_fd, pipe_fd, info.i, info.count);
 		info.i++;
 	}
-	int status = 0;
-	// while (waitpid(-1, &status, 0) > 0)
-	// {
-
-	// }
 	while (waitpid(-1, &(ctx->last_status), 0) > 0)
     	ctx->last_status = WEXITSTATUS(ctx->last_status);
 }

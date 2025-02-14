@@ -55,6 +55,7 @@ int builtin_execute(char **args, t_context *context)
 	else if (select == 6)
 	{
 		ft_unset(args, context);
+		return (1);
 	}
 	return (0);
 }
