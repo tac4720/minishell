@@ -7,33 +7,33 @@ void handle_sigint(int sig) {
     rl_redisplay();
 }
 
-int main() {
-    char *input;
-	t_context context;
-	context.environ = map_new();
-	context.last_status = 0;
-  signal(SIGINT, handle_sigint);
-    while (1) {
-        // ユーザーにプロンプトを表示して入力を受け取る
-        input = readline("minishell:)");
+// int main() {
+//     char *input;
+// 	t_context context;
+// 	context.environ = map_new();
+// 	context.last_status = 0;
+//   signal(SIGINT, handle_sigint);
+//     while (1) {
+//         // ユーザーにプロンプトを表示して入力を受け取る
+//         input = readline("minishell:)");
 
-        if (input == NULL) { // EOF (Ctrl+D)の場合
-            printf("\nExiting...\n");
-            break;
-        }
+//         if (input == NULL) { // EOF (Ctrl+D)の場合
+//             printf("\nExiting...\n");
+//             break;
+//         }
 
-        if (*input) { // 入力が空でない場合
-            add_history(input); // 履歴に追加
-            interpret(input, &context); // 入力を解釈して実行
-        }
+//         if (*input) { // 入力が空でない場合
+//             add_history(input); // 履歴に追加
+//             interpret(input, &context); // 入力を解釈して実行
+//         }
 
-        printf("You entered: %s\n", input);
+//         printf("You entered: %s\n", input);
 
-        free(input); // readlineが動的に確保したメモリを解放
-    }
+//         free(input); // readlineが動的に確保したメモリを解放
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
 // #include <stdio.h>
 // #include <stdlib.h>

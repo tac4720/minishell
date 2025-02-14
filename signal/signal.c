@@ -58,46 +58,48 @@ static void	setup_signals(t_context *ctx)
     }
 }
 
-static void	init_context(t_context *ctx, char **envp)
+void	init_context(t_context *ctx, char **envp)
 {
     ctx->shell_pgid = getpid();
     ctx->is_interactive = isatty(STDIN_FILENO);
     ctx->environ = map_new();
+	// map_set(ctx->environ, "TEST", "test");
+	// printf("%s\n", map_get(ctx->environ, "TEST"));
     tcgetattr(STDIN_FILENO, &ctx->shell_tmodes);
     setup_signals(ctx);
 }
 
 
-int	main(int argc, char **argv, char **envp)
-{
-    t_context	ctx;
-    char		*input;
+// int	main(int argc, char **argv, char **envp)
+// {
+//     t_context	ctx;
+//     char		*input;
 
-    (void)argc;
-    (void)argv;
-    init_context(&ctx, envp);
+//     (void)argc;
+//     (void)argv;
+//     init_context(&ctx, envp);
 
-    while (1)
-    {
-        if (g_sigint)
-        {
-            rl_redisplay();
-            g_sigint = 0;
-        }
+//     while (1)
+//     {
+//         if (g_sigint)
+//         {
+//             rl_redisplay();
+//             g_sigint = 0;
+//         }
 
-        input = readline("minishell:)");
+//         input = readline("minishell:)");
 
-        if (input == NULL)  // EOF (Ctrl+D)の場合
-        {
-            printf("\nExiting...\n");
-            break;
-        }
-        if (*input)
-        {
-            add_history(input);
-            interpret(input, &context); // 入力を解釈して実行
-        }
-        free(input);
-    }
-    return (ctx.last_status);
-}
+//         if (input == NULL)  // EOF (Ctrl+D)の場合
+//         {
+//             printf("\nExiting...\n");
+//             break;
+//         }
+//         if (*input)
+//         {
+//             add_history(input);
+//             interpret(input, &context); // 入力を解釈して実行
+//         }
+//         free(input);
+//     }
+//     return (ctx.last_status);
+// }

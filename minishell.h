@@ -61,4 +61,4 @@ int		ft_printf(const char *format, ...);
 int		builtin_execute(char *line, t_context *context);
 
 //execute.c
-void execute_ast(t_ast_node *node, char **envp);
+void execute_ast(t_ast_node *node, char **envp, t_context *ctx);
