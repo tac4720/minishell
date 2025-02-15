@@ -58,8 +58,6 @@ void	setup_signals(t_context *ctx)
 	}
 }
 
-
-
 // int	main(int argc, char **argv, char **envp)
 // {
 //     t_context	ctx;

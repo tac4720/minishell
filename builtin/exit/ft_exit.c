@@ -22,10 +22,9 @@ static bool	is_numeric(const char *str)
 
 static void    print_error(const char *msg, int newline)
 {
-    ft_putstr_fd("exit\n", STDERR_FILENO);
-    ft_putstr_fd(msg, STDERR_FILENO);
+    ft_putstr_fd(msg, 2);
     if (newline)
-        ft_putstr_fd("\n", STDERR_FILENO);
+        ft_putstr_fd("\n", 2);
 }
 
 static long    safe_strtol(const char *str, int *error)
@@ -50,18 +49,18 @@ int    ft_exit(char **args, t_context *context)
 
     error_flag = 0;
     if (!args[1])
-        exit(context->last_status % 256);
+        exit(1);
     if (args[2])
     {
-        print_error("exit: too many arguments", 1);
-        context->last_status = 1;
-        return (1);
+        print_error(" too many arguments", 1);
+        context->last_status = 2;
+        return (2);
     }
     status = safe_strtol(args[1], &error_flag);
     if (error_flag || !is_numeric(args[1]))
     {
-        print_error("exit: numeric argument required", 1);
-        exit(255);
+        print_error(" numeric argument required", 1);
+        exit(2);
     }
     exit((unsigned char)status);
 }
