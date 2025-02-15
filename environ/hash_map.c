@@ -9,7 +9,7 @@
 
 #define PATH_MAX 4096
 
-static int	add_new_item(t_map *map, size_t index, const char *name, const char *value)
+int	add_new_item(t_map *map, size_t index, const char *name, const char *value)
 {
 	t_item	*new_item;
 
@@ -30,7 +30,7 @@ char	*ft_strtrim_free(char *str, const char *set)
 	return (new_str);
 }
 
-static unsigned int	hash_function(const char *name)
+unsigned int	hash_function(const char *name)
 {
 	unsigned int	hash;
 	const char		*tmp;
@@ -155,7 +155,7 @@ int	map_set(t_map *map, const char *name, const char *value)
 }
 
 
-static char	*process_unset_key(const char *name)
+ char	*process_unset_key(const char *name)
 {
 	char	*key;
 	char	*eq_pos;
@@ -169,7 +169,7 @@ static char	*process_unset_key(const char *name)
 	return (key);
 }
 
-static t_item	**find_item_ptr(t_map *map, const char *key, unsigned int index)
+ t_item	**find_item_ptr(t_map *map, const char *key, unsigned int index)
 {
 	t_item	*current;
 	t_item	**prev_ptr;
@@ -186,7 +186,7 @@ static t_item	**find_item_ptr(t_map *map, const char *key, unsigned int index)
 	return (NULL);
 }
 
-static void	free_item(t_item *item)
+ void	free_item(t_item *item)
 {
 	free(item->name);
 	free(item->value);
@@ -220,7 +220,7 @@ int	map_unset(t_map *map, const char *name)
 }
 
 
-// static unsigned int hash_function(const char *name) 
+//  unsigned int hash_function(const char *name) 
 // {
 // 	unsigned int hash = 0;
 // 	while (*name)

@@ -5,6 +5,7 @@ int ft_env(char **args, t_context *context)
 {
 	t_map	*env;
 	int 	i;
+	t_item	*current;
 
 	env = context->environ;
 	i = 0;
@@ -15,7 +16,7 @@ int ft_env(char **args, t_context *context)
 
 	while (i < TABLE_SIZE)
     {
-      t_item *current = env->table[i];
+      current = env->table[i];
       while (current)
       {
         ft_printf("%s=%s\n", current->name, current->value);

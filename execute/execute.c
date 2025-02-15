@@ -1,4 +1,3 @@
-
 #include "../minishell.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -21,7 +20,7 @@ typedef struct s_exec_info
 	char	**envp;
 }	t_exec_info;
 
-static char	*join_and_free(char *s1, char *s2, int free_s2)
+ char	*join_and_free(char *s1, char *s2, int free_s2)
 {
 	char	*result;
 	char	*tmp;
@@ -34,7 +33,7 @@ static char	*join_and_free(char *s1, char *s2, int free_s2)
 	return (result);
 }
 
-static char	*expand_status(const char *str, int *i, char *result, t_context *ctx)
+ char	*expand_status(const char *str, int *i, char *result, t_context *ctx)
 {
 	char	*expand_str;
 
@@ -47,7 +46,7 @@ static char	*expand_status(const char *str, int *i, char *result, t_context *ctx
 	return (result);
 }
 
-static char	*get_env_value(const char *str, int *i)
+ char	*get_env_value(const char *str, int *i)
 {
 	char	*var_name;
 	int		start;
@@ -59,7 +58,7 @@ static char	*get_env_value(const char *str, int *i)
 	return (var_name);
 }
 
-static char	*expand_env_var(const char *str, int *i, char *result, t_context *ctx)
+ char	*expand_env_var(const char *str, int *i, char *result, t_context *ctx)
 {
 	char	*var_name;
 	char	*expand_str;
@@ -79,7 +78,7 @@ static char	*expand_env_var(const char *str, int *i, char *result, t_context *ct
 	return (result);
 }
 
-static char	*expand_normal_str(const char *str, int *i, char *result)
+ char	*expand_normal_str(const char *str, int *i, char *result)
 {
 	char	*tmp;
 	int		start;
@@ -119,22 +118,67 @@ char	*expand_helper(const char *str, t_context *ctx)
 	return (result);
 }
 
-// void	remove_quotes(char *str)
-// {
-// 	int	len;
+static void quotes_backup(char *str, char *s, int i, int *j)
+{
+    if (str[i] == 1)
+        s[++(*j)] = '\'';
+    else if (str[i] == 2)
+        s[++(*j)] = '\"';
+    else
+        s[++(*j)] = str[i];
+}
 
-// 	len = ft_strlen(str);
-// 	if (len >= 2)
-// 	{
-// 		ft_memmove(str, str + 1, len - 2);
-// 		str[len - 2] = '\0';
-// 	}
-// 	else if (len == 2)
-// 	{
-// 		str[0] = '\0';
-// 	}
-// }
+static int check_quotes_count(char *str)
+{
+    int i;
+    int n;
+    char a;
 
+    i = 0;
+    n = 0;
+    while (str[i])
+    {
+        if (str[i] == '\"' || str[i] == '\'')
+        {
+            a = str[i];
+            i++;
+            n++;
+            while (str[i] && str[i] != a)
+                i++;
+            if (str[i] == a)
+                n++;
+        }
+        if (str[i])
+            i++;
+    }
+    return (n);
+}
+
+char *remove_quotes_helper(char *str)
+{
+    int i;
+    int j;
+    char a;
+    char *s;
+
+    i = -1;
+    j = -1;
+    s = ft_calloc(ft_strlen(str) - check_quotes_count(str) + 1, sizeof(char));
+    while (str[++i])
+    {
+        if (str[i] == '\"' || str[i] == '\'')
+        {
+            a = str[i];
+            while (str[++i] && str[i] != a)
+                quotes_backup(str, s, i, &j);
+        }
+        else
+            quotes_backup(str, s, i, &j);
+    }
+    s[++j] = 0;
+    free(str);
+    return (s);
+}
 
 void	remove_quotes(char *str)
 {
@@ -164,6 +208,34 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
+// void	remove_quotes(char *str)
+// {
+// 	int		i = 0;
+// 	int		j = 0;
+// 	char	quote = '\0';
+
+// 	while (str[i])
+// 	{
+// 		if ((str[i] == '\'' || str[i] == '\"'))
+// 		{
+// 			if (quote == '\0')
+// 			{
+// 				quote = str[i];
+// 				i++;
+// 				continue;
+// 			}
+// 			else if (str[i] == quote)
+// 			{
+// 				quote = '\0';
+// 				i++;
+// 				continue;
+// 			}
+// 		}
+// 		str[j++] = str[i++];
+// 	}
+// 	str[j] = '\0';
+// }
+
 void	expand(t_ast_node *node, t_context *ctx)
 {
 	t_command_args *current;
@@ -174,8 +246,8 @@ void	expand(t_ast_node *node, t_context *ctx)
 	while (current)
 	{
 		// printf("%i\n", current->flag);
-		if (current->flag & (F_DOLLAR_IN_DQUOTES | F_SQUOTES | F_DQUOTES))
-			remove_quotes(current->string);
+		// if (current->flag & (F_DOLLAR_IN_DQUOTES | F_SQUOTES | F_DQUOTES))
+		// 	remove_quotes(current->string);
 		if (current->flag != F_SQUOTES)
 		{
 			current->string = expand_helper(current->string, ctx);
@@ -185,7 +257,7 @@ void	expand(t_ast_node *node, t_context *ctx)
 }
 
 
-static void handle_heredoc(t_infile_redir *ir)
+ void handle_heredoc(t_infile_redir *ir)
 {
     int fd;
 
@@ -200,15 +272,14 @@ static void handle_heredoc(t_infile_redir *ir)
     fd = open(ir->filename, O_RDONLY);
     if (fd == -1)
     {
-        perror("open");
-        exit(EXIT_FAILURE);
+		exit (EXIT_FAILURE);
     }
     dup2(fd, STDIN_FILENO);
     close(fd);
     unlink(ir->filename);
 }
 
-static void handle_input_redirect(t_infile_redir *ir)
+ void handle_input_redirect(t_infile_redir *ir)
 {
     int fd;
 
@@ -232,7 +303,7 @@ static void handle_input_redirect(t_infile_redir *ir)
     }
 }
 
-static void handle_output_redirect(t_outfile_redir *or)
+ void handle_output_redirect(t_outfile_redir *or)
 {
     int flags;
     int fd;
@@ -258,67 +329,16 @@ static void handle_output_redirect(t_outfile_redir *or)
 
 void handle_redirect(t_cmd *cmd)
 {
+	// if (cmd->infile_redir->redirection_flag == FILE_IN ||
+	// 	cmd->outfile_redir->redirection_flag == FILE_OUT ||
+	// 	cmd->outfile_redir->redirection_flag == APPEND
+	// )
+	// {
+	// }
+
     handle_input_redirect(cmd->infile_redir);
     handle_output_redirect(cmd->outfile_redir);
 }
-
-// void handle_redirect(t_cmd *cmd)
-// {
-// 	t_infile_redir *ir = cmd->infile_redir;
-// 	int flags;
-// 	int fd;
-// 	while (ir)
-// 	{
-// 		if (ir->redirection_flag == F_HEREDOC) {
-// 			fd = open(ir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 			if (fd == -1)
-// 			{
-// 				perror("open");
-// 				exit(EXIT_FAILURE);
-// 			}
-// 			here_doc(ir->filename, fd);
-// 			close(fd);
-
-// 			fd = open(ir->filename, O_RDONLY);
-// 			if (fd == -1)
-// 			{
-// 				perror("open");
-// 				exit(EXIT_FAILURE);
-// 			}
-// 			dup2(fd, STDIN_FILENO);
-// 			close(fd);
-// 			unlink(ir->filename);
-// 			ir = ir->next;
-// 			continue ;
-// 		}
-// 		fd = open(ir->filename, O_RDONLY);
-// 		if (fd == -1) {
-// 			perror("open");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		dup2(fd, STDIN_FILENO);
-// 		close(fd);
-// 		ir = ir->next;
-// 	}
-// 	t_outfile_redir *or = cmd->outfile_redir;
-// 	while (or) 
-// 	{
-// 		flags = O_WRONLY | O_CREAT;
-// 		if (or->redirection_flag == F_APPEND)
-// 			flags |= O_APPEND;
-// 		else
-// 			flags |= O_TRUNC;
-// 		fd = open(or->filename, flags, 0644);
-// 		if (fd == -1)
-// 		{
-// 			perror("open");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		dup2(fd, STDOUT_FILENO);
-// 		close(fd);
-// 		or = or->next;
-// 	}
-// }
 
 void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_context *ctx)
 {
@@ -331,7 +351,6 @@ void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_c
 		 close(output_fd);
 	}
 	handle_redirect(node->command_node);
-
 	t_command_args *current = node->command_node->command_args;
 	char *cmds = ft_strdup(current->string);
 	current = current->next;
@@ -363,7 +382,7 @@ void execute_command(t_ast_node *node, char **envp, int input_fd, int output_fd,
 	}
 }
 
-static void	reverse_commands(t_ast_node **cmds, int count)
+ void	reverse_commands(t_ast_node **cmds, int count)
 {
 	int			i;
 	t_ast_node	*temp;
@@ -378,7 +397,7 @@ static void	reverse_commands(t_ast_node **cmds, int count)
 	}
 }
 
-static void	store_commands(t_ast_node *node, t_ast_node **cmds, int *count)
+ void	store_commands(t_ast_node *node, t_ast_node **cmds, int *count)
 {
 	while (node && node->type == AST_PIPE)
 	{
@@ -393,7 +412,7 @@ static void	store_commands(t_ast_node *node, t_ast_node **cmds, int *count)
 	}
 }
 
-static void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
+ void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
 		t_exec_info *info, t_context *ctx)
 {
 	if (in_fd != STDIN_FILENO)
@@ -411,7 +430,7 @@ static void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
 	exit(EXIT_FAILURE);
 }
 
-static void	parent_process(int *in_fd, int *pipe_fd, int i, int count)
+ void	parent_process(int *in_fd, int *pipe_fd, int i, int count)
 {
 	if (*in_fd != STDIN_FILENO)
 		close(*in_fd);

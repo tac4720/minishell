@@ -8,6 +8,8 @@ void add_infile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag)//
     {
         cmd->infile_redir = ft_calloc(1, sizeof(t_infile_redir));
         cmd->infile_redir->filename = ft_strdup((*token_list)->str);
+		printf(cmd->infile_redir->filename);
+		// remove_quotes(cmd->infile_redir->filename);
         cmd->infile_redir->next = NULL;
         cmd->infile_redir->redirection_flag |= command_flag;
         *token_list = (*token_list)->next;
@@ -19,6 +21,8 @@ void add_infile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag)//
             tmp = tmp->next;
         tmp->next = ft_calloc(1, sizeof(t_infile_redir));
         tmp->next->filename = ft_strdup((*token_list)->str);
+		printf(tmp->next->filename);
+		// remove_quotes(cmd->infile_redir->filename);
         tmp->next->next = NULL;
         cmd->infile_redir->redirection_flag |= command_flag;
         *token_list = (*token_list)->next;
@@ -34,7 +38,8 @@ void add_outfile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag)/
     {
         cmd->outfile_redir = ft_calloc(1, sizeof(t_outfile_redir));
         cmd->outfile_redir->filename = ft_strdup((*token_list)->str);
-        // ft_printf("test:%s\n", cmd->outfile_redir->filename);
+		// remove_quotes(cmd->infile_redir->filename);
+        ft_printf("test:%s\n", cmd->outfile_redir->filename);
         cmd->outfile_redir->next = NULL;
         cmd->outfile_redir->redirection_flag |= command_flag;
         *token_list = (*token_list)->next;
@@ -46,6 +51,7 @@ void add_outfile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag)/
             tmp = tmp->next;
         tmp->next = ft_calloc(1, sizeof(t_outfile_redir));
         tmp->next->filename = ft_strdup((*token_list)->str);
+		remove_quotes(cmd->infile_redir->filename);
         tmp->next->next = NULL;
         cmd->outfile_redir->redirection_flag |= command_flag;
         *token_list = (*token_list)->next;

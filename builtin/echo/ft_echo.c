@@ -41,15 +41,15 @@ int    ft_echo(char **args, t_context *context)
         flag = 1;
         i++;
     }
-    while (args[i] && status == 0)
+    while (args[i])
     {
-        status = write_str(args[i]);
-        if (args[i + 1] && status == 0)
-            status = write_str(" ");
+        ft_printf(args[i]);
+        if (args[i + 1])
+            status = ft_printf(" ");
         i++;
     }
     if (flag == 0 && status == 0)
-        status = write_newline();
+        status = ft_printf("\n");
     return (status);
 }
 

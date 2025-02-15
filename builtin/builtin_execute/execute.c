@@ -3,7 +3,6 @@
 #include "builtin.h"
 #include <stdio.h>
 
-
 int is_builtin(char *str)
 {
     int         i;
@@ -28,7 +27,6 @@ int is_builtin(char *str)
     }
     return (-1);
 }
-
 
 // int	is_builtin(char *str)
 // {

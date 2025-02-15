@@ -34,6 +34,24 @@ static void handle_export_error(t_context *context)
 	exit(1);
 }
 
+int	printf_all_env(t_context *context)
+{
+	int	i;
+
+	i = 0;
+	while (i < TABLE_SIZE)
+    {
+      t_item *current = context->environ->table[i];
+      while (current)
+      {
+        ft_printf("declare -x %s=%s\n", current->name, current->value);
+        current = current->next;
+      }
+		i++;
+    }
+	return (0);
+}
+
 int ft_export(char **args, t_context *context)
 {
     t_map   *env;
@@ -43,7 +61,7 @@ int ft_export(char **args, t_context *context)
     env = context->environ;
     status = 0;
     if (!args[1])
-        return (0);
+        return printf_all_env(context);
     j = 1;
     while (args[j])
     {

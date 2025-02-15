@@ -74,8 +74,11 @@ static void	process_input_line(char *input, t_context *ctx, char **envp)
 		add_history(input);
 		tokens = input_scanner(input);
 		ast = parse_tokens(&tokens);
-		expand_ast(ast, envp, ctx);
-		execute_ast(ast, envp, ctx);
+		if (ast)
+		{
+			expand_ast(ast, envp, ctx);
+			execute_ast(ast, envp, ctx);
+		}
 	}
 }
 

@@ -64,5 +64,6 @@ int		builtin_execute(char **args, t_context *context);
 //execute.c
 void execute_ast(t_ast_node *node, char **envp, t_context *ctx);
 void	expand_ast(t_ast_node *node, char **envp, t_context *ctx);
+void	remove_quotes(char *str);
 //signal.c
 void	setup_signals(t_context *ctx);

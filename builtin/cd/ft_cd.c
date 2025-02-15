@@ -15,20 +15,24 @@ static int  update_pwd_oldpwd(t_context *context)
 		map_set(context->environ, "OLDPWD", oldpwd);
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-		perror("cd");
-		return (1);
+		context->last_status = 1;
+		exit(1);
 	}
 	map_set(context->environ, "PWD", cwd);
-	return (0);
+	context->last_status = 0;
+	exit(0);
 }
 
-int ft_cd(char **args, t_context *context)
+void	error_check(char **args, t_context *context, char *target_dir)
 {
-	char    *target_dir;
-	int     ret;
-
+	if (args[2] != NULL)
+	{
+		ft_putstr_fd(" too many arguments", 2);
+		context->last_status = 1;
+		exit(1);
+	}
 	if (args[1])
-	target_dir = args[1];
+		target_dir = args[1];
 	if (target_dir == NULL)
 	{
 		target_dir = map_get(context->environ, "HOME");
@@ -36,23 +40,40 @@ int ft_cd(char **args, t_context *context)
 		{
 			context->last_status = 1;
 			exit(1);
-			return (1);
 		}
 	}
-	else if (strcmp(target_dir, "-") == 0)
-	{
-		target_dir = map_get(context->environ, "OLDPWD");
-		if (target_dir == NULL)
-		{
-			context->last_status = 1;
-			exit(1);
-		}
-		printf("%s\n", target_dir);
-	}
+}
+
+int ft_cd(char **args, t_context *context)
+{
+	char    *target_dir;
+	int     ret;
+	
+	error_check(args, context, target_dir);
+	// if (args[1])
+	// 	target_dir = args[1];
+	// if (target_dir == NULL)
+	// {
+	// 	target_dir = map_get(context->environ, "HOME");
+	// 	if (target_dir == NULL)
+	// 	{
+	// 		context->last_status = 1;
+	// 		exit(1);
+	// 	}
+	// }
+	// else if (ft_strncmp(target_dir, "-", 1) == 0)
+	// {
+	// 	target_dir = map_get(context->environ, "OLDPWD");
+	// 	if (target_dir == NULL)
+	// 	{
+	// 		context->last_status = 1;
+	// 		exit(1);
+	// 	}
+	// 	ft_printf("%s\n", target_dir);
+	// }
 	ret = chdir(target_dir);
 	if (ret != 0)
 	{
-		perror("chdir");
 		context->last_status = 1;
 		exit (1);
 	}
