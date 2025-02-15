@@ -10,11 +10,11 @@ int	ft_pwd(char **args, t_context *context)
 	char	*path;
 
 	(void)context;
-	if (args[1] != NULL)
-	{
-		fprintf(stderr, "pwd: too many arguments\n");
-		return (1);
-	}
+	// if (args[1] != NULL)
+	// {
+	// 	fprintf(stderr, "pwd: too many arguments\n");
+	// 	return (1);
+	// }
 	buff = malloc(PATH_MAX);
 	if (!buff)
 	{

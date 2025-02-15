@@ -44,42 +44,92 @@ static bool	is_limiter_match(char *line, const char *limiter)
 	return (false);
 }
 
+static char	*process_input_line(char **line, char *input)
+{
+    char	*tmp;
+
+    tmp = ft_strjoin(*line, input);
+    free(*line);
+    *line = tmp;
+    tmp = ft_strjoin(*line, "\n");
+    free(*line);
+    return (tmp);
+}
+
+static void	handle_eof(const char *limiter)
+{
+    ft_putstr_fd("minishell: warning: here-document ", STDERR_FILENO);
+    ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
+    ft_putstr_fd(limiter, STDERR_FILENO);
+    ft_putstr_fd("')\n", STDERR_FILENO);
+}
+
 void	here_doc(const char *limiter, int fd)
 {
-	char	*input;
-	char	*line;
+    char	*input;
+    char	*line;
 
-	line = "";
-	setup_heredoc_signals();
-	while (true)
-	{
-		input = readline("> ");
-		if (g_signal_flag)
-		{
-			free(input);
-			ft_putstr_fd("\n", STDERR_FILENO);
-			break ;
-		}
-		if (!input)
-		{
-			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file", 2);
-			ft_putstr_fd(" (wanted `", 2); 
-			ft_putstr_fd(limiter, 2);
-			ft_putstr_fd("')\n", 2);
-			break ;
-		}
-		if (is_limiter_match(input, limiter))
-		{
-			ft_putstr_fd(line, fd);
-			free(input);
-			break ;
-		}
-		line = ft_strjoin(line, input);
-		line = ft_strjoin(line, "\n");
-		free(input);
-	}
-	close(fd);
+    line = ft_strdup("");
+    setup_heredoc_signals();
+    while (!g_signal_flag)
+    {
+        input = readline("> ");
+        if (!input)
+        {
+            handle_eof(limiter);
+            break ;
+        }
+        if (is_limiter_match(input, limiter))
+        {
+            ft_putstr_fd(line, fd);
+            free(input);
+            break ;
+        }
+        line = process_input_line(&line, input);
+        free(input);
+    }
+    free(line);
+    close(fd);
+    if (g_signal_flag)
+        exit(130);
 }
+
+// void	here_doc(const char *limiter, int fd)
+// {
+// 	char	*input;
+// 	char	*line;
+
+// 	line = "";
+// 	setup_heredoc_signals();
+// 	while (true)
+// 	{
+// 		input = readline("> ");
+// 		if (g_signal_flag)
+// 		{
+// 			free(input);
+// 			ft_putstr_fd("\n", STDERR_FILENO);
+// 			break ;
+// 		}
+// 		if (!input)
+// 		{
+// 			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file", 2);
+// 			ft_putstr_fd(" (wanted `", 2); 
+// 			ft_putstr_fd(limiter, 2);
+// 			ft_putstr_fd("')\n", 2);
+// 			break ;
+// 		}
+// 		if (is_limiter_match(input, limiter))
+// 		{
+// 			ft_putstr_fd(line, fd);
+// 			free(input);
+// 			break ;
+// 		}
+// 		line = ft_strjoin(line, input);
+// 		line = ft_strjoin(line, "\n");
+// 		free(input);
+// 	}
+// 	close(fd);
+// }
 
 // int main(void)
 // {

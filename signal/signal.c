@@ -58,16 +58,6 @@ void	setup_signals(t_context *ctx)
 	}
 }
 
-void	init_context(t_context *ctx, char **envp)
-{
-	ctx->shell_pgid = getpid();
-	ctx->is_interactive = isatty(STDIN_FILENO);
-	ctx->environ = map_new();
-	// map_set(ctx->environ, "TEST", "test");
-	// printf("%s\n", map_get(ctx->environ, "TEST"));
-	tcgetattr(STDIN_FILENO, &ctx->shell_tmodes);
-	setup_signals(ctx);
-}
 
 
 // int	main(int argc, char **argv, char **envp)

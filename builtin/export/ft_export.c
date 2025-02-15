@@ -1,34 +1,61 @@
 #include <unistd.h>
 #include "../builtin_execute/builtin.h"
+#include "../../minishell.h"
 
+static int  validate_var_name(char *arg)
+{
+    char    *eq_pos;
+    size_t  name_len;
+    size_t  i;
+
+    eq_pos = ft_strchr(arg, '=');
+    if (eq_pos)
+        name_len = eq_pos - arg;
+    else
+        name_len = ft_strlen(arg);
+    if (name_len == 0)
+        return (0);
+    if (!ft_isalpha(arg[0]) && arg[0] != '_')
+        return (0);
+    i = 1;
+    while (i < name_len)
+    {
+        if (!ft_isalnum(arg[i]) && arg[i] != '_')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+static void handle_export_error(t_context *context)
+{
+    ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
+    context->last_status = 1;
+	exit(1);
+}
 
 int ft_export(char **args, t_context *context)
 {
-  t_map *env = context->environ;
-  
-  if (args[1] == NULL)
-  {
-    for (int i = 0; i < TABLE_SIZE; i++)
+    t_map   *env;
+    int     j;
+    int     status;
+
+    env = context->environ;
+    status = 0;
+    if (!args[1])
+        return (0);
+    j = 1;
+    while (args[j])
     {
-      t_item *current = env->table[i];
-      while (current)
-      {
-        printf("declare -x %s=%s\n", current->name, current->value);
-        current = current->next;
-      }
+        if (!validate_var_name(args[j]))
+        {
+            handle_export_error(context);
+            status = 1;
+        }
+        else
+            map_put(env, args[j]);
+        j++;
     }
-  }
-  int i = 0;
-  while (args[1][i])
-  {
-    if (!isalpha(args[1][i]) && args[1][i] != '_' && args[1][i] != '=')
-    {
-      write(2, "export: not a valid identifier\n", 31);
-      return 1;
-    }
-    i++;
-  }
-  map_put(env, args[1]);
-  printf("%s\n", map_get(context->environ, args[1]));
-  return 0;
+    return (status);
 }
+

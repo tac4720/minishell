@@ -27,13 +27,15 @@ int ft_cd(char **args, t_context *context)
 	char    *target_dir;
 	int     ret;
 
+	if (args[1])
 	target_dir = args[1];
 	if (target_dir == NULL)
 	{
 		target_dir = map_get(context->environ, "HOME");
 		if (target_dir == NULL)
 		{
-			fprintf(stderr, "cd: HOME not set\n");
+			context->last_status = 1;
+			exit(1);
 			return (1);
 		}
 	}
@@ -42,16 +44,17 @@ int ft_cd(char **args, t_context *context)
 		target_dir = map_get(context->environ, "OLDPWD");
 		if (target_dir == NULL)
 		{
-			fprintf(stderr, "cd: OLDPWD not set\n");
-			return (1);
+			context->last_status = 1;
+			exit(1);
 		}
 		printf("%s\n", target_dir);
 	}
 	ret = chdir(target_dir);
 	if (ret != 0)
 	{
-		fprintf(stderr, "cd: %s: %s\n", target_dir, strerror(errno));
-		return (1);
+		perror("chdir");
+		context->last_status = 1;
+		exit (1);
 	}
 	return (update_pwd_oldpwd(context));
 }

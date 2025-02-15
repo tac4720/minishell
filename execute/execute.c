@@ -103,6 +103,11 @@ char	*expand_helper(const char *str, t_context *ctx)
 	{
 		if (str[i] == '$')
 		{
+			if (ft_strlen(str) == 1)
+			{
+				result = ft_strdup("$");
+				break;
+			}
 			if (str[i + 1] == '?')
 				result = expand_status(str, &i, result, ctx);
 			else
@@ -114,20 +119,49 @@ char	*expand_helper(const char *str, t_context *ctx)
 	return (result);
 }
 
+// void	remove_quotes(char *str)
+// {
+// 	int	len;
+
+// 	len = ft_strlen(str);
+// 	if (len >= 2)
+// 	{
+// 		ft_memmove(str, str + 1, len - 2);
+// 		str[len - 2] = '\0';
+// 	}
+// 	else if (len == 2)
+// 	{
+// 		str[0] = '\0';
+// 	}
+// }
+
+
 void	remove_quotes(char *str)
 {
-	int	len;
+	int		i = 0;
+	int		j = 0;
+	char	quote = '\0';
 
-	len = ft_strlen(str);
-	if (len >= 2)
+	while (str[i])
 	{
-		ft_memmove(str, str + 1, len - 2);
-		str[len - 2] = '\0';
+		if ((str[i] == '\'' || str[i] == '\"'))
+		{
+			if (quote == '\0')
+			{
+				quote = str[i];
+				i++;
+				continue;
+			}
+			else if (str[i] == quote)
+			{
+				quote = '\0';
+				i++;
+				continue;
+			}
+		}
+		str[j++] = str[i++];
 	}
-	else if (len == 2)
-	{
-		str[0] = '\0';
-	}
+	str[j] = '\0';
 }
 
 void	expand(t_ast_node *node, t_context *ctx)
@@ -150,63 +184,141 @@ void	expand(t_ast_node *node, t_context *ctx)
 	}
 }
 
+
+static void handle_heredoc(t_infile_redir *ir)
+{
+    int fd;
+
+    fd = open(ir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1)
+    {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+    here_doc(ir->filename, fd);
+    close(fd);
+    fd = open(ir->filename, O_RDONLY);
+    if (fd == -1)
+    {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+    dup2(fd, STDIN_FILENO);
+    close(fd);
+    unlink(ir->filename);
+}
+
+static void handle_input_redirect(t_infile_redir *ir)
+{
+    int fd;
+
+    while (ir)
+    {
+        if (ir->redirection_flag == F_HEREDOC)
+        {
+            handle_heredoc(ir);
+            ir = ir->next;
+            continue;
+        }
+        fd = open(ir->filename, O_RDONLY);
+        if (fd == -1)
+        {
+            perror("open");
+            exit(EXIT_FAILURE);
+        }
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+        ir = ir->next;
+    }
+}
+
+static void handle_output_redirect(t_outfile_redir *or)
+{
+    int flags;
+    int fd;
+
+    while (or)
+    {
+        flags = O_WRONLY | O_CREAT;
+        if (or->redirection_flag == F_APPEND)
+            flags |= O_APPEND;
+        else
+            flags |= O_TRUNC;
+        fd = open(or->filename, flags, 0644);
+        if (fd == -1)
+        {
+            perror("open");
+            exit(EXIT_FAILURE);
+        }
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+        or = or->next;
+    }
+}
+
 void handle_redirect(t_cmd *cmd)
 {
-	t_infile_redir *ir = cmd->infile_redir;
-	int flags;
-	int fd;
-	while (ir)
-	{
-		if (ir->redirection_flag == F_HEREDOC) {
-			fd = open(ir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
-			{
-				perror("open");
-				exit(EXIT_FAILURE);
-			}
-			here_doc(ir->filename, fd);
-			close(fd);
-
-			fd = open(ir->filename, O_RDONLY);
-			if (fd == -1)
-			{
-				perror("open");
-				exit(EXIT_FAILURE);
-			}
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-			unlink(ir->filename);
-			ir = ir->next;
-			continue ;
-		}
-		fd = open(ir->filename, O_RDONLY);
-		if (fd == -1) {
-			perror("open");
-			exit(EXIT_FAILURE);
-		}
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-		ir = ir->next;
-	}
-	t_outfile_redir *or = cmd->outfile_redir;
-	while (or) 
-	{
-		flags = O_WRONLY | O_CREAT;
-		if (or->redirection_flag == F_APPEND)
-			flags |= O_APPEND;
-		else
-			flags |= O_TRUNC;
-		fd = open(or->filename, flags, 0644);
-		if (fd == -1)
-		{
-			perror("open");
-			exit(EXIT_FAILURE);
-		}
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-		or = or->next;
-	}
+    handle_input_redirect(cmd->infile_redir);
+    handle_output_redirect(cmd->outfile_redir);
 }
+
+// void handle_redirect(t_cmd *cmd)
+// {
+// 	t_infile_redir *ir = cmd->infile_redir;
+// 	int flags;
+// 	int fd;
+// 	while (ir)
+// 	{
+// 		if (ir->redirection_flag == F_HEREDOC) {
+// 			fd = open(ir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 			if (fd == -1)
+// 			{
+// 				perror("open");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 			here_doc(ir->filename, fd);
+// 			close(fd);
+
+// 			fd = open(ir->filename, O_RDONLY);
+// 			if (fd == -1)
+// 			{
+// 				perror("open");
+// 				exit(EXIT_FAILURE);
+// 			}
+// 			dup2(fd, STDIN_FILENO);
+// 			close(fd);
+// 			unlink(ir->filename);
+// 			ir = ir->next;
+// 			continue ;
+// 		}
+// 		fd = open(ir->filename, O_RDONLY);
+// 		if (fd == -1) {
+// 			perror("open");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		dup2(fd, STDIN_FILENO);
+// 		close(fd);
+// 		ir = ir->next;
+// 	}
+// 	t_outfile_redir *or = cmd->outfile_redir;
+// 	while (or) 
+// 	{
+// 		flags = O_WRONLY | O_CREAT;
+// 		if (or->redirection_flag == F_APPEND)
+// 			flags |= O_APPEND;
+// 		else
+// 			flags |= O_TRUNC;
+// 		fd = open(or->filename, flags, 0644);
+// 		if (fd == -1)
+// 		{
+// 			perror("open");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		dup2(fd, STDOUT_FILENO);
+// 		close(fd);
+// 		or = or->next;
+// 	}
+// }
 
 void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_context *ctx)
 {
@@ -233,7 +345,7 @@ void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_c
 	}
 	ft_execvp(cmds, envp, ctx);
 	free(cmds);
-	exit(EXIT_FAILURE);
+	exit(0);
 }
 
 void execute_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_context *ctx)
@@ -369,52 +481,4 @@ void execute_ast(t_ast_node *node, char **envp, t_context *ctx)
 		execute_command(node, envp, STDIN_FILENO, STDOUT_FILENO, ctx);
 	}
 }
-
-// static volatile sig_atomic_t g_sigint = 0; 
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_context	*ctx;
-// 	char		*input;
-// 	char *line;
-// 	t_token *token;
-// 	t_ast_node *tree;
-
-// 	(void)argc;
-// 	(void)argv;
-// 	ctx = malloc(sizeof(t_context));
-// 	// init_context(&ctx, envp);
-// 	ctx->last_status = 0;
-// 	ctx->environ = map_new();
-// 	setup_signals(ctx);
-
-// 	while (1)
-// 	{
-// 		if (g_sigint)
-// 		{
-// 			rl_redisplay();
-// 			g_sigint = 0;
-// 		}
-
-// 		input = readline("minishell:)");
-
-// 		if (input == NULL)
-// 		{
-// 			printf("\nExiting...\n");
-// 			break ;
-// 		}
-// 		if (*input)
-// 		{
-// 			add_history(input);
-// 			token = input_scanner(input);
-// 			tree = parse_tokens(&token);
-// 			expand_ast(tree, envp, ctx);
-// 			execute_ast(tree, envp, ctx);
-// 			// print_ast(tree, 0);
-// 			// interpret(input, &ctx); // 入力を解釈して実行
-// 		}
-// 		free(input);
-// 	}
-// 	return (ctx->last_status);
-// }
 

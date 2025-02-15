@@ -7,6 +7,7 @@
 #include "define.h"
 #include "libft/libft.h"
 #include <fcntl.h>
+#include <sys/stat.h>
 //tokenizer
 t_token *tokenize(char *line);
 int is_blank(char c);
@@ -62,3 +63,6 @@ int		builtin_execute(char **args, t_context *context);
 
 //execute.c
 void execute_ast(t_ast_node *node, char **envp, t_context *ctx);
+void	expand_ast(t_ast_node *node, char **envp, t_context *ctx);
+//signal.c
+void	setup_signals(t_context *ctx);
