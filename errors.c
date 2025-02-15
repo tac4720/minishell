@@ -47,8 +47,24 @@ void malloc_error(t_context *context)
     printf("malloc error\n");
     exit(12);//exitで何番返す？,marieのminishell参照
 }
+//parseのエラー処理
+void error_in_parse(t_context *context)
+{
+    //token列のfree
+    if (context->token_list_top)
+        free_tokens(context->token_list_top);
 
-free_tokens(t_token *token)
+    //readlineでもらったlineのfree
+    if (context->readline != NULL)
+        free(context->readline);
+
+    //最後にcontextのfreeその中で必要なもの
+    free(context);
+
+    printf("error in parse\n");
+    exit(13);//exitで何番返す？,marieのminishell参照
+}
+void free_tokens(t_token *token)
 {
     t_token *tmp;
 

@@ -19,7 +19,7 @@ t_ast_node	*interpret(char *line, t_context *context)
         token_list_for_printf = token_list_for_printf->next;
     }
 
-    tree = parse_tokens(&token_list);
+    tree = parse_tokens(&token_list, context);
 
     // t_command_args *command_args_for_printf;
 

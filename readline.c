@@ -16,7 +16,7 @@ int main()
         }
         if (*input) { // 入力が空でない場合
             add_history(input); // 履歴に追加
-            (&context)->tree = interpret(input, &context); // 入力を解釈
+            interpret(input, &context); // 入力を解釈
             // read_tree_exec(&context, (&context)->tree);//実行
         }
         // printf("You entered: %s\n", input);

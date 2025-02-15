@@ -42,7 +42,7 @@ typedef struct s_token {
 typedef struct s_context{
 	int last_status;
 	t_map *environ;
-	t_ast_node *tree;
+	t_ast_node *root_node;
 	t_token *token_list_top;
 	char *readline;
 	int is_in_pipeline;
