@@ -56,13 +56,18 @@ void add_outfile_redir_node(t_token **token_list, t_cmd *cmd, int command_flag)/
 void parse_heredoc(t_token **token_list, t_cmd *cmd, int command_flags)
 {
     *token_list = (*token_list)->next;
+    if ((*token_list) == NULL)
+    {
+        ft_printf("syntax error heredoc\n");
+        exit(0);
+    }
     if ((*token_list)->type == WORD || ENV_PARAM)//redirectionの引数に環境変数いれられる？
     {
         add_infile_redir_node(token_list, cmd, command_flags);
     }
     else
     {
-        ft_printf("syntax error redirection\n");
+        ft_printf("syntax error heredoc\n");
         exit(0);
     }
 }
@@ -72,6 +77,11 @@ void parse_heredoc(t_token **token_list, t_cmd *cmd, int command_flags)
 void parse_file_in(t_token **token_list, t_cmd *cmd, int command_flags)
 {
     *token_list = (*token_list)->next;
+    if ((*token_list) == NULL)
+    {
+        ft_printf("syntax error redirection\n");
+        exit(0);
+    }
     if ((*token_list)->type == WORD || ENV_PARAM)//redirectionの引数に環境変数いれられる？
     {
         add_infile_redir_node(token_list, cmd, command_flags);
@@ -86,6 +96,11 @@ void parse_file_in(t_token **token_list, t_cmd *cmd, int command_flags)
 void parse_file_out(t_token **token_list, t_cmd *cmd, int command_flags)
 {
     *token_list = (*token_list)->next;
+    if ((*token_list) == NULL)
+    {
+        ft_printf("syntax error redirection\n");
+        exit(0);
+    }
     if ((*token_list)->type == WORD || ENV_PARAM)//redirectionの引数に環境変数いれられる？
     {
         add_outfile_redir_node(token_list, cmd, command_flags);
@@ -100,6 +115,11 @@ void parse_file_out(t_token **token_list, t_cmd *cmd, int command_flags)
 void parse_append(t_token **token_list, t_cmd *cmd, int command_flags)
 {
     *token_list = (*token_list)->next;
+    if ((*token_list) == NULL)
+    {
+        ft_printf("syntax error redirection\n");
+        exit(0);
+    }
     if ((*token_list)->type == WORD || ENV_PARAM)//redirectionの引数に環境変数いれられる？
     {
         add_outfile_redir_node(token_list, cmd, command_flags);
