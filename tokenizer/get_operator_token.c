@@ -62,7 +62,7 @@ int get_op_type(char **s)
 	return (ERROR);
     
 }
-t_token *get_operator_token(char **s)
+t_token *get_operator_token(char **s, t_context *context)
 {
     t_token *new_token;
 
@@ -70,7 +70,8 @@ t_token *get_operator_token(char **s)
         return (NULL);
     new_token = ft_calloc(1, sizeof(t_token));
     //mallocエラーしたときの挙動を書く
-    // new_token->str = ft_calloc(1, sizeof(char));//cmdという名前がきもいかも
+    if (new_token == NULL)
+        malloc_error(context);
     //mallocエラーしたときの挙動を書く
     new_token->type = get_op_type(s);
     operator_input(new_token);

@@ -74,12 +74,14 @@ void *analyze_word(char **s, t_token *token)
 	*s += n;
 }
 
-t_token *get_word_token(char **s)
+t_token *get_word_token(char **s, t_context *context)
 {
     t_token *new_token;
 
     new_token = ft_calloc(1, sizeof(t_token));
     //malloc失敗時の処理を書く
+    if (new_token == NULL)
+        malloc_error(context);
     analyze_word(s, new_token);
     if (new_token->flag & F_DOLLAR || new_token->flag & F_DOLLAR_IN_DQUOTES)
 		new_token->type = ENV_PARAM;

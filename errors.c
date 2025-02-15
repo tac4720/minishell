@@ -29,3 +29,34 @@ void	check_open_close(char *line)
         }
 	}
 }
+
+void malloc_error(t_context *context)
+{
+    //token列のfree
+    if (context->token_list_top)
+        free_tokens(context->token_list_top);
+
+    //readlineでもらったlineのfree
+    if (context->readline != NULL)
+        free(context->readline);
+
+    //最後にcontextのfreeその中で必要なもの
+    free(context);
+
+
+    printf("malloc error\n");
+    exit(12);//exitで何番返す？,marieのminishell参照
+}
+
+free_tokens(t_token *token)
+{
+    t_token *tmp;
+
+    while (token != NULL)
+    {
+        tmp = token;
+        token = token->next;
+        free(tmp->str);
+        free(tmp);
+    }
+}

@@ -43,6 +43,8 @@ typedef struct s_context{
 	int last_status;
 	t_map *environ;
 	t_ast_node *tree;
+	t_token *token_list_top;
+	char *readline;
 	int is_in_pipeline;
 } t_context; 
 

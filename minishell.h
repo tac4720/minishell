@@ -9,15 +9,15 @@
 //tokenizer
 t_token *tokenize(char *line);
 int is_blank(char c);
-t_token *get_token(char **s);
-t_token *get_word_token(char **s);
-t_token *get_operator_token(char **s);
+t_token *get_token(char **s, t_context *context);
+t_token *get_word_token(char **s, t_context *context);
+t_token *get_operator_token(char **s, t_context *context);
 int get_op_type(char **s);
 void operator_input(t_token *node);
 int check_flags(char *str);
 void quote_check(char *s, int *n);
 int check_redir(char **s);
-t_token *input_scanner(char *line);
+t_token *input_scanner(char *line, t_context *context);
 
 //parse
 t_ast_node  *parse_tokens(t_token **token_list);

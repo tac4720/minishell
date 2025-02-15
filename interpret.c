@@ -7,7 +7,8 @@ t_ast_node	*interpret(char *line, t_context *context)
 	t_token *token_list;
     t_ast_node *tree;
 	check_open_close(line);//クォーテーションで閉じられているか決める
-	token_list = input_scanner(line);
+	token_list = input_scanner(line, context);
+    context->token_list_top = token_list;
 
 	t_token *token_list_for_printf;
     token_list_for_printf = token_list;
