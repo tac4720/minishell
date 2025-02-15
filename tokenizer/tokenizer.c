@@ -25,6 +25,7 @@ int is_blank(char c)
 
 t_token *get_token(char **s)
 {
+
     if (!(*s))
         return (NULL);//空文字が渡されたとき、または文字列の読み込みが終わったとき
     while (**s && is_blank(**s))
@@ -35,6 +36,7 @@ t_token *get_token(char **s)
         return (get_operator_token(s));
     else if (**s)
         return (get_word_token(s));
+    
     return (NULL);
 }
 
@@ -52,7 +54,8 @@ void token_add(t_token **token_list, t_token *token)
 {
     t_token *tmp;
     t_token *last;
-
+    if (token == NULL)
+        return ;
     if (*token_list == NULL)
     {
         *token_list = token;

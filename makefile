@@ -1,5 +1,5 @@
 # コンパイラとフラグの設定
-CC = gcc
+CC = cc
 CFLAGS = 
 LDFLAGS = -lreadline
 INCLUDES = -I. -I./builtin
