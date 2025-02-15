@@ -12,65 +12,6 @@ t_ast_node  *parse_tokens(t_token **token_list)
     return (tree);
 }
 
-static void print_indent(int depth) {
-    for (int i = 0; i < depth * 4; i++)
-        printf(" ");
-}
-
-static void print_redirections(t_cmd *cmd, int depth) {
-    t_infile_redir *ir = cmd->infile_redir;
-    t_outfile_redir *or = cmd->outfile_redir;
-
-    while (ir) {
-        print_indent(depth);
-        printf("├─IN ");
-        switch(ir->redirection_flag) {
-            case F_INFILE:  printf("< %s\n", ir->filename); break;
-            case F_HEREDOC: printf("<< %s\n", ir->filename); break;
-        }
-        ir = ir->next;
-    }
-
-    while (or) {
-        print_indent(depth);
-        printf("├─OUT ");
-        switch(or->redirection_flag) {
-            case F_OUTFILE: printf("> %s\n", or->filename); break;
-            case F_APPEND:  printf(">> %s\n", or->filename); break;
-        }
-        or = or->next;
-    }
-}
-
-void print_ast(t_ast_node *node, int depth) {
-    if (!node) return;
-
-    print_indent(depth);
-    
-    switch(node->type) {
-        case AST_PIPE:
-            printf("PIPE\n");
-            print_indent(depth);
-            printf("├─LEFT\n");
-            print_ast(node->pipe_node->left, depth + 1);
-            print_indent(depth);
-            printf("└─RIGHT\n");
-            print_ast(node->pipe_node->right, depth + 1);
-            break;
-            
-        case AST_COMMAND:
-            printf("COMMAND\n");
-            print_redirections(node->command_node, depth);
-            print_indent(depth);
-            printf("└─ARGS: ");
-            for (t_command_args *arg = node->command_node->command_args; arg; arg = arg->next) {
-                printf("\"%s\" ", arg->string);
-            }
-            printf("\n");
-            break;
-    }
-}
-
 // char	*get_all_path(char **envp)
 // {
 // 	int	i;
