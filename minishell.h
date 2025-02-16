@@ -51,6 +51,9 @@ void malloc_error(t_context *context);
 void free_tokens(t_token *token_list);
 void free_ast_tree(t_ast_node *node);
 void error_in_parse(t_context *context);
+
+void free_map(t_map *map);//仮
+
 //libft
 char	**ft_split(const char *str, char c);
 char	*ft_strjoin(const char *s1, const char *s2);

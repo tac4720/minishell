@@ -26,6 +26,7 @@ MAIN_SRCS = readline.c \
             make_path.c \
             errors/errors.c \
             errors/error_in_parse.c \
+            errors/free_map.c \
             tokenizer/tokenizer.c \
             tokenizer/get_word_token.c \
             tokenizer/get_operator_token.c \
