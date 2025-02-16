@@ -118,68 +118,6 @@ char	*expand_helper(const char *str, t_context *ctx)
 	return (result);
 }
 
-static void quotes_backup(char *str, char *s, int i, int *j)
-{
-    if (str[i] == 1)
-        s[++(*j)] = '\'';
-    else if (str[i] == 2)
-        s[++(*j)] = '\"';
-    else
-        s[++(*j)] = str[i];
-}
-
-static int check_quotes_count(char *str)
-{
-    int i;
-    int n;
-    char a;
-
-    i = 0;
-    n = 0;
-    while (str[i])
-    {
-        if (str[i] == '\"' || str[i] == '\'')
-        {
-            a = str[i];
-            i++;
-            n++;
-            while (str[i] && str[i] != a)
-                i++;
-            if (str[i] == a)
-                n++;
-        }
-        if (str[i])
-            i++;
-    }
-    return (n);
-}
-
-char *remove_quotes_helper(char *str)
-{
-    int i;
-    int j;
-    char a;
-    char *s;
-
-    i = -1;
-    j = -1;
-    s = ft_calloc(ft_strlen(str) - check_quotes_count(str) + 1, sizeof(char));
-    while (str[++i])
-    {
-        if (str[i] == '\"' || str[i] == '\'')
-        {
-            a = str[i];
-            while (str[++i] && str[i] != a)
-                quotes_backup(str, s, i, &j);
-        }
-        else
-            quotes_backup(str, s, i, &j);
-    }
-    s[++j] = 0;
-    free(str);
-    return (s);
-}
-
 void	remove_quotes(char *str)
 {
 	int		i = 0;
@@ -208,34 +146,6 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
-// void	remove_quotes(char *str)
-// {
-// 	int		i = 0;
-// 	int		j = 0;
-// 	char	quote = '\0';
-
-// 	while (str[i])
-// 	{
-// 		if ((str[i] == '\'' || str[i] == '\"'))
-// 		{
-// 			if (quote == '\0')
-// 			{
-// 				quote = str[i];
-// 				i++;
-// 				continue;
-// 			}
-// 			else if (str[i] == quote)
-// 			{
-// 				quote = '\0';
-// 				i++;
-// 				continue;
-// 			}
-// 		}
-// 		str[j++] = str[i++];
-// 	}
-// 	str[j] = '\0';
-// }
-
 void	expand(t_ast_node *node, t_context *ctx)
 {
 	t_command_args *current;
@@ -246,8 +156,8 @@ void	expand(t_ast_node *node, t_context *ctx)
 	while (current)
 	{
 		// printf("%i\n", current->flag);
-		// if (current->flag & (F_DOLLAR_IN_DQUOTES | F_SQUOTES | F_DQUOTES))
-		// 	remove_quotes(current->string);
+		if (current->flag & (F_DOLLAR_IN_DQUOTES | F_SQUOTES | F_DQUOTES))
+			remove_quotes(current->string);
 		if (current->flag != F_SQUOTES)
 		{
 			current->string = expand_helper(current->string, ctx);
@@ -291,6 +201,7 @@ void	expand(t_ast_node *node, t_context *ctx)
             ir = ir->next;
             continue;
         }
+		remove_quotes(ir->filename);
         fd = open(ir->filename, O_RDONLY);
         if (fd == -1)
         {
@@ -315,6 +226,7 @@ void	expand(t_ast_node *node, t_context *ctx)
             flags |= O_APPEND;
         else
             flags |= O_TRUNC;
+		remove_quotes(or->filename);
         fd = open(or->filename, flags, 0644);
         if (fd == -1)
         {
@@ -351,6 +263,7 @@ void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_c
 		 close(output_fd);
 	}
 	handle_redirect(node->command_node);
+
 	t_command_args *current = node->command_node->command_args;
 	char *cmds = ft_strdup(current->string);
 	current = current->next;

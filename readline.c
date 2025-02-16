@@ -79,6 +79,7 @@ static void	process_input_line(char *input, t_context *ctx, char **envp)
 			expand_ast(ast, envp, ctx);
 			execute_ast(ast, envp, ctx);
 		}
+		//free_tree(ast);的な関数を入れる
 	}
 }
 
@@ -90,6 +91,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	initialize_shell(&ctx, envp);
+	// char test[] = "\"    hello world  \"";
+	// remove_quotes(test);
+	// printf("%s\n", test);
 	while (1)
 	{
 		handle_sigint(ctx);

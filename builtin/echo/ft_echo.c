@@ -30,12 +30,10 @@ int    ft_echo(char **args, t_context *context)
 {
     size_t    i;
     int        flag;
-    int        status;
 
     (void)context;
     i = 1;
     flag = 0;
-    status = 0;
     if (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
     {
         flag = 1;
@@ -45,12 +43,12 @@ int    ft_echo(char **args, t_context *context)
     {
         ft_printf(args[i]);
         if (args[i + 1])
-            status = ft_printf(" ");
+            ft_printf(" ");
         i++;
     }
-    if (flag == 0 && status == 0)
-        status = ft_printf("\n");
-    return (status);
+    if (flag == 0)
+        ft_printf("\n");
+    return (0);
 }
 
 // int ft_echo(char **args, t_context *context)

@@ -76,7 +76,7 @@ void	execute_pipeline(t_ast_node *node, char **envp, int input_fd, t_context *ct
 
 void execute_ast(t_ast_node *node, char **envp, t_context *ctx) 
 {
-	if (!node)
+if (!node)
 		return ;
 	if (node->type == AST_PIPE) 
 	{

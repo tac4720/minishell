@@ -10,8 +10,9 @@ void parse_args(t_token **token_list, t_cmd *cmd)
 
         cmd->command_args = ft_calloc(1, sizeof(t_command_args));
         cmd->command_args->string = ft_strdup((*token_list)->str);
-		printf("%s\n",cmd->command_args->string);
-		remove_quotes(cmd->command_args->string);
+		// printf("%s\n",cmd->command_args->string);
+		// remove_quotes(cmd->command_args->string);
+		// printf("%s\n",cmd->command_args->string);
         cmd->command_args->next = NULL;
         cmd->command_args->flag = (*token_list)->flag;
 
@@ -24,9 +25,9 @@ void parse_args(t_token **token_list, t_cmd *cmd)
             tmp = tmp->next;
         tmp->next = ft_calloc(1, sizeof(t_command_args));
         tmp->next->string = ft_strdup((*token_list)->str);
-		printf("%s\n",tmp->next->string);
-		remove_quotes(tmp->next->string);
-		printf("%s\n",tmp->next->string);
+		// printf("%s\n",tmp->next->string);
+		// remove_quotes(tmp->next->string);
+		// printf("%s\n",tmp->next->string);
         tmp->next->next = NULL;
         tmp->next->flag = (*token_list)->flag;
     }
@@ -72,7 +73,8 @@ t_ast_node *new_cmd_node(t_cmd *cmd, t_token **token_list)
     {//もしWORDかENV_PARAM以外だったらはじく
         cmd->command_args = ft_calloc(1, sizeof(t_command_args));
         new_node->command_node->command_args->string = ft_strdup((*token_list)->str);
-		remove_quotes(new_node->command_node->command_args->string);
+		// remove_quotes(new_node->command_node->command_args->string);
+		// printf("%s\n", new_node->command_node->command_args->string);
         new_node->command_node->command_args->next = NULL;
         new_node->command_node->command_args->flag = (*token_list)->flag;
         *token_list = (*token_list)->next;
@@ -96,7 +98,7 @@ int word_count(t_token *token_list)
 		token_list = token_list->next;
 
 	}
-    printf("%s\n","num_of_words:%d\n", n);
+    // printf("%s\n","num_of_words:%d\n", n);
 
     return n;
 }
