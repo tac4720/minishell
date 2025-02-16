@@ -51,12 +51,15 @@ void malloc_error(t_context *context)
 void error_in_parse(t_context *context)
 {
     //token列のfree
-    if (context->token_list_top)
+    if (context->token_list_top != NULL)
         free_tokens(context->token_list_top);
 
     //readlineでもらったlineのfree
     if (context->readline != NULL)
         free(context->readline);
+
+    //astのfree
+    free_ast_tree(context->root_node);
 
     //最後にcontextのfreeその中で必要なもの
     free(context);

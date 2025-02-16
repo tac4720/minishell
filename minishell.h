@@ -49,6 +49,7 @@ int read_tree_exec(t_context *context, t_ast_node *node);
 void	check_open_close(char *line);
 void malloc_error(t_context *context);
 void free_tokens(t_token *token_list);
+void free_ast_tree(t_ast_node *node);
 void error_in_parse(t_context *context);
 //libft
 char	**ft_split(const char *str, char c);
