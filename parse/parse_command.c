@@ -104,8 +104,12 @@ int word_count(t_token *token_list)
 t_ast_node *parse_cmd(t_token **token_list, t_context *context)
 {
     printf("parse_cmd activated\n");
-    printf("token_content when parse_cmd activated:%s\n", (*token_list)->str);
-
+    // printf("token_content when parse_cmd activated:%s\n", (*token_list)->str);
+    if ((*token_list) == NULL)
+    {
+        printf("syntax error\n");
+        error_in_parse(context);
+    }
     t_cmd *cmd;
     cmd = ft_calloc(1, sizeof(t_cmd));
     //mallocエラー処理

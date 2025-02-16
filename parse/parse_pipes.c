@@ -2,6 +2,16 @@
 
 t_ast_node *parse_pipeline(t_token **token_list, t_context *context)
 {
+    if ((*token_list) == NULL)
+    {
+        printf("syntax error\n");
+        error_in_parse(context);
+    }
+    if ((*token_list)->type == PIPE_OP)
+    {
+        printf("syntax error\n");
+        error_in_parse(context);
+    }
     printf("parse_pipeline activated\n");
     t_ast_node *node;
 
