@@ -6,7 +6,7 @@
 /*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 13:24:15 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/16 13:24:16 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/02/16 16:07:07 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ void malloc_error(t_context *context)
 
 
     printf("malloc error\n");
-    exit(12);//exitで何番返す？,marieのminishell参照
+    exit(1);//exitで何番返す？,marieのminishell参照
 }
 //parseのエラー処理
 void error_in_parse(t_context *context)
 {
     printf("error in parse\n");
     if (context == NULL)
-        exit(13);//exitで何番返す？,marieのminishell参照
+        exit(1);//exitで何番返す？,marieのminishell参照
     //token列のfree
     if (context->token_list_top != NULL)
         free_tokens(context->token_list_top);
@@ -81,7 +81,7 @@ void error_in_parse(t_context *context)
         free_map(context->environ);
     //最後にcontextのfree
     free(context);
-    exit(13);//exitで何番返す？,marieのminishell参照
+    exit(1);//exitで何番返す？,marieのminishell参照
 }
 void free_tokens(t_token *token)
 {

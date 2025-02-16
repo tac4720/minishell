@@ -129,7 +129,7 @@ void parse_append(t_token **token_list, t_cmd *cmd, int command_flags, t_context
     if ((*token_list) == NULL)
     {
         ft_printf("syntax error redirection\n");
-        exit(0);
+        error_in_parse(context);
     }
     if ((*token_list)->type == WORD || ENV_PARAM)//redirectionの引数に環境変数いれられる？
     {

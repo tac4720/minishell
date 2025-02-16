@@ -6,32 +6,30 @@
 /*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 13:22:31 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/16 13:25:27 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/02/16 15:57:42 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void free_map(t_map *map)//仮
+void free_map(t_map *map)
 {
-	int i;
-	t_item *tmp;
-	t_item *next;
+    if (map == NULL)
+        return;
 
-	i = 0;
-	while (i < TABLE_SIZE)
-	{
-		tmp = map->table[i];
-		while (tmp != NULL)
-		{
-			next = tmp->next;
-			free(tmp->name);
-			free(tmp->value);
-			free(tmp);
-			tmp = next;
-		}
-		i++;
-	}
-	free(map);
+	t_item *item;
+    for (size_t i = 0; i < TABLE_SIZE; i++)
+    {
+        item = map->table[i];
+        while (item != NULL)
+        {
+            t_item *next = item->next;
+            free(item->name);
+            free(item->value);
+            free(item);
+            item = next;
+        }
+        map->table[i] = NULL;
+    }
+    free(map);
 }
