@@ -48,7 +48,7 @@ int    ft_echo(char **args, t_context *context)
     }
     if (flag == 0)
         ft_printf("\n");
-    return (0);
+    exit (0);
 }
 
 // int ft_echo(char **args, t_context *context)

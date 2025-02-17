@@ -1,12 +1,13 @@
 #include "../minishell.h"
 #include <stdlib.h>
+#include <strings.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 
 int pipe_process(char *cmd, char **envp);
-void ft_execvp(char *cmd, char **envp, t_context *ctx);
+void ft_execvp(char **cmds, char **envp, t_context *ctx);
 void here_doc(const char *limiter, int fd);
 void print_ast(t_ast_node *node, int depth);
 void	init_context(t_context *ctx, char **envp);
@@ -102,10 +103,13 @@ char	*expand_helper(const char *str, t_context *ctx)
 	{
 		if (str[i] == '$')
 		{
-			if (ft_strlen(str) == 1)
+			if (str[i + 1] == '\0' || str[i + 1] == ' ')
 			{
-				result = ft_strdup("$");
-				break;
+				// result = ft_strdup("$"); // leakする+               
+				result = join_and_free(result, "$", 0);
+				// break;
+				i++;
+				continue;
 			}
 			if (str[i + 1] == '?')
 				result = expand_status(str, &i, result, ctx);
@@ -230,7 +234,8 @@ void	expand(t_ast_node *node, t_context *ctx)
         fd = open(or->filename, flags, 0644);
         if (fd == -1)
         {
-            perror("open");
+            // perror("open");
+			//ctx->last_status = 1;
             exit(EXIT_FAILURE);
         }
         dup2(fd, STDOUT_FILENO);
@@ -252,8 +257,110 @@ void handle_redirect(t_cmd *cmd)
     handle_output_redirect(cmd->outfile_redir);
 }
 
+int		count_args(t_ast_node *node)
+{
+	t_command_args	*current;
+	char			**cmds;
+	int				cnt;
+
+	current =node->command_node->command_args;
+	cnt = 0;
+	while (current) 
+	{
+		cnt++;	
+		current = current->next;
+	}
+	return(cnt);
+}
+
+char	**create_cmds(t_ast_node *node)
+{
+	t_command_args	*current;
+	char			**cmds;
+	int				i;
+
+	current = node->command_node->command_args;
+	cmds = malloc(sizeof(char *) * (count_args(node) + 1));
+	//if (!cmds)
+		//終了処理
+	i = 0;
+	while (current) 
+	{
+		cmds[i] = ft_strdup(current->string);
+		i++;
+		current = current->next;
+	}
+	cmds[i] = NULL;
+	return (cmds);
+}
+
+int    is_string_empty(const char *str)
+{
+    const char  *tmp;
+
+    tmp = str;
+    while (*tmp)
+    {
+        if (*tmp != ' ' && *tmp != '\t')
+            return (0);
+        tmp++;
+    }
+    return (1);
+}
+
+
+void    free_commands(char **cmds)
+{
+    int idx;
+
+    if (cmds == NULL)
+        return ;
+    idx = 0;
+    while (cmds[idx])
+    {
+        free(cmds[idx]);
+        idx++;
+    }
+    free(cmds);
+}
+
+char    **remove_empty_commands(char **cmds)
+{
+    int     idx;
+    int     new_idx;
+    int     count;
+    char    **new_cmds;
+
+    count = 0;
+    idx = 0;
+    while (cmds[idx])
+        if (is_string_empty(cmds[idx++]) == false)
+            count++;
+    new_cmds = malloc((count + 1) * sizeof(*new_cmds));
+    if (new_cmds == NULL)
+        return (NULL);
+    idx = 0;
+    new_idx = 0;
+    while (cmds[idx])
+    {
+        if (is_string_empty(cmds[idx]) == false)
+        {
+            new_cmds[new_idx] = ft_strdup(cmds[idx]);
+            if (new_cmds[new_idx] == NULL)
+                return (free_commands(new_cmds), NULL);
+            new_idx++;
+        }
+        idx++;
+    }
+    new_cmds[new_idx] = NULL;
+    return (new_cmds);
+}
+
+
 void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_context *ctx)
 {
+	char	**cmds;
+
 	if (input_fd != STDIN_FILENO) {
 		 dup2(input_fd, STDIN_FILENO);
 		 close(input_fd);
@@ -263,18 +370,25 @@ void run_command(t_ast_node *node, char **envp, int input_fd, int output_fd, t_c
 		 close(output_fd);
 	}
 	handle_redirect(node->command_node);
-
-	t_command_args *current = node->command_node->command_args;
-	char *cmds = ft_strdup(current->string);
-	current = current->next;
-	char *tmp;
-	while (current) {
-		 tmp = ft_strjoin(cmds, " ");
-		 free(cmds);
-		 cmds = ft_strjoin(tmp, current->string);
-		 free(tmp);
-		 current = current->next;
-	}
+	
+	cmds = create_cmds(node);
+	cmds = remove_empty_commands(cmds);
+	if (!cmds || !cmds[0])
+  	{
+        free_commands(cmds);
+        exit(0);
+    }
+	// t_command_args *current = node->command_node->command_args;
+	// char *cmds = ft_strdup(current->string);
+	// current = current->next;
+	// char *tmp;
+	// while (current) {
+	// 	 tmp = ft_strjoin(cmds, " ");
+	// 	 free(cmds);
+	// 	 cmds = ft_strjoin(tmp, current->string);
+	// 	 free(tmp);
+	// 	 current = current->next;
+	// }
 	ft_execvp(cmds, envp, ctx);
 	free(cmds);
 	exit(0);

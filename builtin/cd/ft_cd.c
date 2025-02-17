@@ -5,14 +5,11 @@
 #include <string.h>
 #include "../builtin_execute/builtin.h"
 
-static int  update_pwd_oldpwd(t_context *context)
+static int  update_pwd(t_context *context)
 {
 	char    *oldpwd;
 	char    cwd[PATH_MAX];
 
-	oldpwd = map_get(context->environ, "PWD");
-	if (oldpwd)
-		map_set(context->environ, "OLDPWD", oldpwd);
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		context->last_status = 1;
@@ -23,16 +20,23 @@ static int  update_pwd_oldpwd(t_context *context)
 	exit(0);
 }
 
-void	error_check(char **args, t_context *context, char *target_dir)
+void	error_check(char **args, t_context *context)
 {
 	if (args[2] != NULL)
 	{
-		ft_putstr_fd(" too many arguments", 2);
+		ft_putstr_fd(" too many arguments\n", 2);
 		context->last_status = 1;
 		exit(1);
 	}
-	if (args[1])
-		target_dir = args[1];
+}
+
+int ft_cd(char **args, t_context *context)
+{
+	char    *target_dir;
+	int     ret;
+	
+	error_check(args, context);
+	target_dir = args[1];
 	if (target_dir == NULL)
 	{
 		target_dir = map_get(context->environ, "HOME");
@@ -42,16 +46,6 @@ void	error_check(char **args, t_context *context, char *target_dir)
 			exit(1);
 		}
 	}
-}
-
-int ft_cd(char **args, t_context *context)
-{
-	char    *target_dir;
-	int     ret;
-	
-	error_check(args, context, target_dir);
-	// if (args[1])
-	// 	target_dir = args[1];
 	// if (target_dir == NULL)
 	// {
 	// 	target_dir = map_get(context->environ, "HOME");
@@ -61,21 +55,14 @@ int ft_cd(char **args, t_context *context)
 	// 		exit(1);
 	// 	}
 	// }
-	// else if (ft_strncmp(target_dir, "-", 1) == 0)
-	// {
-	// 	target_dir = map_get(context->environ, "OLDPWD");
-	// 	if (target_dir == NULL)
-	// 	{
-	// 		context->last_status = 1;
-	// 		exit(1);
-	// 	}
-	// 	ft_printf("%s\n", target_dir);
-	// }
 	ret = chdir(target_dir);
+	// printf("ret:%i\n", ret);
 	if (ret != 0)
 	{
+		ft_putstr_fd(" No such file or directory\n", 2);
 		context->last_status = 1;
 		exit (1);
 	}
-	return (update_pwd_oldpwd(context));
+	update_pwd(context);
+	exit(0);
 }

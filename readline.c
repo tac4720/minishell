@@ -78,6 +78,7 @@ static void	process_input_line(char *input, t_context *ctx, char **envp)
 		{
 			expand_ast(ast, envp, ctx);
 			execute_ast(ast, envp, ctx);
+			// ctx->last_status = 0;
 		}
 		//free_tree(ast);的な関数を入れる
 	}
