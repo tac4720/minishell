@@ -2,23 +2,27 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "../builtin_execute/builtin.h"
-int ft_pwd(char **args, t_context *context)
+
+void	ft_pwd(char **args, t_context *context)
 {
+	char	*buff;
+	char	*path;
 
-	if (args[2] != NULL) 
-  	{
-		return (1);
-  	}
-  char *buff = malloc(PATH_MAX);
-  char *path = getcwd(buff, PATH_MAX);
-  printf("%s\n", path);
-  free(path);
-  return 0;
+	(void)context;
+	buff = malloc(PATH_MAX);
+	if (!buff)
+	{
+		free_and_exit(context, args, 1);
+	}
+	path = getcwd(buff, PATH_MAX);
+	if (path == NULL)
+	{
+		perror("pwd");
+		free(buff);
+		free_and_exit (context, args, 1);
+	}
+	printf("%s\n", path);
+	free(buff);
+	free_and_exit (context, args, 0);
 }
-
-// int main(int argc, char **argv)
-// {
-//   ft_pwd(argv);
-// }

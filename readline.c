@@ -1,27 +1,99 @@
 #include "minishell.h"
 
-int main()
+// void init_environment(t_map *env, char **envp)
+// {
+//     char    *eq_pos;
+//     char    *name;
+//     char    *value;
+//     int     i;
+
+//     i = 0;
+//     while (envp[i])
+//     {
+//         eq_pos = ft_strchr(envp[i], '=');
+//         if (eq_pos)
+//         {
+//             name = ft_substr(envp[i], 0, eq_pos - envp[i]);
+//             value = ft_strdup(eq_pos + 1);
+//             if (!name || !value)
+//             {
+//                 free(name);
+//                 free(value);
+//                 continue;
+//             }
+//             map_set(env, name, value);
+//             free(name);
+//             free(value);
+//         }
+//         i++;
+//     }
+// }
+
+// void	init_context(t_context *ctx, char **envp)
+// {
+// 	ctx->shell_pgid = getpid();
+// 	ctx->is_interactive = isatty(STDIN_FILENO);
+// 	ctx->last_status = 0;
+// 	ctx->environ = map_new();
+// 	init_environment(ctx->environ, envp);
+// 	tcgetattr(STDIN_FILENO, &ctx->shell_tmodes);
+// 	setup_signals(ctx);
+// }
+
+static void	initialize_shell(t_context **ctx, char **envp)
 {
-    char *input;
-	t_context context;
-	context.environ = map_new();
-	context.last_status = 0;
+	*ctx = malloc(sizeof(t_context));
+	if (!*ctx)
+		exit(EXIT_FAILURE);
+	init_context(*ctx, envp);
+	setup_signals(*ctx);
+}
 
-    while (1) {
-        // ユーザーにプロンプトを表示して入力を受け取る
-        input = readline("minishell:)");
-        if (input == NULL) { // EOF (Ctrl+D)の場合
-            printf("\nExiting...\n");
-            break;
-        }
-        if (*input) { // 入力が空でない場合
-            add_history(input); // 履歴に追加
-            interpret(input, &context); // 入力を解釈
-            // read_tree_exec(&context, (&context)->tree);//実行
-        }
-        // printf("You entered: %s\n", input);
-        // free(input); // readlineが動的に確保したメモリを解放
-    }
+static void	handle_sigint(t_context *ctx)
+{
+	if (g_sigint)
+	{
+		rl_redisplay();
+		g_sigint = 0;
+		ctx->last_status = 130;
+	}
+}
 
-    return 0;
+static void	process_input_line(char *input, t_context *ctx, char **envp)
+{
+	t_token		*tokens;
+	t_ast_node	*ast;
+
+	if (*input)
+	{
+		add_history(input);
+		tokens = input_scanner(input, ctx);
+		ast = parse_tokens(&tokens, ctx);
+		if (ast)
+		{
+			expand_ast(ast, envp, ctx);
+			execute_ast(ast, envp, ctx);
+			free_ast_tree(ast);
+		}
+	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_context	*ctx;
+	char		*input;
+
+	(void)argc;
+	(void)argv;
+	initialize_shell(&ctx, envp);
+	while (1)
+	{
+		handle_sigint(ctx);
+		input = readline("minishell:) ");
+		if (!input)
+			break ;
+		process_input_line(input, ctx, envp);
+		free(input);
+	}
+	return (ctx->last_status);
 }

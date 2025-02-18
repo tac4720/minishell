@@ -5,8 +5,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "define.h"
+#include "libft/libft.h"
+#include <fcntl.h>
+#include <sys/stat.h>//tokenizer
 
-//tokenizer
+static volatile sig_atomic_t g_sigint = 0; 
+
 t_token *tokenize(char *line);
 int is_blank(char c);
 t_token *get_token(char **s, t_context *context);
@@ -64,6 +68,12 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_printf(const char *format, ...);
 
 //builtin
-int		builtin_execute(char *line, t_context *context);
-
-
+int builtin_execute(char **args, t_context *context);
+//execute.c
+void execute_ast(t_ast_node *node, char **envp, t_context *ctx);
+void	expand_ast(t_ast_node *node, char **envp, t_context *ctx);
+void	remove_quotes(char *str);
+void	remove_quotes(char *str);
+//signal.c
+void	setup_signals(t_context *ctx);
+void	init_context(t_context *ctx, char **envp);

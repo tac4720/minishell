@@ -1,6 +1,7 @@
 #ifndef TOKEN_TYPE_H
 #define TOKEN_TYPE_H
 #include "environ/environ.h"
+#include <termios.h>
 # define OPERATORS	"<>|"
 
 typedef struct s_context t_context;
@@ -41,6 +42,9 @@ typedef struct s_token {
 
 typedef struct s_context{
 	int last_status;
+	pid_t           shell_pgid;
+	struct termios  shell_tmodes;
+	int             is_interactive;
 	t_map *environ;
 	t_ast_node *root_node;
 	t_token *token_list_top;

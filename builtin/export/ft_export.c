@@ -1,34 +1,82 @@
 #include <unistd.h>
 #include "../builtin_execute/builtin.h"
-//TODO: 引数が空の場合、環境変数を全て出力するが、その表示形式がbashと違う
-//TODO: 環境変数へのアクセスが現在はダミーを使っている (変更済み)
+#include "../../minishell.h"
 
-int ft_export(char **args, t_context *context)
+static int  validate_var_name(char *arg)
 {
-  t_map *env = context->environ; //TODO:
-  
-  if (args[1] == NULL)
-  {
-    for (int i = 0; i < TABLE_SIZE; i++)
+    char    *eq_pos;
+    size_t  name_len;
+    size_t  i;
+
+    eq_pos = ft_strchr(arg, '=');
+    if (eq_pos)
+        name_len = eq_pos - arg;
+    else
+        name_len = ft_strlen(arg);
+    if (name_len == 0)
+        return (0);
+    if (!ft_isalpha(arg[0]) && arg[0] != '_')
+        return (0);
+    i = 1;
+    while (i < name_len)
     {
-      t_item *current = env->table[i];
+        if (!ft_isalnum(arg[i]) && arg[i] != '_')
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
+static void handle_export_error(t_context *context)
+{
+    ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
+    context->last_status = 1;
+	exit(1);
+}
+
+int	printf_all_env(t_context *context)
+{
+	int	i;
+
+	i = 0;
+	while (i < TABLE_SIZE)
+    {
+      t_item *current = context->environ->table[i];
       while (current)
       {
-        printf("declare -x %s=%s\n", current->name, current->value);
+        ft_printf("declare -x %s=%s\n", current->name, current->value);
         current = current->next;
       }
+		i++;
     }
-  }
-  int i = 0;
-  while (args[1][i])
-  {
-    if (!isalpha(args[1][i]) && args[1][i] != '_')
-    {
-      write(2, "export: not a valid identifier\n", 31);
-      return 1;
-    }
-    i++;
-  }
-  map_put(env, args[1]);
-  return 0;
+	return (0);
 }
+
+void ft_export(char **args, t_context *context)
+{
+    t_map   *env;
+    int     j;
+    int     status;
+
+    env = context->environ;
+    status = 0;
+    if (!args[1])
+	{
+        printf_all_env(context);
+		free_and_exit(context, args, 0);
+	}
+    j = 1;
+    while (args[j])
+    {
+        if (!validate_var_name(args[j]))
+        {
+            handle_export_error(context);
+            status = 1;
+        }
+        else
+            map_put(env, args[j]);
+        j++;
+    }
+    free_and_exit (context, args, status);
+}
+
