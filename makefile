@@ -1,6 +1,5 @@
-# コンパイラとフラグの設定
 CC = cc
-CFLAGS = 
+CFLAGS =
 LDFLAGS = -lreadline
 INCLUDES = -I. -I./builtin
 
@@ -18,12 +17,18 @@ BUILTIN_SRCS = builtin/builtin_execute/execute.c \
                builtin/pwd/ft_pwd.c \
                builtin/unset/ft_unset.c
 
-ENVIRON_SRCS = environ/hash_map.c
+# 環境変数関連のソースファイル
+ENVIRON_SRCS = environ/item.c \
+               environ/map_create.c \
+               environ/map_get_put.c \
+               environ/map_unset.c \
+               environ/map_utils.c
 
 # メインプログラムのソースファイル
 MAIN_SRCS = readline.c \
             interpret.c \
             make_path.c \
+            init.c \
             errors/errors.c \
             errors/error_in_parse.c \
             errors/free_map.c \
@@ -34,8 +39,16 @@ MAIN_SRCS = readline.c \
             parse/parse_pipes.c \
             parse/parse_redir.c \
             parse/parse.c \
-            # execute/execute.c \
-            # execute/execute_pipeline \
+            execute/command_search.c \
+            execute/command_search_utils.c \
+            execute/execution.c \
+            execute/execution_utils.c \
+            execute/execution_utils2.c \
+            execute/expantion.c \
+            execute/expantion_utils.c \
+            execute/redirection.c \
+            signal/signal.c \
+			heredoc/heredoc.c 
 
 # 全ソースファイルの結合
 SRCS = $(MAIN_SRCS) $(BUILTIN_SRCS) $(ENVIRON_SRCS)

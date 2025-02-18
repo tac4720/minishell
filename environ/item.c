@@ -1,5 +1,17 @@
 #include "environ.h"
 
+int	add_new_item(t_map *map, size_t index, const char *name, const char *value)
+{
+	t_item	*new_item;
+
+	new_item = item_new((char *)name, (char *)value);
+	if (!new_item)
+		return (-1);
+	new_item->next = map->table[index];
+	map->table[index] = new_item;
+	return (0);
+}
+
 t_item	*item_new(char *name, char *value)
 {
 	t_item	*item;
