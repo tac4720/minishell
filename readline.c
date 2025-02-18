@@ -78,10 +78,17 @@ static void	process_input_line(char *input, t_context *ctx, char **envp)
 	}
 }
 
+void	clean(t_context *ctx)
+{
+	free_map(ctx->environ);
+	free(ctx);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_context	*ctx;
 	char		*input;
+	int			last;
 
 	(void)argc;
 	(void)argv;
@@ -95,5 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		process_input_line(input, ctx, envp);
 		free(input);
 	}
-	return (ctx->last_status);
+	last = ctx->last_status;
+	clean(ctx);
+	return (last);
 }
