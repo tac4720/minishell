@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_get_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:34 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:21:27 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,12 @@ int	map_set(t_map *map, const char *name, const char *value)
 		{
 			free(current->value);
 			current->value = ft_strdup(value);
-			return (current->value ? 0 : -1);
+			if (current->value)
+				return (0);
+			else
+				return (-1);
 		}
 		current = current->next;
 	}
 	return (add_new_item(map, index, name, value));
 }
-
-

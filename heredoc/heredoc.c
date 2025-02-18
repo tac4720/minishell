@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:23 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:21:23 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdbool.h>
 #include <signal.h>
+
+void	handle_eof(char *limiter);
 
 static void	handle_sigint(int sig)
 {
@@ -56,51 +58,39 @@ static bool	is_limiter_match(char *line, const char *limiter)
 
 static char	*process_input_line(char **line, char *input)
 {
-    char	*tmp;
+	char	*tmp;
 
-    tmp = ft_strjoin(*line, input);
-    free(*line);
-    *line = tmp;
-    tmp = ft_strjoin(*line, "\n");
-    free(*line);
-    return (tmp);
+	tmp = ft_strjoin(*line, input);
+	free(*line);
+	*line = tmp;
+	tmp = ft_strjoin(*line, "\n");
+	free(*line);
+	return (tmp);
 }
 
-static void	handle_eof(const char *limiter)
+void	here_doc(char *limiter, int fd)
 {
-    ft_putstr_fd("minishell: warning: here-document ", STDERR_FILENO);
-    ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
-    ft_putstr_fd(limiter, STDERR_FILENO);
-    ft_putstr_fd("')\n", STDERR_FILENO);
+	char	*input;
+	char	*line;
+
+	line = ft_strdup("");
+	setup_heredoc_signals();
+	while (!g_sigint)
+	{
+		input = readline("> ");
+		if (!input)
+		{
+			handle_eof(limiter);
+			break ;
+		}
+		if (is_limiter_match(input, limiter))
+		{
+			ft_putstr_fd(line, fd);
+			free(input);
+			break ;
+		}
+		line = process_input_line(&line, input);
+		free(input);
+	}
+	here_doc_clean(line, fd);
 }
-
-void	here_doc(const char *limiter, int fd)
-{
-    char	*input;
-    char	*line;
-
-    line = ft_strdup("");
-    setup_heredoc_signals();
-    while (!g_sigint)
-    {
-        input = readline("> ");
-        if (!input)
-        {
-            handle_eof(limiter);
-            break ;
-        }
-        if (is_limiter_match(input, limiter))
-        {
-            ft_putstr_fd(line, fd);
-            free(input);
-            break ;
-        }
-        line = process_input_line(&line, input);
-        free(input);
-    }
-    free(line);
-    close(fd);
-    if (g_sigint)
-        exit(130);
-}
-

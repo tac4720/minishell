@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   command_search_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:46 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:30:16 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-
-char	*get_all_path(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i] != NULL)
-	{
-		if (ft_strlen(envp[i]) >= 5 && ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
-			return (envp[i] + 5);
-		}
-		i++;
-	}
-	return (NULL);
-}
 
 void	free_split(char **arr)
 {
@@ -47,6 +31,13 @@ void	free_splits(char **cmds, char **path)
 	free_split(path);
 }
 
+void	free_and_error(char **cmds, char **path, char *full_path)
+{
+	free_splits(cmds, path);
+	perror("access");
+	exit(126);
+}
+
 char	*valid_command(char **cmds, char **path, char *tmp, char *full_path)
 {
 	int	i;
@@ -56,19 +47,15 @@ char	*valid_command(char **cmds, char **path, char *tmp, char *full_path)
 	{
 		tmp = ft_strjoin(path[i], "/");
 		if (!tmp)
-			break;
+			break ;
 		full_path = ft_strjoin(tmp, cmds[0]);
 		free(tmp);
 		if (!full_path)
-			break;
+			break ;
 		if (access(full_path, F_OK) == 0)
 		{
 			if (access(full_path, X_OK) != 0)
-			{
-				free_splits(cmds, path);
-				perror("access");
-				exit(126);
-			}
+				free_and_error(cmds, path, full_path);
 			free_split(path);
 			return (full_path);
 		}
@@ -94,4 +81,3 @@ char	*generate_path(char *cmd, char **envp)
 		return (NULL);
 	return (valid_command(&cmd, path, NULL, NULL));
 }
-

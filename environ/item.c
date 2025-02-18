@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   item.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:26 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:25:28 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ t_item	*item_new(char *name, char *value)
 	item->next = NULL;
 	return (item);
 }
-
 
 void	free_item(t_item *item)
 {

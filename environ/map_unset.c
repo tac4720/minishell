@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_unset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:37 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 18:54:57 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,3 @@ int	map_unset(t_map *map, const char *name)
 	free(key);
 	return (0);
 }
-
-

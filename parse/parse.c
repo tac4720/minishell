@@ -1,14 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 16:53:57 by dkajiwar          #+#    #+#             */
+/*   Updated: 2025/02/18 19:21:24 by tac              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_ast_node  *parse_tokens(t_token **token_list, t_context *context)
 {
-    t_ast_node *tree;
+	t_ast_node *tree;
 
-    // context->root_node = tree;
-    tree = NULL;
-    if(token_list == NULL)
-        return (NULL);
-    tree = parse_pipeline(token_list, context);
-    printf("パースが完了しました\n");
-    return (tree);
+	tree = NULL;
+	if(token_list == NULL)
+		return (NULL);
+	tree = parse_pipeline(token_list, context);
+	return (tree);
 }

@@ -1,38 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_operator_token.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/18 16:54:04 by dkajiwar          #+#    #+#             */
+/*   Updated: 2025/02/18 16:54:04 by dkajiwar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int check_pipe(char **s)
 {
-    (*s)++;
-    if (**s != '|')
-    {
-        return (PIPE_OP);
-    }
-    return (ERROR);
+	(*s)++;
+	if (**s != '|')
+	{
+		return (PIPE_OP);
+	}
+	return (ERROR);
 }
 
 int check_redir(char **s)
 {
-    if (**s == '<')
-    {
-        (*s)++;
-        if (**s == '<')
-        {
-            (*s)++;
-            return (HEREDOC);
-        }
-        return (FILE_IN);
-    }
-    else if (**s == '>')
-    {
-        (*s)++;
-        if (**s == '>')
-        {
-            (*s)++;
-            return (APPEND);
-        }
-        return (FILE_OUT);
-    }
-    return (ERROR);
+	if (**s == '<')
+	{
+		(*s)++;
+		if (**s == '<')
+		{
+			(*s)++;
+			return (HEREDOC);
+		}
+		return (FILE_IN);
+	}
+	else if (**s == '>')
+	{
+		(*s)++;
+		if (**s == '>')
+		{
+			(*s)++;
+			return (APPEND);
+		}
+		return (FILE_OUT);
+	}
+	return (ERROR);
 }
 
 void	operator_input(t_token *token)
@@ -53,30 +65,28 @@ void	operator_input(t_token *token)
 
 int get_op_type(char **s)
 {
-    if (**s == '|')
-        return (check_pipe(s));
-    else if (**s == '<')
+	if (**s == '|')
+		return (check_pipe(s));
+	else if (**s == '<')
 		return (check_redir(s));
 	else if (**s == '>')
 		return (check_redir(s));
 	return (ERROR);
-    
 }
+
 t_token *get_operator_token(char **s, t_context *context)
 {
-    t_token *new_token;
+	t_token *new_token;
 
-    if (!s || !(*s))
-        return (NULL);
-    new_token = ft_calloc(1, sizeof(t_token));
-    //mallocエラーしたときの挙動を書く
-    if (new_token == NULL)
-        malloc_error(context);
-    //mallocエラーしたときの挙動を書く
-    new_token->type = get_op_type(s);
-    operator_input(new_token);
-    new_token->flag = 0;
+	if (!s || !(*s))
+		return (NULL);
+	new_token = ft_calloc(1, sizeof(t_token));
+	if (new_token == NULL)
+		malloc_error(context);
+	new_token->type = get_op_type(s);
+	operator_input(new_token);
+	new_token->flag = 0;
 	new_token->next = NULL;
 	new_token->prev = NULL;
-    return (new_token);
+	return (new_token);
 }

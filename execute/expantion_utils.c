@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expantion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:10 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:46:17 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
- char	*expand_status(const char *str, int *i, char *result, t_context *ctx)
+char	*expand_status(const char *str, int *i, char *result, t_context *ctx)
 {
 	char	*expand_str;
 
@@ -25,7 +25,7 @@
 	return (result);
 }
 
- char	*get_env_value(const char *str, int *i)
+char	*get_env_value(const char *str, int *i)
 {
 	char	*var_name;
 	int		start;
@@ -37,7 +37,7 @@
 	return (var_name);
 }
 
- char	*expand_env_var(const char *str, int *i, char *result, t_context *ctx)
+char	*expand_env_var(const char *str, int *i, char *result, t_context *ctx)
 {
 	char	*var_name;
 	char	*expand_str;
@@ -48,7 +48,7 @@
 	free(var_name);
 	if (expand_str)
 	{
-		result = join_and_free(result , expand_str, 0);
+		result = join_and_free(result, expand_str, 0);
 	}
 	else
 	{
@@ -57,7 +57,7 @@
 	return (result);
 }
 
- char	*expand_normal_str(const char *str, int *i, char *result)
+char	*expand_normal_str(const char *str, int *i, char *result)
 {
 	char	*tmp;
 	int		start;
@@ -85,7 +85,7 @@ char	*expand_helper(const char *str, t_context *ctx)
 			{
 				result = join_and_free(result, "$", 0);
 				i++;
-				continue;
+				continue ;
 			}
 			if (str[i + 1] == '?')
 				result = expand_status(str, &i, result, ctx);
@@ -97,4 +97,3 @@ char	*expand_helper(const char *str, t_context *ctx)
 	}
 	return (result);
 }
-

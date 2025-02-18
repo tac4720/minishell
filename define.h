@@ -21,6 +21,13 @@ typedef struct s_outfile_redir t_outfile_redir;
 typedef struct s_infile_redir t_infile_redir;
 typedef enum e_command_flags t_command_flags;
 
+typedef struct s_exec_info
+{
+	int		count;
+	int		i;
+	char	**envp;
+}	t_exec_info;
+
 typedef enum e_token_type {
 	HEREDOC,
 	APPEND,
@@ -45,7 +52,9 @@ typedef struct s_context{
 	pid_t           shell_pgid;
 	struct termios  shell_tmodes;
 	int             is_interactive;
-	t_map *environ;
+	t_map 	*environ;
+	t_exec_info *info;
+	char	**env;
 	t_ast_node *root_node;
 	t_token *token_list_top;
 	char *readline;
@@ -56,7 +65,6 @@ typedef struct s_command_args
 {
 	char *string;
 	t_command_args *next;
-	// t_command_args *prev;
 	int flag;	
 } t_command_args;
 

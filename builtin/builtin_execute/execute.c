@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:26 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:21:30 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,43 @@
 #include "builtin.h"
 #include <stdio.h>
 
-int is_builtin(char *str)
+int	is_builtin(char *str)
 {
-    int         i;
-    char        *builtin_cmds[8];
-    size_t      cmd_len;
+	int			i;
+	char		*builtin_cmds[8];
+	size_t		cmd_len;
 
-    i = 0;
-    builtin_cmds[0] = "cd";
-    builtin_cmds[1] = "echo";
-    builtin_cmds[2] = "env";
-    builtin_cmds[3] = "exit";
-    builtin_cmds[4] = "export";
-    builtin_cmds[5] = "pwd";
-    builtin_cmds[6] = "unset";
-    builtin_cmds[7] = NULL;
-    while (builtin_cmds[i])
-    {
-        cmd_len = ft_strlen(builtin_cmds[i]);
-        if (ft_strncmp(str, builtin_cmds[i], cmd_len + 1) == 0)
-            return (i);
-        i++;
-    }
-    return (-1);
+	i = 0;
+	builtin_cmds[0] = "cd";
+	builtin_cmds[1] = "echo";
+	builtin_cmds[2] = "env";
+	builtin_cmds[3] = "exit";
+	builtin_cmds[4] = "export";
+	builtin_cmds[5] = "pwd";
+	builtin_cmds[6] = "unset";
+	builtin_cmds[7] = NULL;
+	while (builtin_cmds[i])
+	{
+		cmd_len = ft_strlen(builtin_cmds[i]);
+		if (ft_strncmp(str, builtin_cmds[i], cmd_len + 1) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 void	free_and_exit(t_context *ctx, char **args, int status)
 {
 	free_commands(args);
-	// free(ctx->tokens);
-	// free_ast_tree(ctx->tree);
+	free_ast_tree(ctx->root_node);
+	free_tokens(ctx->token_list_top);
 	exit(status);
 }
 
-int builtin_execute(char **args, t_context *context)
+int	builtin_execute(char **args, t_context *context)
 {
-	int select;
-	
+	int	select;
+
 	select = is_builtin(args[0]);
 	if (select == 0)
 		ft_cd(args, context);

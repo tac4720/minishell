@@ -1,14 +1,12 @@
 CC = cc
-CFLAGS =
+# CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
-INCLUDES = -I. -I./builtin
+INCLUDES = -I.
 
-# ライブラリ関連の設定
 LIBFT_PATH = libft
 LIBFTFLAGS = -L$(LIBFT_PATH) -lft
 
-# ビルトインコマンドのソースファイル
-BUILTIN_SRCS = builtin/builtin_execute/execute.c \
+BUILTIN_SRCS =  builtin/builtin_execute/execute.c \
                builtin/cd/ft_cd.c \
                builtin/echo/ft_echo.c \
                builtin/env/ft_env.c \
@@ -17,17 +15,13 @@ BUILTIN_SRCS = builtin/builtin_execute/execute.c \
                builtin/pwd/ft_pwd.c \
                builtin/unset/ft_unset.c
 
-# 環境変数関連のソースファイル
 ENVIRON_SRCS = environ/item.c \
                environ/map_create.c \
                environ/map_get_put.c \
                environ/map_unset.c \
                environ/map_utils.c
 
-# メインプログラムのソースファイル
 MAIN_SRCS = readline.c \
-            interpret.c \
-            make_path.c \
             init.c \
             errors/errors.c \
             errors/error_in_parse.c \
@@ -38,31 +32,29 @@ MAIN_SRCS = readline.c \
             parse/parse_command.c \
             parse/parse_pipes.c \
             parse/parse_redir.c \
+            parse/add_redir_node.c \
             parse/parse.c \
             execute/command_search.c \
             execute/command_search_utils.c \
             execute/execution.c \
             execute/execution_utils.c \
             execute/execution_utils2.c \
+            execute/execution_utils3.c \
             execute/expantion.c \
             execute/expantion_utils.c \
             execute/redirection.c \
             signal/signal.c \
-			heredoc/heredoc.c 
+			heredoc/heredoc.c \
+			heredoc/heredoc_utils.c 
 
-# 全ソースファイルの結合
 SRCS = $(MAIN_SRCS) $(BUILTIN_SRCS) $(ENVIRON_SRCS)
 
-# オブジェクトファイル
 OBJS = $(SRCS:.c=.o)
 
-# 依存関係ファイル
 DEPS = $(OBJS:.o=.d)
 
-# 実行ファイル名
 NAME = minishell
 
-# ビルドルール
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT_PATH)/libft.a
@@ -71,11 +63,9 @@ $(NAME): $(OBJS) $(LIBFT_PATH)/libft.a
 $(LIBFT_PATH)/libft.a:
 	$(MAKE) -C $(LIBFT_PATH)
 
-# オブジェクトファイルの生成
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
-# 依存関係の読み込み
 -include $(DEPS)
 
 clean:
@@ -89,4 +79,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-

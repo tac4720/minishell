@@ -3,15 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:03 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:25:34 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef EXECUTION_H
-#define EXECUTION_H
 
 #include "../minishell.h"
 #include <stdlib.h>
@@ -20,13 +17,6 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <errno.h>
-
-typedef struct s_exec_info
-{
-	int		count;
-	int		i;
-	char	**envp;
-}	t_exec_info;
 
 int		pipe_process(char *cmd, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);
@@ -51,17 +41,19 @@ char	**create_cmds(t_ast_node *node);
 int		is_string_empty(const char *str);
 void	free_commands(char **cmds);
 char	**remove_empty_commands(char **cmds);
-void	run_command(t_ast_node *node, char **envp, int input_fd,
-		int output_fd, t_context *ctx);
-void	execute_command(t_ast_node *node, char **envp, int input_fd,
-		int output_fd, t_context *ctx);
+void	run_command(t_ast_node *node, int input_fd,
+			int output_fd, t_context *ctx);
+void	execute_command(t_ast_node *node, int input_fd,
+			int output_fd, t_context *ctx);
 void	reverse_commands(t_ast_node **cmds, int count);
 void	store_commands(t_ast_node *node, t_ast_node **cmds, int *count);
 void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
-		t_exec_info *info, t_context *ctx);
+			t_context *ctx);
+void	info_set(t_ast_node *node, t_ast_node *cmds, t_exec_info *info,
+			t_context *ctx);
 void	parent_process(int *in_fd, int *pipe_fd, int i, int count);
 void	execute_pipeline(t_ast_node *node, char **envp, int input_fd,
-		t_context *ctx);
+			t_context *ctx);
 void	expand_ast(t_ast_node *node, char **envp, t_context *ctx);
 void	execute_ast(t_ast_node *node, char **envp, t_context *ctx);
 char	*get_all_path(char **envp);
@@ -72,5 +64,3 @@ char	*generate_path(char *cmd, char **envp);
 void	is_dir(const char *cmd);
 int		check_other(char **args, t_context *ctx, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);
-
-#endif

@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_map.c                                         :+:      :+:    :+:   */
+/*   execution_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 13:22:31 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:29 by tac              ###   ########.fr       */
+/*   Created: 2025/02/18 17:44:27 by tac               #+#    #+#             */
+/*   Updated: 2025/02/18 19:21:22 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "exec.h"
 
-void free_map(t_map *map)
+void	info_set(t_ast_node *node, t_ast_node *cmds, t_exec_info *info,
+	t_context *ctx)
 {
-	if (map == NULL)
-		return;
-
-	t_item *item;
-	for (size_t i = 0; i < TABLE_SIZE; i++)
-	{
-		item = map->table[i];
-		while (item != NULL)
-		{
-			t_item *next = item->next;
-			free(item->name);
-			free(item->value);
-			free(item);
-			item = next;
-		}
-		map->table[i] = NULL;
-	}
-	free(map);
+	info->count = 0;
+	info->envp = ctx->env;
+	store_commands(node, cmds, &info->count);
+	reverse_commands(cmds, info->count);
+	info->i = 0;
 }

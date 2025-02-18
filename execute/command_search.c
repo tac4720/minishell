@@ -3,18 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   command_search.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:49 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:27:16 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
+char	*get_all_path(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		if (ft_strlen(envp[i]) >= 5 && ft_strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			return (envp[i] + 5);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	is_dir(const char *cmd)
 {
-	struct stat st;
+	struct stat	st;
 
 	if (stat(cmd, &st) == 0)
 	{
@@ -53,7 +69,8 @@ int	check_other(char **args, t_context *ctx, char **envp)
 	return (0);
 }
 
-void	execute_command_helper(char *full_path, char **cmds, char **envp, t_context *ctx)
+void	execute_command_helper(char *full_path, char **cmds,
+								char **envp, t_context *ctx)
 {
 	if (execve(full_path, cmds, envp) == -1)
 	{
@@ -69,12 +86,10 @@ void	ft_execvp(char **cmds, char **envp, t_context *ctx)
 
 	if (!cmds || !cmds[0] || !envp)
 		exit(EXIT_FAILURE);
-
 	if (check_other(cmds, ctx, envp))
 	{
-		return;
+		return ;
 	}
-
 	full_path = generate_path(cmds[0], envp);
 	if (!full_path)
 	{

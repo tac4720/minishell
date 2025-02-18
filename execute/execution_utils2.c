@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:56 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 19:21:31 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int		count_args(t_ast_node *node)
+int	count_args(t_ast_node *node)
 {
 	t_command_args	*current;
 	char			**cmds;
 	int				cnt;
 
-	current =node->command_node->command_args;
+	current = node->command_node->command_args;
 	cnt = 0;
-	while (current) 
+	while (current)
 	{
-		cnt++;	
+		cnt++;
 		current = current->next;
 	}
-	return(cnt);
+	return (cnt);
 }
 
 char	**create_cmds(t_ast_node *node)
@@ -36,10 +36,8 @@ char	**create_cmds(t_ast_node *node)
 
 	current = node->command_node->command_args;
 	cmds = malloc(sizeof(char *) * (count_args(node) + 1));
-	//if (!cmds)
-		//終了処理
 	i = 0;
-	while (current) 
+	while (current)
 	{
 		cmds[i] = ft_strdup(current->string);
 		i++;
@@ -49,27 +47,40 @@ char	**create_cmds(t_ast_node *node)
 	return (cmds);
 }
 
+void	store_commands(t_ast_node *node, t_ast_node **cmds, int *count)
+{
+	while (node && node->type == AST_PIPE)
+	{
+		cmds[*count] = node->pipe_node->right;
+		(*count)++;
+		node = node->pipe_node->left;
+	}
+	if (node)
+	{
+		cmds[*count] = node;
+		(*count)++;
+	}
+}
 
-
- void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
-		t_exec_info *info, t_context *ctx)
+void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
+		t_context *ctx)
 {
 	if (in_fd != STDIN_FILENO)
 	{
 		dup2(in_fd, STDIN_FILENO);
 		close(in_fd);
 	}
-	if (info->i < info->count - 1)
+	if (ctx->info->i < ctx->info->count - 1)
 	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 	}
-	run_command(cmd, info->envp, STDIN_FILENO, STDOUT_FILENO, ctx);
+	run_command(cmd, STDIN_FILENO, STDOUT_FILENO, ctx);
 	exit(EXIT_FAILURE);
 }
 
- void	parent_process(int *in_fd, int *pipe_fd, int i, int count)
+void	parent_process(int *in_fd, int *pipe_fd, int i, int count)
 {
 	if (*in_fd != STDIN_FILENO)
 		close(*in_fd);
@@ -79,5 +90,3 @@ char	**create_cmds(t_ast_node *node)
 		*in_fd = pipe_fd[0];
 	}
 }
-
-

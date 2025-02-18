@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expantion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:14 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 12:09:43 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:20:41 by tac              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
- char	*join_and_free(char *s1, char *s2, int free_s2)
+char	*join_and_free(char *s1, char *s2, int free_s2)
 {
 	char	*result;
 	char	*tmp;
@@ -25,13 +25,8 @@
 	return (result);
 }
 
-
-void	remove_quotes(char *str)
+void	remove_quotes_helper(char *str, char quote, int i, int j)
 {
-	int		i = 0;
-	int		j = 0;
-	char	quote = '\0';
-
 	while (str[i])
 	{
 		if ((str[i] == '\'' || str[i] == '\"'))
@@ -40,13 +35,13 @@ void	remove_quotes(char *str)
 			{
 				quote = str[i];
 				i++;
-				continue;
+				continue ;
 			}
 			else if (str[i] == quote)
 			{
 				quote = '\0';
 				i++;
-				continue;
+				continue ;
 			}
 		}
 		str[j++] = str[i++];
@@ -54,11 +49,23 @@ void	remove_quotes(char *str)
 	str[j] = '\0';
 }
 
+void	remove_quotes(char *str)
+{
+	int		i;
+	int		j;
+	char	quote;
+
+	i = 0;
+	j = 0;
+	quote = '\0';
+	remove_quotes_helper(str, i, j, quote);
+}
+
 void	expand(t_ast_node *node, t_context *ctx)
 {
-	t_command_args *current;
-	char *expand_str;
-	char *tmp;
+	t_command_args	*current;
+	char			*expand_str;
+	char			*tmp;
 
 	current = node->command_node->command_args;
 	while (current)
@@ -87,5 +94,3 @@ void	expand_ast(t_ast_node *node, char **envp, t_context *ctx)
 		expand(node, ctx);
 	}
 }
-
-
