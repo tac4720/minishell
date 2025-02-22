@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-int is_blank(char c)
+int	is_blank(char c)
 {
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-t_token *get_token(char **s, t_context *context)
+t_token	*get_token(char **s, t_context *context)
 {
 	if (!(*s))
 		return (NULL);
@@ -29,13 +29,12 @@ t_token *get_token(char **s, t_context *context)
 		return (get_operator_token(s, context));
 	else if (**s)
 		return (get_word_token(s, context));
-	
 	return (NULL);
 }
 
-t_token *last_token(t_token *token)
+t_token	*last_token(t_token *token)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	tmp = token;
 	while (tmp->next)
@@ -43,17 +42,17 @@ t_token *last_token(t_token *token)
 	return (tmp);
 }
 
-void token_add(t_token **token_list, t_token *token, t_context *context)
+void	token_add(t_token **token_list, t_token *token, t_context *context)
 {
-	t_token *tmp;
-	t_token *last;
+	t_token	*last;
+
 	if (token == NULL)
 		return ;
 	if (*token_list == NULL)
 	{
 		context->token_list_top = token;
 		*token_list = token;
-		return;
+		return ;
 	}
 	else
 	{
@@ -61,18 +60,18 @@ void token_add(t_token **token_list, t_token *token, t_context *context)
 		last->next = token;
 		token->prev = last;
 	}
-	return;
+	return ;
 }
 
-t_token *input_scanner(char *line, t_context *context)
+t_token	*input_scanner(char *line, t_context *context)
 {
-	t_token *token_list;
-	t_token *token;
+	t_token	*token_list;
+	t_token	*token;
 
 	token_list = NULL;
 	token = NULL;
 	context->readline = line;
-	while(*line)
+	while (*line)
 	{
 		token = get_token(&line, context);
 		token_add(&token_list, token, context);

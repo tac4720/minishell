@@ -12,9 +12,10 @@
 
 #include "minishell.h"
 
-void check_quotes_flag(int *i, int *flag, char *str)
+void	check_quotes_flag(int *i, int *flag, char *str)
 {
-	if (str[*i] == '\'' ){
+	if (str[*i] == '\'' )
+	{
 		*flag |= F_SQUOTES;
 		(*i)++;
 		while (str[*i] && str[*i] != '\'')
@@ -37,10 +38,10 @@ void check_quotes_flag(int *i, int *flag, char *str)
 	}
 }
 
-int check_flags(char *str)
+int	check_flags(char *str)
 {
-	int i;
-	int flag;
+	int	i;
+	int	flag;
 
 	i = 0;
 	flag = 0;
@@ -53,41 +54,41 @@ int check_flags(char *str)
 	return (flag);
 }
 
-void quote_check(char *line, int *i)
-{
-	int quote;
+// void	quote_check(char *line, int *i)
+// {
+// 	int	quote;
 
-	if (line && line[*i] && (line[*i] == '\'' || line[*i] == '\"'))
-	{
-		quote = line[*i];
-		(*i)++;
-		while (line[*i] && line[*i] != quote)
-		{
-			(*i)++;
-		}
-	}
-}
+// 	if (line && line[*i] && (line[*i] == '\'' || line[*i] == '\"'))
+// 	{
+// 		quote = line[*i];
+// 		(*i)++;
+// 		while (line[*i] && line[*i] != quote)
+// 		{
+// 			(*i)++;
+// 		}
+// 	}
+// }
 
-void *analyze_word(char **s, t_token *token)
+void	analyze_word(char **s, t_token *token)
 {
-	int n;
+	int	n;
 
 	n = 0;
-	while (*(*s + n) && !ft_strchr(OPERATORS, *(*s + n)) && !is_blank(*(*s + n)))
+	while (*(*s + n) && !ft_strchr(OPERATORS, *(*s + n))
+		&& !is_blank(*(*s + n)))
 	{
 		quote_check(*s, &n);
 		if (*(*s + n))
 			n++;
-
 	}
 	token->str = ft_substr(*s, 0, n);
 	token->flag = check_flags(token->str);
 	*s += n;
 }
 
-t_token *get_word_token(char **s, t_context *context)
+t_token	*get_word_token(char **s, t_context *context)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	new_token = ft_calloc(1, sizeof(t_token));
 	if (new_token == NULL)

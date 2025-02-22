@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   environ.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:12 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:31 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 20:55:30 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <linux/limits.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include "../libft/libft.h"
+#ifndef ENVIRON_H
+# define ENVIRON_H
+# include <linux/limits.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <stdbool.h>
+# include "../libft/libft.h"
 
 typedef struct s_map		t_map;
 typedef struct s_item		t_item;
 
-#define TABLE_SIZE 1021
+# define TABLE_SIZE 1021
 
 typedef struct s_item
 {
@@ -47,3 +49,4 @@ int				add_new_item(t_map *map, size_t index, const char *name,
 					const char *value);
 unsigned int	hash_function(const char *name);
 char			*ft_strtrim_free(char *str, const char *set);
+#endif

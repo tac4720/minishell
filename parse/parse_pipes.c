@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parse_pipes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 16:53:43 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:29 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 21:01:02 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ast_node *parse_pipeline(t_token **token_list, t_context *context)
+t_ast_node	*parse_pipeline(t_token **token_list, t_context *context)
 {
-	t_ast_node *node;
+	t_ast_node	*node;
 
+	node = NULL;
 	if ((*token_list) == NULL)
 	{
 		ft_printf("syntax error\n");
@@ -31,10 +32,11 @@ t_ast_node *parse_pipeline(t_token **token_list, t_context *context)
 	return (parse_pipe(node, token_list, context));
 }
 
-t_ast_node *parse_pipe(t_ast_node *left, t_token **token_list, t_context *context)
+t_ast_node	*parse_pipe(t_ast_node *left, t_token **token_list,
+t_context *context)
 {
-	t_ast_node *new_node;
-	
+	t_ast_node	*new_node;
+
 	if (*token_list != NULL)
 	{
 		if ((*token_list)->type == PIPE_OP)

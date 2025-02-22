@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:53 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:32 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 21:15:23 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,7 @@ char	**remove_helper(char **cmds, int count)
 char	**remove_empty_commands(char **cmds)
 {
 	int		idx;
-	int		new_idx;
 	int		count;
-	char	**new_cmds;
 
 	count = 0;
 	idx = 0;

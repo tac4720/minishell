@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:41 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:28 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 17:30:46 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ft_exit(char **args, t_context *context)
 
 	error_flag = 0;
 	if (!args[1])
-		free_and_exit(context, args, 1);
+		free_and_exit(context, args, 0);
 	if (args[2])
 	{
 		print_error(" too many arguments");

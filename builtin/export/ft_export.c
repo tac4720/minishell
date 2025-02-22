@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:44 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:32 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 16:57:47 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,32 @@ void	ft_export(char **args, t_context *context)
 		j++;
 	}
 	free_and_exit (context, args, status);
+}
+
+void	ft_export_p(char **args, t_context *context)
+{
+	t_map	*env;
+	int		j;
+	int		status;
+
+	env = context->environ;
+	status = 0;
+	if (!args[1])
+	{
+		printf_all_env(context);
+		context->last_status = 0;
+	}
+	j = 1;
+	while (args[j])
+	{
+		if (!validate_var_name(args[j]))
+		{
+			handle_export_error(context);
+			status = 1;
+		}
+		else
+			map_put(env, args[j]);
+		j++;
+	}
+	context->last_status = status;
 }

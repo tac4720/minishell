@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:26 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:30 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 17:03:01 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,25 @@ int	is_builtin(char *str)
 
 void	free_and_exit(t_context *ctx, char **args, int status)
 {
+	(void)(ctx);
 	free_commands(args);
-	free_ast_tree(ctx->root_node);
-	free_tokens(ctx->token_list_top);
 	exit(status);
+}
+
+int	builin_execute_p(char **args, t_context *context)
+{
+	int	select;
+
+	select = is_builtin(args[0]);
+	if (select == 0)
+		ft_cd_p(args, context);
+	else if (select == 3)
+		ft_exit(args, context);
+	else if (select == 4)
+		ft_export_p(args, context);
+	else if (select == 6)
+		ft_unset_p(args, context);
+	return (0);
 }
 
 int	builtin_execute(char **args, t_context *context)

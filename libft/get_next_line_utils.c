@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 16:14:02 by thashimo          #+#    #+#             */
-/*   Updated: 2024/02/17 22:33:54 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/02/18 20:47:01 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,3 @@ char	*ft_strnjoin(char *s1, char *s2, int n)
 	free(s1);
 	return (new);
 }
-

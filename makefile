@@ -1,5 +1,5 @@
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 INCLUDES = -I.
 
@@ -26,13 +26,15 @@ MAIN_SRCS = readline.c \
             errors/errors.c \
             errors/error_in_parse.c \
             errors/free_map.c \
+            errors/check_open_close.c \
             tokenizer/tokenizer.c \
             tokenizer/get_word_token.c \
             tokenizer/get_operator_token.c \
             parse/parse_command.c \
             parse/parse_pipes.c \
             parse/parse_redir.c \
-            parse/add_redir_node.c \
+            parse/add_infile_redir_node.c \
+            parse/add_outfile_redir_node.c \
             parse/parse.c \
             execute/command_search.c \
             execute/command_search_utils.c \
@@ -64,7 +66,7 @@ $(LIBFT_PATH)/libft.a:
 	$(MAKE) -C $(LIBFT_PATH)
 
 %.o: %.c
-	$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 -include $(DEPS)
 

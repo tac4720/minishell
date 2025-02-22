@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:56 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:31 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 21:15:43 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	count_args(t_ast_node *node)
 {
 	t_command_args	*current;
-	char			**cmds;
 	int				cnt;
 
 	current = node->command_node->command_args;

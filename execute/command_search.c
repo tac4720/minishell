@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_search.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:49 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:27:16 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 21:08:47 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	check_other(char **args, t_context *ctx, char **envp)
 void	execute_command_helper(char *full_path, char **cmds,
 								char **envp, t_context *ctx)
 {
+	(void) ctx;
 	if (execve(full_path, cmds, envp) == -1)
 	{
 		free(full_path);

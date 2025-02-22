@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expantion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:14 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 15:20:41 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 18:57:58 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	remove_quotes(char *str)
 void	expand(t_ast_node *node, t_context *ctx)
 {
 	t_command_args	*current;
-	char			*expand_str;
 	char			*tmp;
 
 	current = node->command_node->command_args;
@@ -74,7 +73,9 @@ void	expand(t_ast_node *node, t_context *ctx)
 			remove_quotes(current->string);
 		if (current->flag != F_SQUOTES)
 		{
-			current->string = expand_helper(current->string, ctx);
+			tmp = expand_helper(current->string, ctx);
+			free(current->string);
+			current->string = tmp;
 		}
 		current = current->next;
 	}

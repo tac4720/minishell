@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:19 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:23 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 18:02:15 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,29 @@
 
 void	handle_heredoc(t_infile_redir *ir)
 {
-	int	fd;
+	int		fd;
+	char	*tmp;
 
-	fd = open(ir->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	tmp = ft_strjoin("/tmp/", ir->filename);
+	fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("open");
+		free(tmp);
 		exit(EXIT_FAILURE);
 	}
 	here_doc(ir->filename, fd);
 	close(fd);
-	fd = open(ir->filename, O_RDONLY);
+	fd = open(tmp, O_RDONLY);
 	if (fd == -1)
 	{
+		free(tmp);
 		exit (EXIT_FAILURE);
 	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
-	unlink(ir->filename);
+	unlink(tmp);
+	free(tmp);
 }
 
 void	handle_input_redirect(t_infile_redir *ir)
@@ -75,6 +80,7 @@ void	handle_output_redirect(t_outfile_redir *or)
 		fd = open(or->filename, flags, 0644);
 		if (fd == -1)
 		{
+			perror("open");
 			exit(EXIT_FAILURE);
 		}
 		dup2(fd, STDOUT_FILENO);

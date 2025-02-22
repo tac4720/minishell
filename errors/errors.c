@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 13:24:15 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:32 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 15:04:51 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,31 @@ void	unclosed_quote(char *line, t_context *ctx)
 	exit(1);
 }
 
-void	check_open_close(char *line, t_context *ctx)
-{
-	int i;
-	int quote;
+// void	check_open_close(char *line, t_context *ctx)
+// {
+// 	int	i;
+// 	int	quote;
 
-	i = 0;
-	while (line && line[i])
-	{
-		if (line[i] == '\'' || line[i] == '\"')
-		{
-			quote = line[i];
-			(i)++;
-			while (line[i] && line[i] != quote)
-			{
-				(i)++;
-				if (line[i] == '\0')
-					unclosed_quote(line, ctx);
-			}
-		}
-		else
-			i++;
-	}
-}
+// 	i = 0;
+// 	while (line && line[i])
+// 	{
+// 		if (line[i] == '\'' || line[i] == '\"')
+// 		{
+// 			quote = line[i];
+// 			(i)++;
+// 			while (line[i] && line[i] != quote)
+// 			{
+// 				(i)++;
+// 				if (line[i] == '\0')
+// 					unclosed_quote(line, ctx);
+// 			}
+// 		}
+// 		else
+// 			i++;
+// 	}
+// }
 
-void malloc_error(t_context *context)
+void	malloc_error(t_context *context)
 {
 	if (context->token_list_top)
 		free_tokens(context->token_list_top);
@@ -55,7 +55,7 @@ void malloc_error(t_context *context)
 	exit(1);
 }
 
-void error_in_parse(t_context *context)
+void	error_in_parse(t_context *context)
 {
 	ft_printf("error in parse\n");
 	if (context == NULL)
@@ -71,9 +71,9 @@ void error_in_parse(t_context *context)
 	exit(1);
 }
 
-void free_tokens(t_token *token)
+void	free_tokens(t_token *token)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	while (token != NULL)
 	{

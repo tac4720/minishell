@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:33 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:26 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 21:17:46 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,6 @@
 #include <stdio.h>
 #include <errno.h>
 #include "../builtin_execute/builtin.h"
-
-static int	write_str(const char *str)
-{
-	if (write(STDOUT_FILENO, str, ft_strlen(str)) == -1)
-	{
-		perror("echo: write error");
-		return (1);
-	}
-	return (0);
-}
-
-static int	write_newline(void)
-{
-	if (write(STDOUT_FILENO, "\n", 1) == -1)
-	{
-		perror("echo: write error");
-		return (1);
-	}
-	return (0);
-}
 
 void	ft_echo(char **args, t_context *context)
 {

@@ -52,6 +52,17 @@ static void	process_input_line(char *input, t_context *ctx, char **envp)
 		}
 	}
 }
+// int			i;//test
+// 	i = 0;//test
+// t_token		*token_list_for_printf;//test
+// token_list_for_printf = tokens;//test
+// while(token_list_for_printf)
+// {
+// printf("token_list:%s,token_type:%d,token_flag:%d\n",
+// token_list_for_printf->str,
+//token_list_for_printf->type, token_list_for_printf->flag);
+// token_list_for_printf = token_list_for_printf->next;
+// }
 
 void	clean(t_context *ctx)
 {

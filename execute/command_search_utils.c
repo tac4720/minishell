@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_search_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:46 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 17:30:16 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/18 21:10:44 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	free_splits(char **cmds, char **path)
 void	free_and_error(char **cmds, char **path, char *full_path)
 {
 	free_splits(cmds, path);
+	free(full_path);
 	perror("access");
 	exit(126);
 }

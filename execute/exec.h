@@ -3,20 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:03 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:25:34 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 17:25:42 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <errno.h>
+#ifndef EXEC_H
+# define EXEC_H
+# define CMDS 1024
+# include "../minishell.h"
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <errno.h>
 
 int		pipe_process(char *cmd, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);
@@ -49,7 +52,7 @@ void	reverse_commands(t_ast_node **cmds, int count);
 void	store_commands(t_ast_node *node, t_ast_node **cmds, int *count);
 void	child_process(t_ast_node *cmd, int in_fd, int *pipe_fd,
 			t_context *ctx);
-void	info_set(t_ast_node *node, t_ast_node *cmds, t_exec_info *info,
+void	info_set(t_ast_node *node, t_ast_node **cmds, t_exec_info *info,
 			t_context *ctx);
 void	parent_process(int *in_fd, int *pipe_fd, int i, int count);
 void	execute_pipeline(t_ast_node *node, char **envp, int input_fd,
@@ -64,3 +67,6 @@ char	*generate_path(char *cmd, char **envp);
 void	is_dir(const char *cmd);
 int		check_other(char **args, t_context *ctx, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);
+int		builin_execute_p(char **args, t_context *context);
+int		is_builtin(char *str);
+#endif

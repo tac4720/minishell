@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int check_pipe(char **s)
+static int	check_pipe(char **s)
 {
 	(*s)++;
 	if (**s != '|')
@@ -22,7 +22,7 @@ static int check_pipe(char **s)
 	return (ERROR);
 }
 
-int check_redir(char **s)
+int	check_redir(char **s)
 {
 	if (**s == '<')
 	{
@@ -60,10 +60,11 @@ void	operator_input(t_token *token)
 	else if (token->type == PIPE_OP)
 		token->str = ft_strdup("|");
 	else if (token->type == ERROR)
-		token->str = ft_strdup("&");//謎とりあえず書いてる感じがする
+		token->str = ft_strdup("&");
 }
+//&
 
-int get_op_type(char **s)
+int	get_op_type(char **s)
 {
 	if (**s == '|')
 		return (check_pipe(s));
@@ -74,9 +75,9 @@ int get_op_type(char **s)
 	return (ERROR);
 }
 
-t_token *get_operator_token(char **s, t_context *context)
+t_token	*get_operator_token(char **s, t_context *context)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	if (!s || !(*s))
 		return (NULL);

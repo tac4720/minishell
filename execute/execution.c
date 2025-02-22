@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:01 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:33 by tac              ###   ########.fr       */
+/*   Updated: 2025/02/19 17:47:36 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,50 @@ void	run_command(t_ast_node *node, int input_fd, int output_fd,
 	exit(0);
 }
 
+void	run_command_p(t_ast_node *node, int input_fd, int output_fd,
+	t_context *ctx)
+{
+	char	**tmp;
+	char	**cmds;
+
+	if (input_fd != STDIN_FILENO)
+	{
+		dup2(input_fd, STDIN_FILENO);
+		close(input_fd);
+	}
+	if (output_fd != STDOUT_FILENO)
+	{
+		dup2(output_fd, STDOUT_FILENO);
+		close(output_fd);
+	}
+	handle_redirect(node->command_node);
+	tmp = create_cmds(node);
+	cmds = remove_empty_commands(tmp);
+	free_commands(tmp);
+	if (!cmds || !cmds[0])
+	{
+		free_commands(cmds);
+		exit(0);
+	}
+	builin_execute_p(cmds, ctx);
+	free(cmds);
+}
+
 void	execute_command(t_ast_node *node, int input_fd, int output_fd,
 	t_context *ctx)
 {
 	pid_t	pid;
+	int		ret;
 
+	if (node->command_node->command_args)
+	{
+		ret = is_builtin(node->command_node->command_args->string);
+		if (ret == 0 || ret == 3 || ret == 4 || ret == 6)
+		{
+			run_command_p(node, input_fd, output_fd, ctx);
+			return ;
+		}
+	}
 	pid = fork();
 	if (pid == 0)
 	{
@@ -63,12 +102,13 @@ void	execute_command(t_ast_node *node, int input_fd, int output_fd,
 void	execute_pipeline(t_ast_node *node, char **envp, int input_fd,
 	t_context *ctx)
 {
-	t_ast_node	*cmds[1024];
+	t_ast_node	*cmds[CMDS];
 	t_exec_info	info;
 	int			pipe_fd[2];
 	int			in_fd;
 	pid_t		pid;
 
+	(void)(envp);
 	info_set(node, cmds, &info, ctx);
 	ctx->info = &info;
 	in_fd = input_fd;
