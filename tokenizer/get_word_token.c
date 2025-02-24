@@ -54,22 +54,7 @@ int	check_flags(char *str)
 	return (flag);
 }
 
-// void	quote_check(char *line, int *i)
-// {
-// 	int	quote;
-
-// 	if (line && line[*i] && (line[*i] == '\'' || line[*i] == '\"'))
-// 	{
-// 		quote = line[*i];
-// 		(*i)++;
-// 		while (line[*i] && line[*i] != quote)
-// 		{
-// 			(*i)++;
-// 		}
-// 	}
-// }
-
-void	analyze_word(char **s, t_token *token)
+void	analyze_word(char **s, t_token *token, t_context *context)
 {
 	int	n;
 
@@ -82,6 +67,11 @@ void	analyze_word(char **s, t_token *token)
 			n++;
 	}
 	token->str = ft_substr(*s, 0, n);
+	if (token->str == NULL)
+	{
+		free(token);
+		malloc_error(context);
+	}
 	token->flag = check_flags(token->str);
 	*s += n;
 }
@@ -93,7 +83,7 @@ t_token	*get_word_token(char **s, t_context *context)
 	new_token = ft_calloc(1, sizeof(t_token));
 	if (new_token == NULL)
 		malloc_error(context);
-	analyze_word(s, new_token);
+	analyze_word(s, new_token, context);
 	if (new_token->flag & F_DOLLAR || new_token->flag & F_DOLLAR_IN_DQUOTES)
 		new_token->type = ENV_PARAM;
 	else

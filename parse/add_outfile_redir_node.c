@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_outfile_redir_node.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 20:12:06 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/18 21:05:27 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/02/24 21:40:14 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int command_flag, t_context *context)
 	if (cmd->outfile_redir == NULL)
 		error_in_parse(context);
 	cmd->outfile_redir->filename = ft_strdup((*token_list)->str);
+	if (cmd->outfile_redir->filename == NULL)
+		error_in_parse(context);
 	cmd->outfile_redir->next = NULL;
 	cmd->outfile_redir->redirection_flag |= command_flag;
 	*token_list = (*token_list)->next;
@@ -36,6 +38,8 @@ int command_flag, t_context *context)
 	if (tmp->next == NULL)
 		error_in_parse(context);
 	tmp->next->filename = ft_strdup((*token_list)->str);
+	if (tmp->next->filename == NULL)
+		error_in_parse(context);
 	tmp->next->next = NULL;
 	cmd->outfile_redir->redirection_flag |= command_flag;
 	*token_list = (*token_list)->next;

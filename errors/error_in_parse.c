@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_in_parse.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 12:37:27 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/18 20:23:25 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/02/24 21:36:07 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@ void	free_redir_list(t_infile_redir *in_redir, t_outfile_redir *out_redir)
 	while (in_redir != NULL)
 	{
 		tmp_in = in_redir->next;
-		free(in_redir->filename);
+		if (in_redir->filename != NULL)
+			free(in_redir->filename);
 		free(in_redir);
 		in_redir = tmp_in;
 	}
 	while (out_redir != NULL)
 	{
 		tmp_out = out_redir->next;
-		free(out_redir->filename);
+		if (out_redir->filename != NULL)
+			free(out_redir->filename);
 		free(out_redir);
 		out_redir = tmp_out;
 	}
