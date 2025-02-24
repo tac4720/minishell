@@ -37,3 +37,25 @@ void	ft_env(char **args, t_context *context)
 	}
 	free_and_exit (context, args, 0);
 }
+
+void	ft_env_p(char **args, t_context *context)
+{
+	t_map	*env;
+	int		i;
+	t_item	*current;
+
+	(void)(args);
+	env = context->environ;
+	i = 0;
+	while (i < TABLE_SIZE)
+	{
+		current = env->table[i];
+		while (current)
+		{
+			ft_printf("%s=%s\n", current->name, current->value);
+			current = current->next;
+		}
+		i++;
+	}
+	context->last_status = 0;
+}

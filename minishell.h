@@ -25,7 +25,7 @@
 # include <ctype.h>
 # include <signal.h>
 
-static volatile sig_atomic_t	g_sigint;
+extern	int	g_sigint;
 
 t_token		*tokenize(char *line);
 int			is_blank(char c);

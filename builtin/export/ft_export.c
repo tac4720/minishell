@@ -43,7 +43,6 @@ static void	handle_export_error(t_context *context)
 {
 	ft_putstr_fd("export: not a valid identifier\n", STDERR_FILENO);
 	context->last_status = 1;
-	exit(1);
 }
 
 int	printf_all_env(t_context *context)

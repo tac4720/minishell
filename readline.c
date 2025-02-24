@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int g_sigint = 0;
+
 static void	initialize_shell(t_context **ctx, char **envp)
 {
 	*ctx = malloc(sizeof(t_context));

@@ -29,13 +29,29 @@ static void	update_pwd(t_context *context)
 	context->last_status = 0;
 }
 
-void	error_check(char **args, t_context *context)
+// void	error_check(char **args, t_context *context)
+// {
+// 	if (args[2] != NULL)
+// 	{
+// 		ft_putstr_fd(" too many arguments\n", 2);
+// 		context->last_status = 1;
+// 	}
+// }
+
+int	error_check(char **args, t_context *ctx)
 {
-	if (args[2] != NULL)
+	int		count;
+
+	count = 0;
+	while (args[count])
+		count++;
+	if (count > 2)
 	{
 		ft_putstr_fd(" too many arguments\n", 2);
-		context->last_status = 1;
+		ctx->last_status = 1;
+		return (1);
 	}
+	return (0);
 }
 
 void	ft_cd(char **args, t_context *context)
@@ -43,7 +59,8 @@ void	ft_cd(char **args, t_context *context)
 	char	*target_dir;
 	int		ret;
 
-	error_check(args, context);
+	if (error_check(args, context))
+		return ;
 	target_dir = args[1];
 	if (target_dir == NULL)
 	{
@@ -69,7 +86,8 @@ void	ft_cd_p(char **args, t_context *context)
 	char	*target_dir;
 	int		ret;
 
-	error_check(args, context);
+	if (error_check(args, context))
+		return ;
 	target_dir = args[1];
 	if (target_dir == NULL)
 	{

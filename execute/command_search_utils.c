@@ -67,14 +67,15 @@ char	*valid_command(char **cmds, char **path, char *tmp, char *full_path)
 	return (NULL);
 }
 
-char	*generate_path(char *cmd, char **envp)
+char	*generate_path(char *cmd, char **envp, t_context *ctx)
 {
 	char	**path;
 	char	*all_path;
 
 	if (!cmd || !envp)
 		return (NULL);
-	all_path = get_all_path(envp);
+	// all_path = get_all_path(envp);
+	all_path = ft_strjoin("PATH", map_get(ctx->environ, "PATH"));
 	if (!all_path)
 		return (NULL);
 	path = ft_split(all_path, ':');

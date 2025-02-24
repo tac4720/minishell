@@ -54,6 +54,8 @@ int	builin_execute_p(char **args, t_context *context)
 	select = is_builtin(args[0]);
 	if (select == 0)
 		ft_cd_p(args, context);
+	else if (select == 2)
+		ft_env_p(args, context);
 	else if (select == 3)
 		ft_exit(args, context);
 	else if (select == 4)

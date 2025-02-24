@@ -38,7 +38,7 @@ void	run_command(t_ast_node *node, int input_fd, int output_fd,
 		exit(0);
 	}
 	ft_execvp(cmds, ctx->env, ctx);
-	free(cmds);
+	free_commands(cmds);
 	exit(0);
 }
 
@@ -68,7 +68,7 @@ void	run_command_p(t_ast_node *node, int input_fd, int output_fd,
 		exit(0);
 	}
 	builin_execute_p(cmds, ctx);
-	free(cmds);
+	free_commands(cmds);
 }
 
 void	execute_command(t_ast_node *node, int input_fd, int output_fd,
@@ -80,7 +80,7 @@ void	execute_command(t_ast_node *node, int input_fd, int output_fd,
 	if (node->command_node->command_args)
 	{
 		ret = is_builtin(node->command_node->command_args->string);
-		if (ret == 0 || ret == 3 || ret == 4 || ret == 6)
+		if (ret == 0 || ret == 2 || ret == 3 || ret == 4 || ret == 6)
 		{
 			run_command_p(node, input_fd, output_fd, ctx);
 			return ;

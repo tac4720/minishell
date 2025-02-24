@@ -67,17 +67,44 @@ char	**remove_helper(char **cmds, int count)
 	return (new_cmds);
 }
 
+// char	**remove_empty_commands(char **cmds)
+// {
+// 	int		idx;
+// 	int		count;
+
+// 	count = 0;
+// 	idx = 0;
+// 	while (cmds[idx])
+// 		if (is_string_empty(cmds[idx++]) == false)
+// 			count++;
+// 	return (remove_helper(cmds, count));
+// }
+
 char	**remove_empty_commands(char **cmds)
 {
-	int		idx;
-	int		count;
+	int		skip_count;
+	int		total_len;
+	int		i;
+	char	**new_cmds;
 
-	count = 0;
-	idx = 0;
-	while (cmds[idx])
-		if (is_string_empty(cmds[idx++]) == false)
-			count++;
-	return (remove_helper(cmds, count));
+	skip_count = 0;
+	while (cmds[skip_count] && is_string_empty(cmds[skip_count]))
+		skip_count++;
+	total_len = 0;
+	while (cmds[total_len])
+		total_len++;
+	new_cmds = malloc((total_len - skip_count + 1) * sizeof(*new_cmds));
+	if (!new_cmds)
+		return (NULL);
+	i = skip_count - 1;
+	while (cmds[++i] && (i - skip_count) >= 0)
+	{
+		new_cmds[i - skip_count] = ft_strdup(cmds[i]);
+		if (!new_cmds[i - skip_count])
+			free_commands(new_cmds);
+	}
+	new_cmds[total_len - skip_count] = NULL;
+	return (new_cmds);
 }
 
 void	reverse_commands(t_ast_node **cmds, int count)

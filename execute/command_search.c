@@ -91,7 +91,7 @@ void	ft_execvp(char **cmds, char **envp, t_context *ctx)
 	{
 		return ;
 	}
-	full_path = generate_path(cmds[0], envp);
+	full_path = generate_path(cmds[0], envp, ctx);
 	if (!full_path)
 	{
 		ft_putstr_fd(" command not found\n", 2);

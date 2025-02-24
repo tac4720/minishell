@@ -18,6 +18,7 @@ void	ft_cd(char **args, t_context *context);
 void	ft_cd_p(char **args, t_context *context);
 void	ft_echo(char **args, t_context *context);
 void	ft_env(char **args, t_context *context);
+void	ft_env_p(char **args, t_context *context);
 void	ft_exit(char **args, t_context *context);
 void	ft_export(char **args, t_context *context);
 void	ft_export_p(char **args, t_context *context);

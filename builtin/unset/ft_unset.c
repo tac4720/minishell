@@ -73,8 +73,10 @@ void	ft_unset_p(char **args, t_context *context)
 			status = 1;
 		}
 		else
+		{
 			map_unset(env, args[i]);
+		}
 		i++;
 	}
-	context->last_status = 0;
+	context->last_status = status;
 }
