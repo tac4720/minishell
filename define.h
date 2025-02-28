@@ -66,6 +66,7 @@ typedef struct s_context{
 	int				is_interactive;
 	t_map			*environ;
 	t_exec_info		*info;
+	struct sigaction	*sa;
 	char			**env;
 	t_ast_node		*root_node;
 	t_token			*token_list_top;

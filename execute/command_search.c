@@ -72,7 +72,8 @@ int	check_other(char **args, t_context *ctx, char **envp)
 void	execute_command_helper(char *full_path, char **cmds,
 								char **envp, t_context *ctx)
 {
-	(void) ctx;
+	ctx->sa->sa_handler = SIG_DFL;
+	sigaction(SIGQUIT, ctx->sa, NULL);
 	if (execve(full_path, cmds, envp) == -1)
 	{
 		free(full_path);
@@ -91,7 +92,7 @@ void	ft_execvp(char **cmds, char **envp, t_context *ctx)
 	{
 		return ;
 	}
-	full_path = generate_path(cmds[0], envp, ctx);
+	full_path = generate_path(cmds, envp, ctx);
 	if (!full_path)
 	{
 		ft_putstr_fd(" command not found\n", 2);

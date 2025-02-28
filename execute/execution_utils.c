@@ -101,7 +101,10 @@ char	**remove_empty_commands(char **cmds)
 	{
 		new_cmds[i - skip_count] = ft_strdup(cmds[i]);
 		if (!new_cmds[i - skip_count])
+		{
 			free_commands(new_cmds);
+			exit(1);
+		}
 	}
 	new_cmds[total_len - skip_count] = NULL;
 	return (new_cmds);

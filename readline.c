@@ -27,7 +27,7 @@ static void	handle_sigint(t_context *ctx)
 {
 	if (g_sigint)
 	{
-		rl_redisplay();
+		// rl_redisplay();
 		g_sigint = 0;
 		ctx->last_status = 130;
 	}

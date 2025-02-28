@@ -63,7 +63,7 @@ char	*get_all_path(char **envp);
 void	free_split(char **arr);
 void	free_splits(char **cmds, char **path);
 char	*valid_command(char **cmds, char **path, char *tmp, char *full_path);
-char	*generate_path(char *cmd, char **envp, t_context *ctx);
+char	*generate_path(char **cmd, char **envp, t_context *ctx);
 void	is_dir(const char *cmd);
 int		check_other(char **args, t_context *ctx, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);

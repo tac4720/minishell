@@ -67,7 +67,7 @@ char	*valid_command(char **cmds, char **path, char *tmp, char *full_path)
 	return (NULL);
 }
 
-char	*generate_path(char *cmd, char **envp, t_context *ctx)
+char	*generate_path(char **cmd, char **envp, t_context *ctx)
 {
 	char	**path;
 	char	*all_path;
@@ -79,7 +79,8 @@ char	*generate_path(char *cmd, char **envp, t_context *ctx)
 	if (!all_path)
 		return (NULL);
 	path = ft_split(all_path, ':');
+	free(all_path);
 	if (!path)
 		return (NULL);
-	return (valid_command(&cmd, path, NULL, NULL));
+	return (valid_command(cmd, path, NULL, NULL));
 }

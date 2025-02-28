@@ -37,6 +37,7 @@ void	run_command(t_ast_node *node, int input_fd, int output_fd,
 		free_commands(cmds);
 		exit(0);
 	}
+	
 	ft_execvp(cmds, ctx->env, ctx);
 	free_commands(cmds);
 	exit(0);
