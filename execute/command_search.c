@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_search.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:49 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 21:08:47 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:34:31 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,13 @@ int	check_other(char **args, t_context *ctx, char **envp)
 void	execute_command_helper(char *full_path, char **cmds,
 								char **envp, t_context *ctx)
 {
-	ctx->sa->sa_handler = SIG_DFL;
-	sigaction(SIGQUIT, ctx->sa, NULL);
+	struct sigaction	sa;
+
+	(void)(ctx);
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = SIG_DFL;
+	sa.sa_flags = 0;
+	sigaction(SIGQUIT, &sa, NULL);
 	if (execve(full_path, cmds, envp) == -1)
 	{
 		free(full_path);

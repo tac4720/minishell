@@ -25,7 +25,7 @@
 # include <ctype.h>
 # include <signal.h>
 
-extern	int	g_sigint;
+extern sig_atomic_t	g_sigint;
 
 t_token		*tokenize(char *line);
 int			is_blank(char c);

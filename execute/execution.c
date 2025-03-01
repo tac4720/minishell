@@ -6,7 +6,7 @@
 /*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:01 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/19 17:47:36 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:40:56 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	run_command(t_ast_node *node, int input_fd, int output_fd,
 		free_commands(cmds);
 		exit(0);
 	}
-	
 	ft_execvp(cmds, ctx->env, ctx);
 	free_commands(cmds);
 	exit(0);
@@ -75,8 +74,8 @@ void	run_command_p(t_ast_node *node, int input_fd, int output_fd,
 void	execute_command(t_ast_node *node, int input_fd, int output_fd,
 	t_context *ctx)
 {
-	pid_t	pid;
-	int		ret;
+	pid_t				pid;
+	int					ret;
 
 	if (node->command_node->command_args)
 	{
@@ -95,8 +94,8 @@ void	execute_command(t_ast_node *node, int input_fd, int output_fd,
 	}
 	else
 	{
-		waitpid(pid, &(ctx->last_status), 0);
-		ctx->last_status = WEXITSTATUS(ctx->last_status);
+		setup();
+		wait_for_child(ctx, pid);
 	}
 }
 
@@ -126,8 +125,7 @@ void	execute_pipeline(t_ast_node *node, char **envp, int input_fd,
 		parent_process(&in_fd, pipe_fd, info.i, info.count);
 		info.i++;
 	}
-	while (waitpid(-1, &(ctx->last_status), 0) > 0)
-		ctx->last_status = WEXITSTATUS(ctx->last_status);
+	wait_for_children(ctx);
 }
 
 void	execute_ast(t_ast_node *node, char **envp, t_context *ctx)

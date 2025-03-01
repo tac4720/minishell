@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_search_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:46 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 21:10:44 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/01 15:01:01 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ char	*generate_path(char **cmd, char **envp, t_context *ctx)
 
 	if (!cmd || !envp)
 		return (NULL);
-	// all_path = get_all_path(envp);
 	all_path = ft_strjoin("PATH", map_get(ctx->environ, "PATH"));
 	if (!all_path)
 		return (NULL);

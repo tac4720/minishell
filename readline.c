@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int g_sigint = 0;
+sig_atomic_t	g_sigint = 0;
 
 static void	initialize_shell(t_context **ctx, char **envp)
 {
@@ -27,9 +27,8 @@ static void	handle_sigint(t_context *ctx)
 {
 	if (g_sigint)
 	{
-		// rl_redisplay();
-		g_sigint = 0;
 		ctx->last_status = 130;
+		g_sigint = 0;
 	}
 }
 
@@ -84,6 +83,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		handle_sigint(ctx);
+		setup_signals(ctx);
 		input = readline("minishell:) ");
 		check_open_close(input, ctx);
 		if (!input)

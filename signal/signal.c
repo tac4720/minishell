@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:28 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:25 by tac              ###   ########.fr       */
+/*   Updated: 2025/03/01 16:26:00 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	handle_sigint(int sig)
 	write(STDERR_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	// rl_redisplay();
+	rl_redisplay();
 }
 
 void	setup_signals(t_context *ctx)
@@ -28,7 +28,6 @@ void	setup_signals(t_context *ctx)
 
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-	ctx->sa = &sa;
 	if (ctx->is_interactive)
 	{
 		sa.sa_handler = handle_sigint;
