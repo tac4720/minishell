@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:33 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 21:17:46 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:34:51 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,19 @@
 
 void	ft_echo(char **args, t_context *context)
 {
-	size_t		i;
+	int			i;
+	int			j;
 	int			flag;
 
-	(void)context;
 	i = 1;
 	flag = 0;
-	if (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
+	while (args[i] && ft_strncmp(args[i], "-n", 2) == 0)
 	{
+		j = 1;
+		while (args[i][j] == 'n')
+			j++;
+		if (args[i][j] != '\0')
+			break;
 		flag = 1;
 		i++;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:06:53 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 21:15:23 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:17:00 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,7 @@ char	**remove_empty_commands(char **cmds)
 	{
 		new_cmds[i - skip_count] = ft_strdup(cmds[i]);
 		if (!new_cmds[i - skip_count])
-		{
-			free_commands(new_cmds);
-			exit(1);
-		}
+			return (free_commands(new_cmds), NULL);
 	}
 	new_cmds[total_len - skip_count] = NULL;
 	return (new_cmds);

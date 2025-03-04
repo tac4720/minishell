@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-int g_sigint = 0;
+sig_atomic_t	g_sigint = 0;
 
 static void	initialize_shell(t_context **ctx, char **envp)
 {
-	*ctx = malloc(sizeof(t_context));
+	*ctx = ft_calloc(1, sizeof(t_context));
 	if (!*ctx)
 		exit(EXIT_FAILURE);
 	init_context(*ctx, envp);
@@ -27,9 +27,8 @@ static void	handle_sigint(t_context *ctx)
 {
 	if (g_sigint)
 	{
-		// rl_redisplay();
-		g_sigint = 0;
 		ctx->last_status = 130;
+		g_sigint = 0;
 	}
 }
 
@@ -43,6 +42,7 @@ static void	process_input_line(char *input, t_context *ctx, char **envp)
 		add_history(input);
 		tokens = input_scanner(input, ctx);
 		ctx->token_list_top = tokens;
+		ctx->root_node = NULL;
 		ast = parse_tokens(&tokens, ctx);
 		free_tokens(ctx->token_list_top);
 		if (ast)
@@ -84,6 +84,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		handle_sigint(ctx);
+		setup_signals(ctx);
 		input = readline("minishell:) ");
 		check_open_close(input, ctx);
 		if (!input)

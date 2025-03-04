@@ -6,7 +6,7 @@
 /*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:03 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/19 17:25:42 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/01 16:39:38 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 int		pipe_process(char *cmd, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);
-void	here_doc(const char *limiter, int fd);
+void	here_doc(char *limiter, int fd, t_context *ctx);
 void	print_ast(t_ast_node *node, int depth);
 void	init_context(t_context *ctx, char **envp);
 void	setup_signals(t_context *ctx);
@@ -35,10 +35,10 @@ char	*expand_normal_str(const char *str, int *i, char *result);
 char	*expand_helper(const char *str, t_context *ctx);
 void	remove_quotes(char *str);
 void	expand(t_ast_node *node, t_context *ctx);
-void	handle_heredoc(t_infile_redir *ir);
-void	handle_input_redirect(t_infile_redir *ir);
+void	handle_heredoc(t_infile_redir *ir, t_context *ctx);
+void	handle_input_redirect(t_infile_redir *ir, t_context *ctx);
 void	handle_output_redirect(t_outfile_redir *or);
-void	handle_redirect(t_cmd *cmd);
+void	handle_redirect(t_cmd *cmd, t_context *ctx);
 int		count_args(t_ast_node *node);
 char	**create_cmds(t_ast_node *node);
 int		is_string_empty(const char *str);
@@ -69,4 +69,8 @@ int		check_other(char **args, t_context *ctx, char **envp);
 void	ft_execvp(char **cmds, char **envp, t_context *ctx);
 int		builin_execute_p(char **args, t_context *context);
 int		is_builtin(char *str);
+void	handle_sigint_in_process(int sig);
+void	wait_for_child(t_context *ctx, pid_t pid);
+void	wait_for_children(t_context *ctx);
+void	setup(void);
 #endif

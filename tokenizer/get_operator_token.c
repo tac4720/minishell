@@ -47,7 +47,7 @@ int	check_redir(char **s)
 	return (ERROR);
 }
 
-void	operator_input(t_token *token)
+void	operator_input(t_token *token, t_context *context)
 {
 	if (token->type == HEREDOC)
 		token->str = ft_strdup("<<");
@@ -61,8 +61,18 @@ void	operator_input(t_token *token)
 		token->str = ft_strdup("|");
 	else if (token->type == ERROR)
 		token->str = ft_strdup("&");
+	if (token->str == NULL)
+	{
+		free(token);
+		free_tokens(context->token_list_top);
+		if (context->readline != NULL)
+			free(context->readline);
+		if (context->environ != NULL)
+			free_map(context->environ);
+		free(context);
+		exit(1);
+	}
 }
-//&
 
 int	get_op_type(char **s)
 {
@@ -85,7 +95,7 @@ t_token	*get_operator_token(char **s, t_context *context)
 	if (new_token == NULL)
 		malloc_error(context);
 	new_token->type = get_op_type(s);
-	operator_input(new_token);
+	operator_input(new_token, context);
 	new_token->flag = 0;
 	new_token->next = NULL;
 	new_token->prev = NULL;

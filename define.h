@@ -6,7 +6,7 @@
 /*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 20:51:26 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/19 14:48:38 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/01 22:09:10 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ typedef struct s_context{
 	int				is_interactive;
 	t_map			*environ;
 	t_exec_info		*info;
-	struct sigaction	*sa;
 	char			**env;
 	t_ast_node		*root_node;
 	t_token			*token_list_top;
 	char			*readline;
 	int				is_in_pipeline;
+	t_ast_node		*node_in_process;
 }	t_context;
 
 typedef struct s_command_args

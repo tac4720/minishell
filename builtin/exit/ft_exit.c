@@ -6,7 +6,7 @@
 /*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:41 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/19 17:30:46 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/02 20:38:02 by thashimo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ static void	print_error(char *msg)
 
 void	ft_exit(char **args, t_context *context)
 {
-	int	status;
-	int	error_flag;
+	long long	status;
 
-	error_flag = 0;
 	if (!args[1])
 		free_and_exit(context, args, 0);
 	if (args[2])
@@ -52,8 +50,8 @@ void	ft_exit(char **args, t_context *context)
 		context->last_status = 1;
 		free_and_exit(context, args, 1);
 	}
-	status = ft_atoi(args[1]);
-	if (error_flag || !is_numeric(args[1]))
+	status = ft_atol(args[1]);
+	if (status > LLONG_MAX || !is_numeric(args[1]))
 	{
 		print_error(" numeric argument required");
 		context->last_status = 2;

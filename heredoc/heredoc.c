@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../execute/exec.h"
 #include <stdbool.h>
 #include <signal.h>
 
@@ -68,7 +69,7 @@ static char	*process_input_line(char **line, char *input)
 	return (tmp);
 }
 
-void	here_doc(char *limiter, int fd)
+void	here_doc(char *limiter, int fd, t_context *ctx)
 {
 	char	*input;
 	char	*line;
@@ -89,6 +90,7 @@ void	here_doc(char *limiter, int fd)
 			free(input);
 			break ;
 		}
+		input = expand_helper(input, ctx);	
 		line = process_input_line(&line, input);
 		free(input);
 	}

@@ -56,7 +56,10 @@ int	printf_all_env(t_context *context)
 		current = context->environ->table[i];
 		while (current)
 		{
-			ft_printf("declare -x %s=%s\n", current->name, current->value);
+			if (ft_strncmp(current->value, "@", 1) == 0)
+				ft_printf("declare -x %s\n", current->name);
+			else
+				ft_printf("declare -x %s=%s\n", current->name, current->value);
 			current = current->next;
 		}
 		i++;

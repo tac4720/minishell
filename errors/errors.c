@@ -6,7 +6,7 @@
 /*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 13:24:15 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/19 15:04:51 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/01 22:06:42 by dkajiwar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,6 @@ void	unclosed_quote(char *line, t_context *ctx)
 	free(line);
 	exit(1);
 }
-
-// void	check_open_close(char *line, t_context *ctx)
-// {
-// 	int	i;
-// 	int	quote;
-
-// 	i = 0;
-// 	while (line && line[i])
-// 	{
-// 		if (line[i] == '\'' || line[i] == '\"')
-// 		{
-// 			quote = line[i];
-// 			(i)++;
-// 			while (line[i] && line[i] != quote)
-// 			{
-// 				(i)++;
-// 				if (line[i] == '\0')
-// 					unclosed_quote(line, ctx);
-// 			}
-// 		}
-// 		else
-// 			i++;
-// 	}
-// }
 
 void	malloc_error(t_context *context)
 {

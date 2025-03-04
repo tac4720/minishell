@@ -30,6 +30,11 @@ char	*map_get(t_map *map, const char *name)
 	return (NULL);
 }
 
+int	map_set_no_value(t_map *map, const char *string)
+{
+	return (map_set(map, string, "@"));
+}
+
 int	map_put(t_map *map, const char *string)
 {
 	char	*equal_pos;
@@ -39,7 +44,7 @@ int	map_put(t_map *map, const char *string)
 
 	equal_pos = ft_strchr(string, '=');
 	if (!equal_pos)
-		return (-1);
+		return (map_set_no_value(map, string));
 	name = ft_substr(string, 0, equal_pos - string);
 	value = ft_strdup(equal_pos + 1);
 	if (!name || !value)

@@ -12,7 +12,7 @@
 
 #include "exec.h"
 
-void	handle_heredoc(t_infile_redir *ir)
+void	handle_heredoc(t_infile_redir *ir, t_context *ctx)
 {
 	int		fd;
 	char	*tmp;
@@ -25,7 +25,7 @@ void	handle_heredoc(t_infile_redir *ir)
 		free(tmp);
 		exit(EXIT_FAILURE);
 	}
-	here_doc(ir->filename, fd);
+	here_doc(ir->filename, fd, ctx);
 	close(fd);
 	fd = open(tmp, O_RDONLY);
 	if (fd == -1)
@@ -39,7 +39,7 @@ void	handle_heredoc(t_infile_redir *ir)
 	free(tmp);
 }
 
-void	handle_input_redirect(t_infile_redir *ir)
+void	handle_input_redirect(t_infile_redir *ir, t_context *ctx)
 {
 	int	fd;
 
@@ -47,7 +47,7 @@ void	handle_input_redirect(t_infile_redir *ir)
 	{
 		if (ir->redirection_flag == F_HEREDOC)
 		{
-			handle_heredoc(ir);
+			handle_heredoc(ir, ctx);
 			ir = ir->next;
 			continue ;
 		}
@@ -89,8 +89,8 @@ void	handle_output_redirect(t_outfile_redir *or)
 	}
 }
 
-void	handle_redirect(t_cmd *cmd)
+void	handle_redirect(t_cmd *cmd, t_context *ctx)
 {
-	handle_input_redirect(cmd->infile_redir);
+	handle_input_redirect(cmd->infile_redir, ctx);
 	handle_output_redirect(cmd->outfile_redir);
 }

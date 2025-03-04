@@ -11,6 +11,7 @@ BUILTIN_SRCS =  builtin/builtin_execute/execute.c \
                builtin/echo/ft_echo.c \
                builtin/env/ft_env.c \
                builtin/exit/ft_exit.c \
+			   builtin/exit/ft_atol.c \
                builtin/export/ft_export.c \
                builtin/pwd/ft_pwd.c \
                builtin/unset/ft_unset.c
@@ -25,12 +26,14 @@ MAIN_SRCS = readline.c \
             init.c \
             errors/errors.c \
             errors/error_in_parse.c \
+            errors/error_in_parse_2.c \
             errors/free_map.c \
             errors/check_open_close.c \
             tokenizer/tokenizer.c \
             tokenizer/get_word_token.c \
             tokenizer/get_operator_token.c \
             parse/parse_command.c \
+            parse/parse_command_2.c \
             parse/parse_pipes.c \
             parse/parse_redir.c \
             parse/add_infile_redir_node.c \

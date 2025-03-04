@@ -25,7 +25,7 @@
 # include <ctype.h>
 # include <signal.h>
 
-extern	int	g_sigint;
+extern sig_atomic_t	g_sigint;
 
 t_token		*tokenize(char *line);
 int			is_blank(char c);
@@ -33,7 +33,7 @@ t_token		*get_token(char **s, t_context *context);
 t_token		*get_word_token(char **s, t_context *context);
 t_token		*get_operator_token(char **s, t_context *context);
 int			get_op_type(char **s);
-void		operator_input(t_token *node);
+void		operator_input(t_token *node, t_context *context);
 int			check_flags(char *str);
 void		quote_check(char *s, int *n);
 void		unclosed_quote(char *line, t_context *ctx);
@@ -64,6 +64,10 @@ void		malloc_error(t_context *context);
 void		free_tokens(t_token *token_list);
 void		free_ast_tree(t_ast_node *node);
 void		error_in_parse(t_context *context);
+void		parse_args_failed(t_cmd *cmd, t_context *context);
+void		new_cmd_node_failed_1(t_context *context);
+void		new_cmd_node_failed_2(t_context *context);
+void		free_cmd_node(t_cmd *cmd);
 void		free_map(t_map *map);
 char		**ft_split(const char *str, char c);
 char		*ft_strjoin(const char *s1, const char *s2);
