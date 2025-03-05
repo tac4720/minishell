@@ -1,0 +1,12 @@
+{
+    "prompt_count_cache": {
+        "value": "4",
+        "timestamp": 1741211870,
+        "ttl": 86400
+    },
+    "template_cache": {
+        "value": "{\"SegmentsCache\":{\"Git\":{\"User\":{\"Name\":\"\",\"Email\":\"\"},\"Working\":{\"Formats\":{},\"Unmerged\":0,\"Deleted\":0,\"Added\":0,\"Modified\":14,\"Moved\":0,\"Conflicted\":0,\"Untracked\":85,\"Clean\":0,\"Missing\":0,\"Ignored\":0},\"Staging\":{\"Formats\":{},\"Unmerged\":0,\"Deleted\":0,\"Added\":0,\"Modified\":0,\"Moved\":0,\"Conflicted\":0,\"Untracked\":0,\"Clean\":0,\"Missing\":0,\"Ignored\":0},\"Rebase\":null,\"RawUpstreamURL\":\"https://github.com/tac4720/minishell.git\",\"Ref\":\"review\",\"Hash\":\"ce8e9d4a06ebc6475c787f81e104e88c95fddec2\",\"ShortHash\":\"ce8e9d4\",\"BranchStatus\":\"≡\",\"Upstream\":\"origin/review\",\"HEAD\":\"review\",\"UpstreamIcon\":\"\",\"UpstreamURL\":\"https://github.com/tac4720/minishell.git\",\"Text\":\" \\u003cLINK\\u003ehttps://github.com/tac4720/minishell.git\\u003cTEXT\\u003e\\u003c/TEXT\\u003e\\u003c/LINK\\u003e review ≡  ?85 ~14 \",\"Dir\":\"~/home/tac472/workspace/minishell\",\"RepoName\":\"minishell\",\"IsWslSharedPath\":false,\"CommandMissing\":false,\"Behind\":0,\"Ahead\":0,\"IsWorkTree\":false,\"Merge\":false,\"CherryPick\":false,\"Revert\":false,\"Detached\":false,\"IsBare\":false,\"UpstreamGone\":false},\"Path\":{\"Text\":\"  \\u003cLINK\\u003efile:/home/tac472/workspace/minishell\\u003cTEXT\\u003eminishell\\u003c/TEXT\\u003e\\u003c/LINK\\u003e \",\"Location\":\"/home/tac472/workspace/minishell\",\"Path\":\"minishell\",\"Folders\":[{\"Name\":\"home\",\"Path\":\"/home\",\"Display\":false},{\"Name\":\"tac472\",\"Path\":\"/home/tac472\",\"Display\":false},{\"Name\":\"workspace\",\"Path\":\"/home/tac472/workspace\",\"Display\":false},{\"Name\":\"minishell\",\"Path\":\"/home/tac472/workspace/minishell\",\"Display\":false}],\"StackCount\":0,\"Writable\":true,\"RootDir\":false},\"Session\":{\"Text\":\" tac472 \",\"DefaultUserName\":\"\",\"SSHSession\":false},\"Status\":{\"Text\":\" CONFIG ERROR \",\"String\":\"0\",\"Meaning\":\"0\",\"Code\":0,\"Error\":false}},\"Segments\":{},\"Var\":{},\"ShellVersion\":\"5.2.37(1)-release\",\"AbsolutePWD\":\"/home/tac472/workspace/minishell\",\"PSWD\":\"\",\"UserName\":\"tac472\",\"HostName\":\"tac\",\"PWD\":\"~/home/tac472/workspace/minishell\",\"Shell\":\"bash\",\"Folder\":\"minishell\",\"OS\":\"arch\",\"Code\":0,\"PromptCount\":4,\"SHLVL\":3,\"Jobs\":0,\"WSL\":false,\"Root\":false}",
+        "timestamp": 1741211870,
+        "ttl": 86400
+    }
+}

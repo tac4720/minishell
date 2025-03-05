@@ -17,16 +17,30 @@
 #include <string.h>
 #include "../builtin_execute/builtin.h"
 
-static void	update_pwd(t_context *context)
-{
-	char	cwd[PATH_MAX];
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-	{
-		context->last_status = 1;
-	}
-	map_set(context->environ, "PWD", cwd);
-	context->last_status = 0;
+static void update_pwd(t_context *context)
+{
+    char cwd[PATH_MAX];
+    char *pwd;
+
+    if (getcwd(cwd, sizeof(cwd)) == NULL)
+    {
+        pwd = map_get(context->environ, "PWD");
+        if (pwd)
+        {
+            pwd = ft_strdup(pwd);
+            if (pwd)
+            {
+                map_set(context->environ, "OLDPWD", pwd);
+                free(pwd);
+            }
+        }
+        context->last_status = 1;
+        return;
+    }
+    map_set(context->environ, "OLDPWD", map_get(context->environ, "PWD"));
+    map_set(context->environ, "PWD", cwd);
+    context->last_status = 0;
 }
 
 // void	error_check(char **args, t_context *context)
@@ -54,55 +68,64 @@ int	error_check(char **args, t_context *ctx)
 	return (0);
 }
 
-void	ft_cd(char **args, t_context *context)
+void ft_cd(char **args, t_context *context)
 {
-	char	*target_dir;
-	int		ret;
+    char *target_dir;
+    int ret;
 
-	if (error_check(args, context))
-		return ;
-	target_dir = args[1];
-	if (target_dir == NULL)
-	{
-		target_dir = map_get(context->environ, "HOME");
-		if (target_dir == NULL)
-		{
-			context->last_status = 1;
-		}
-	}
-	ret = chdir(target_dir);
-	if (ret != 0)
-	{
-		ft_putstr_fd(" No such file or directory\n", 2);
-		context->last_status = 1;
-		exit (1);
-	}
-	update_pwd(context);
+    if (error_check(args, context))
+        free_and_exit(context, args, 1);
+    target_dir = args[1];
+    if (target_dir == NULL)
+    {
+        target_dir = map_get(context->environ, "HOME");
+        if (target_dir == NULL)
+        {
+            ft_putstr_fd("cd: HOME not set\n", 2);
+            context->last_status = 1;
+            free_and_exit(context, args, 1);
+        }
+    }
+    ret = chdir(target_dir);
+    if (ret != 0)
+    {
+        ft_putstr_fd("cd: ", 2);
+        ft_putstr_fd(target_dir, 2);
+        ft_putstr_fd(": No such file or directory\n", 2);
+        context->last_status = 1;
+        free_and_exit(context, args, 1);
+    }
+    update_pwd(context);
 	free_and_exit(context, args, context->last_status);
 }
 
-void	ft_cd_p(char **args, t_context *context)
+void ft_cd_p(char **args, t_context *context)
 {
-	char	*target_dir;
-	int		ret;
+    char *target_dir;
+    int ret;
 
-	if (error_check(args, context))
-		return ;
-	target_dir = args[1];
-	if (target_dir == NULL)
-	{
-		target_dir = map_get(context->environ, "HOME");
-		if (target_dir == NULL)
-		{
-			context->last_status = 1;
-		}
-	}
-	ret = chdir(target_dir);
-	if (ret != 0)
-	{
-		ft_putstr_fd(" No such file or directory\n", 2);
-		context->last_status = 1;
-	}
-	if (context->last_status != 1)
-		update_pwd(context);
+    if (error_check(args, context))
+        return;
+    target_dir = args[1];
+    if (target_dir == NULL)
+    {
+        target_dir = map_get(context->environ, "HOME");
+        if (target_dir == NULL)
+        {
+            ft_putstr_fd("cd: HOME not set\n", 2);
+            context->last_status = 1;
+            return;
+        }
+    }
+    ret = chdir(target_dir);
+    if (ret != 0)
+    {
+        ft_putstr_fd("cd: ", 2);
+        ft_putstr_fd(target_dir, 2);
+        ft_putstr_fd(": No such file or directory\n", 2);
+        context->last_status = 1;
+        return;
+    }
+    update_pwd(context);
 }
+

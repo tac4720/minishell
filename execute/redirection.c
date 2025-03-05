@@ -27,32 +27,36 @@ void	handle_heredoc(t_infile_redir *ir, t_context *ctx)
 	}
 	here_doc(ir->filename, fd, ctx);
 	close(fd);
-	fd = open(tmp, O_RDONLY);
-	if (fd == -1)
-	{
-		free(tmp);
-		exit (EXIT_FAILURE);
-	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
-	unlink(tmp);
+	// fd = open(tmp, O_RDONLY);
+	// if (fd == -1)
+	// {
+	// 	free(tmp);
+	// 	exit (EXIT_FAILURE);
+	// }
+	// dup2(fd, STDIN_FILENO);
+	// close(fd);
+	// unlink(tmp);
 	free(tmp);
 }
 
 void	handle_input_redirect(t_infile_redir *ir, t_context *ctx)
 {
-	int	fd;
+	int		fd;
+	char	*tmp;
 
+	(void)(ctx);
 	while (ir)
 	{
+		tmp = ft_strjoin("/tmp/", ir->filename);
 		if (ir->redirection_flag == F_HEREDOC)
 		{
-			handle_heredoc(ir, ctx);
-			ir = ir->next;
-			continue ;
+			fd = open(tmp, O_RDONLY);
 		}
-		remove_quotes(ir->filename);
-		fd = open(ir->filename, O_RDONLY);
+		else
+		{
+			remove_quotes(ir->filename);
+			fd = open(ir->filename, O_RDONLY);
+		}
 		if (fd == -1)
 		{
 			perror("open");
@@ -60,6 +64,7 @@ void	handle_input_redirect(t_infile_redir *ir, t_context *ctx)
 		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
+		free(tmp);
 		ir = ir->next;
 	}
 }

@@ -72,6 +72,7 @@ typedef struct s_context{
 	char			*readline;
 	int				is_in_pipeline;
 	t_ast_node		*node_in_process;
+	char			*input;
 }	t_context;
 
 typedef struct s_command_args

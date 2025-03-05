@@ -16,8 +16,6 @@ void	here_doc_clean(char *line, int fd)
 {
 	free(line);
 	close(fd);
-	if (g_sigint)
-		exit(130);
 }
 
 void	handle_eof(char *limiter)

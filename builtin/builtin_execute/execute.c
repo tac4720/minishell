@@ -47,6 +47,21 @@ void	free_and_exit(t_context *ctx, char **args, int status)
 	exit(status);
 }
 
+void	free_and_exit_p(t_context *ctx, char **args, int status)
+{
+	int	last_status;
+
+	last_status = ctx->last_status;
+	free(ctx->input);
+	free_ast_tree(ctx->root_node);
+	clean(ctx);
+	free_commands(args);
+	ft_putstr_fd("exit\n", 2);
+	if (status == -1)
+		exit(last_status);
+	exit(status);
+}
+
 int	builin_execute_p(char **args, t_context *context)
 {
 	int	select;
@@ -57,7 +72,7 @@ int	builin_execute_p(char **args, t_context *context)
 	else if (select == 2)
 		ft_env_p(args, context);
 	else if (select == 3)
-		ft_exit(args, context);
+		ft_exit_p(args, context);
 	else if (select == 4)
 		ft_export_p(args, context);
 	else if (select == 6)

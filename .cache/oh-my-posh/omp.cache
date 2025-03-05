@@ -1,0 +1,17 @@
+{
+    "environment_platform": {
+        "value": "arch",
+        "timestamp": 1741211836,
+        "ttl": -1
+    },
+    "is_wsl": {
+        "value": "false",
+        "timestamp": 1741211836,
+        "ttl": -1
+    },
+    "upgrade_check": {
+        "value": "",
+        "timestamp": 1741211854,
+        "ttl": 604800
+    }
+}

@@ -45,6 +45,30 @@ static void	handle_export_error(t_context *context)
 	context->last_status = 1;
 }
 
+void	print_sorted_declare(t_map *environ)
+{
+	char	**list;
+	char	*value;
+	int		i;
+
+	i = 0;
+	list = hashmap_to_list(environ);
+	if (!list)
+		return ;
+	sort_list(list);
+	while (list[i])
+	{
+		value = map_get(environ, list[i]);
+		if (ft_strncmp(value, "@", 1) == 0)
+			ft_printf("declare -x %s\n", list[i]);
+		else
+			ft_printf("declare -x %s=%s\n", list[i], value);
+		free(list[i]);
+		i++;
+	}
+	free(list);
+}
+
 int	printf_all_env(t_context *context)
 {
 	int		i;
@@ -77,7 +101,7 @@ void	ft_export(char **args, t_context *context)
 	status = 0;
 	if (!args[1])
 	{
-		printf_all_env(context);
+		print_sorted_declare(context->environ);
 		free_and_exit(context, args, 0);
 	}
 	j = 1;
@@ -105,7 +129,7 @@ void	ft_export_p(char **args, t_context *context)
 	status = 0;
 	if (!args[1])
 	{
-		printf_all_env(context);
+		print_sorted_declare(context->environ);
 		context->last_status = 0;
 	}
 	j = 1;

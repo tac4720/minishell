@@ -122,6 +122,7 @@ void	execute_pipeline(t_ast_node *node, char **envp, int input_fd,
 		pid = fork();
 		if (pid == 0)
 			child_process(cmds[info.i], in_fd, pipe_fd, ctx);
+		setup();
 		parent_process(&in_fd, pipe_fd, info.i, info.count);
 		info.i++;
 	}

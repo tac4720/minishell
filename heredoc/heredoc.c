@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 #include "../execute/exec.h"
+#include <readline/readline.h>
 #include <stdbool.h>
 #include <signal.h>
 
@@ -21,9 +22,11 @@ static void	handle_sigint(int sig)
 {
 	(void)sig;
 	g_sigint = 1;
+	write(STDERR_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_done = 1;
+	// rl_redisplay();
 }
 
 static void	setup_heredoc_signals(void)
@@ -81,6 +84,7 @@ void	here_doc(char *limiter, int fd, t_context *ctx)
 		input = readline("> ");
 		if (!input)
 		{
+			ft_putstr_fd(line, fd);
 			handle_eof(limiter);
 			break ;
 		}

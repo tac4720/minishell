@@ -62,7 +62,7 @@ int	skip(const char *nptr, int *sign)
 	return (i);
 }
 
-long long	ft_atol(const char *nptr)
+long long	ft_atol(const char *nptr, int *of)
 {
 	size_t		i;
 	size_t		length;
@@ -76,9 +76,15 @@ long long	ft_atol(const char *nptr)
 	while (i < length && ft_isnum(nptr[i]))
 	{
 		if (check(sign, nptr[i] - '0', result) == 1)
+		{
+			*of = 1;
 			return ((int)(LLONG_MAX));
+		}
 		if (check(sign, nptr[i] - '0', result) == -1)
+		{
+			*of = 1;
 			return ((int)(LLONG_MIN));
+		}
 		result = result * 10 + nptr[i] - '0';
 		i++;
 	}

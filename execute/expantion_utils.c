@@ -13,8 +13,7 @@
 #include "exec.h"
 
 char	*expand_status(const char *str, int *i, char *result, t_context *ctx)
-{
-	char	*expand_str;
+{ char	*expand_str;
 
 	if (str[*i + 1] == '?')
 	{

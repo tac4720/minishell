@@ -49,6 +49,7 @@ void	init_context(t_context *ctx, char **envp)
 	ctx->environ = map_new();
 	ctx->env = envp;
 	ctx->root_node = NULL;
+	ctx->input = NULL;
 	init_environment(ctx->environ, envp);
 	tcgetattr(STDIN_FILENO, &ctx->shell_tmodes);
 	setup_signals(ctx);

@@ -41,7 +41,9 @@ static void	print_error(char *msg)
 void	ft_exit(char **args, t_context *context)
 {
 	long long	status;
+	int			of;
 
+	of = 0;
 	if (!args[1])
 		free_and_exit(context, args, 0);
 	if (args[2])
@@ -50,12 +52,36 @@ void	ft_exit(char **args, t_context *context)
 		context->last_status = 1;
 		free_and_exit(context, args, 1);
 	}
-	status = ft_atol(args[1]);
-	if (status > LLONG_MAX || !is_numeric(args[1]))
+	status = ft_atol(args[1], &of);
+	if (of || !is_numeric(args[1]))
 	{
 		print_error(" numeric argument required");
 		context->last_status = 2;
 		free_and_exit(context, args, 2);
 	}
 	free_and_exit(context, args, status);
+}
+
+void	ft_exit_p(char **args, t_context *context)
+{
+	long long	status;
+	int			of;
+
+	of = 0;
+	if (!args[1])
+		free_and_exit_p(context, args, -1);
+	if (args[2])
+	{
+		print_error(" too many arguments");
+		context->last_status = 1;
+		free_and_exit_p(context, args, 1);
+	}
+	status = ft_atol(args[1], &of);
+	if (of || !is_numeric(args[1]))
+	{
+		print_error(" numeric argument required");
+		context->last_status = 2;
+		free_and_exit_p(context, args, 2);
+	}
+	free_and_exit_p(context, args, status);
 }
