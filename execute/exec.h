@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:03 by thashimo          #+#    #+#             */
-/*   Updated: 2025/03/01 16:39:38 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:52:26 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,5 @@ void	handle_sigint_in_process(int sig);
 void	wait_for_child(t_context *ctx, pid_t pid);
 void	wait_for_children(t_context *ctx);
 void	setup(void);
+void	heredoc_process(t_infile_redir *ir, t_context *ctx);
 #endif

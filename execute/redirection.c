@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:19 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/19 18:02:15 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:09:39 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,6 @@ void	handle_heredoc(t_infile_redir *ir, t_context *ctx)
 	}
 	here_doc(ir->filename, fd, ctx);
 	close(fd);
-	// fd = open(tmp, O_RDONLY);
-	// if (fd == -1)
-	// {
-	// 	free(tmp);
-	// 	exit (EXIT_FAILURE);
-	// }
-	// dup2(fd, STDIN_FILENO);
-	// close(fd);
-	// unlink(tmp);
 	free(tmp);
 }
 
@@ -49,9 +40,7 @@ void	handle_input_redirect(t_infile_redir *ir, t_context *ctx)
 	{
 		tmp = ft_strjoin("/tmp/", ir->filename);
 		if (ir->redirection_flag == F_HEREDOC)
-		{
 			fd = open(tmp, O_RDONLY);
-		}
 		else
 		{
 			remove_quotes(ir->filename);

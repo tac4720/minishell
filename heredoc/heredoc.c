@@ -3,31 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:23 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 19:21:23 by tac              ###   ########.fr       */
+/*   Updated: 2025/03/07 15:09:53 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "../execute/exec.h"
+#include "../minishell.h"
 #include <readline/readline.h>
-#include <stdbool.h>
 #include <signal.h>
+#include <stdbool.h>
 
-void	handle_eof(char *limiter);
-
-static void	handle_sigint(int sig)
-{
-	(void)sig;
-	g_sigint = 1;
-	write(STDERR_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_done = 1;
-	// rl_redisplay();
-}
+void		handle_eof(char *limiter);
 
 static void	setup_heredoc_signals(void)
 {
@@ -35,7 +24,7 @@ static void	setup_heredoc_signals(void)
 	struct sigaction	sa_quit;
 
 	ft_memset(&sa_int, 0, sizeof(sa_int));
-	sa_int.sa_handler = handle_sigint;
+	sa_int.sa_handler = SIG_DFL;
 	sigemptyset(&sa_int.sa_mask);
 	sa_int.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa_int, NULL);
@@ -94,7 +83,7 @@ void	here_doc(char *limiter, int fd, t_context *ctx)
 			free(input);
 			break ;
 		}
-		input = expand_helper(input, ctx);	
+		input = expand_helper(input, ctx);
 		line = process_input_line(&line, input);
 		free(input);
 	}

@@ -14,13 +14,14 @@ BUILTIN_SRCS =  builtin/builtin_execute/execute.c \
 			   builtin/exit/ft_atol.c \
                builtin/export/ft_export.c \
                builtin/pwd/ft_pwd.c \
-               builtin/unset/ft_unset.c
+               builtin/unset/ft_unset.c \
+			   builtin/env/sort.c
 
 ENVIRON_SRCS = environ/item.c \
                environ/map_create.c \
                environ/map_get_put.c \
                environ/map_unset.c \
-               environ/map_utils.c
+               environ/map_utils.c \
 
 MAIN_SRCS = readline.c \
             init.c \

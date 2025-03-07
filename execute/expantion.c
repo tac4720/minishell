@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expantion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:14 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/19 18:57:58 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:53:02 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,9 @@ void	remove_quotes(char *str)
 void	expand(t_ast_node *node, t_context *ctx)
 {
 	t_command_args	*current;
-	t_infile_redir *ir;
 	char			*tmp;
 
-	ir = node->command_node->infile_redir; 
-	while (ir)
-	{
-		if (ir->redirection_flag == F_HEREDOC)
-		{
-			handle_heredoc(node->command_node->infile_redir, ctx);
-		}
-		ir = ir->next;
-	}
+	heredoc_process(node->command_node->infile_redir, ctx);
 	current = node->command_node->command_args;
 	while (current)
 	{

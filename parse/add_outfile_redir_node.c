@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_outfile_redir_node.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkajiwar <dkajiwar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 20:12:06 by dkajiwar          #+#    #+#             */
-/*   Updated: 2025/02/18 21:05:27 by dkajiwar         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:53:47 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int command_flag, t_context *context)
 		error_in_parse(context);
 	tmp->next->filename = ft_strdup((*token_list)->str);
 	tmp->next->next = NULL;
-	cmd->outfile_redir->redirection_flag |= command_flag;
+	tmp->next->redirection_flag |= command_flag;
 	*token_list = (*token_list)->next;
 }
 

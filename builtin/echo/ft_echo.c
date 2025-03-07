@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:33 by thashimo          #+#    #+#             */
-/*   Updated: 2025/03/02 18:34:51 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/07 15:10:55 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@
 #include <stdio.h>
 #include <errno.h>
 #include "../builtin_execute/builtin.h"
+
+void	ft_echo_helper(char **args, int i, int flag)
+{
+	while (args[i])
+	{
+		ft_printf(args[i]);
+		if (args[i + 1])
+			ft_printf(" ");
+		i++;
+	}
+	if (flag == 0)
+		ft_printf("\n");
+}
 
 void	ft_echo(char **args, t_context *context)
 {
@@ -31,18 +44,10 @@ void	ft_echo(char **args, t_context *context)
 		while (args[i][j] == 'n')
 			j++;
 		if (args[i][j] != '\0')
-			break;
+			break ;
 		flag = 1;
 		i++;
 	}
-	while (args[i])
-	{
-		ft_printf(args[i]);
-		if (args[i + 1])
-			ft_printf(" ");
-		i++;
-	}
-	if (flag == 0)
-		ft_printf("\n");
+	ft_echo_helper(args, i, flag);
 	free_and_exit(context, args, 0);
 }

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   expantion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tac <tac@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:07:10 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/18 16:46:17 by tac              ###   ########.fr       */
+/*   Updated: 2025/03/07 14:54:07 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
 char	*expand_status(const char *str, int *i, char *result, t_context *ctx)
-{ char	*expand_str;
+{
+	char	*expand_str;
 
 	if (str[*i + 1] == '?')
 	{

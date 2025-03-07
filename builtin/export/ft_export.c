@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thashimo <thashimo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tac472 <tac472@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:08:44 by thashimo          #+#    #+#             */
-/*   Updated: 2025/02/19 16:57:47 by thashimo         ###   ########.fr       */
+/*   Updated: 2025/03/07 14:48:40 by tac472           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,28 +67,6 @@ void	print_sorted_declare(t_map *environ)
 		i++;
 	}
 	free(list);
-}
-
-int	printf_all_env(t_context *context)
-{
-	int		i;
-	t_item	*current;
-
-	i = 0;
-	while (i < TABLE_SIZE)
-	{
-		current = context->environ->table[i];
-		while (current)
-		{
-			if (ft_strncmp(current->value, "@", 1) == 0)
-				ft_printf("declare -x %s\n", current->name);
-			else
-				ft_printf("declare -x %s=%s\n", current->name, current->value);
-			current = current->next;
-		}
-		i++;
-	}
-	return (0);
 }
 
 void	ft_export(char **args, t_context *context)
